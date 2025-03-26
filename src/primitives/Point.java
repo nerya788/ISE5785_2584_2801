@@ -7,7 +7,7 @@ public class Point {
     /**
      * The coordinates of the point stored as a Double3 object.
      */
-    protected Double3 xyz;
+    protected final Double3 xyz;
     
     /**
      * Constant representing the zero point (0,0,0).
