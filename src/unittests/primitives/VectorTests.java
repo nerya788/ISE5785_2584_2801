@@ -53,11 +53,11 @@ class VectorTests {
 		
 		// ============================ Boundary Values Tests ============================
 		Vector vecMinus123 = new Vector(-1,-2,-3);
-		assertThrowsExactly(IllegalArgumentException.class, () -> vec123.add(vecMinus123) ,"Vector onstractor of Double3 cannot be zero vector");
+		assertThrowsExactly(IllegalArgumentException.class, () -> vec123.add(vecMinus123) ,"Vector onstractor of Double3 cannot be zero vector nji");
 		
 	}
 
-	/**
+	/**mm
 	 * Test method for {@link primitives.Vector#scale(double)}.
 	 */
 	@Test
