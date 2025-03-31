@@ -48,16 +48,16 @@ class VectorTests {
 	void testAddVector() {
 		// ============================ Equivalence Partitions Tests ============================
 		Vector vec123 = new Vector(1,2,3);
-		Vector vec234 = new Vector(-2,3,-4);
-		assertEquals(new Vector (-1,5,-1),vec123.add(vec234) ,"wrong resulte for connecting two vectors");
+		Vector vecm23m4 = new Vector(-2,3,-4);
+		assertEquals(new Vector (-1,5,-1),vec123.add(vecm23m4) ,"wrong resulte for connecting two vectors");
 		
 		// ============================ Boundary Values Tests ============================
 		Vector vecMinus123 = new Vector(-1,-2,-3);
-		assertThrowsExactly(IllegalArgumentException.class, () -> vec123.add(vecMinus123) ,"Vector onstractor of Double3 cannot be zero vector nji");
+		assertThrowsExactly(IllegalArgumentException.class, () -> vec123.add(vecMinus123) ,"Vector onstractor of Double3 cannot be zero vector");
 		
 	}
 
-	/**mm
+	/**
 	 * Test method for {@link primitives.Vector#scale(double)}.
 	 */
 	@Test
@@ -79,8 +79,8 @@ class VectorTests {
 	void testDotProduct() {
 		// ============ Equivalence Partitions Tests ==============
 		 Vector vec123 = new Vector(1,2,3);
-		 Vector vec224 = new Vector(2,2,4);
-		 assertEquals(vec123.crossProduct(vec224),new Vector(2,2,-2),  "crossProduct() wrong result");
+		 Vector vec22m1 = new Vector(2,2,-1);
+		 assertEquals(vec123.dotProduct(vec22m1),3,  "crossProduct() wrong result");
 		 
 		 // =============== Boundary Values Tests ==================
 		 assertThrows(IllegalArgumentException.class, () -> vec123.crossProduct(new Vector(2,4,6)), "Vector constractor of three Double cannot be zero vector");
@@ -91,10 +91,22 @@ class VectorTests {
 	 */
 	@Test
 	void testCrossProduct() {
+
+		 Vector vec123 = new Vector(1,2,3);
+		 Vector vec224 = new Vector(2,2,4);
+		 Vector vec246 = new Vector(2,4,6);
+		 Vector vec22m2 = new Vector(2,2,-2);
+		 
 		// ============================ Equivalence Partitions Tests ============================
-		
+		 
+		 assertEquals(vec123.crossProduct(vec224),vec22m2,  "crossProduct() wrong result");
+		 
 		// ============================ Boundary Values Tests ============================
-		//fail("Not yet implemented");
+		 
+		 assertThrows(IllegalArgumentException.class, () -> vec246.crossProduct(vec123),"Vector constractor of three Double cannot be zero vector");
+		 assertEquals(vec123.length()*vec22m2.length(), (Math.sqrt(42) * 2), 0.00000000001 ,  "wrong cross product of ortogonal vectors");
+		 assertEquals(0.0, vec22m2.dotProduct(vec123),  "wrong cross product of ortogonal vectors");
+		 assertEquals(0.0, vec22m2.dotProduct(vec224),  "wrong cross product of ortogonal vectors");
 	}
 
 	/**
@@ -102,10 +114,9 @@ class VectorTests {
 	 */
 	@Test
 	void testLengthSquared() {
+		 Vector vec224 = new Vector(2,2,4);
 		// ============================ Equivalence Partitions Tests ============================
-		
-		// ============================ Boundary Values Tests ============================
-	//	fail("Not yet implemented");
+		 assertEquals(vec224.lengthSquared(), 24, "wrong length squared calculates");
 	}
 
 	/**
@@ -114,9 +125,9 @@ class VectorTests {
 	@Test
 	void testLength() {
 		// ============================ Equivalence Partitions Tests ============================
-		
-		// ============================ Boundary Values Tests ============================
-		//fail("Not yet implemented");
+		 Vector vecm2m13 = new Vector(-2,-1,3);
+			// ============================ Equivalence Partitions Tests ============================
+			 assertEquals(vecm2m13.length(), Math.sqrt(14), "wrong length calculates");
 	}
 
 	/**
@@ -125,9 +136,9 @@ class VectorTests {
 	@Test
 	void testNormalize() {
 		// ============================ Equivalence Partitions Tests ============================
-		
-		// ============================ Boundary Values Tests ============================
-		//fail("Not yet implemented");
+		Vector vec221 = new Vector(2,2,1);
+		Vector norVec = new Vector((double) 2/3,(double) 2/3, (double) 1/3);
+		assertEquals(vec221.normalize(), norVec, "wrong normalized vector");
 	}
 
 }

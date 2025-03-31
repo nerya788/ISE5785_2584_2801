@@ -19,16 +19,16 @@ class PointTests {
 	 */
 	@Test
 	void testAdd() {
-		Point poi = new Point(2,3,-5);
-		Vector vec = new Vector(1,2,3);
-		Vector vec2 = new Vector(-2,-3,5);
+		Point point23m5 = new Point(2,3,-5);
+		Vector vec123 = new Vector(1,2,3);
+		Vector vecm2m35 = new Vector(-2,-3,5);
 		
 		
 		// ============================ Equivalence Partitions Tests ============================
-		assertEquals(poi.add(vec),new Point(3,5,-2),"wrong resulte for adding vector to point");
+		assertEquals(point23m5.add(vec123),new Point(3,5,-2),"wrong resulte for adding vector to point");
 	
 		// ============================ Boundary Values Tests ============================
-		assertEquals(poi.add(vec2),Point.ZERO,"wrong resulte zero for adding vector to point");	
+		assertEquals(point23m5.add(vecm2m35),Point.ZERO,"wrong resulte zero for adding vector to point");	
 	}
 
 	/**
@@ -37,11 +37,11 @@ class PointTests {
 	 */
 	@Test
 	void testSubtract() {
-		Point poi = new Point(2,3,-5);
-		Point poi2 = new Point(1,2,3);
+		Point point23m5 = new Point(2,3,-5);
+		Point point123 = new Point(1,2,3);
 	
 		// ============================ Equivalence Partitions Tests ============================
-		assertEquals(poi.subtract(poi2),new Vector(1,1,-8),"wrong resulte vector for subtract point to point");
+		assertEquals(point23m5.subtract(point123),new Vector(1,1,-8),"wrong resulte vector for subtract point to point");
 
 	}
 
@@ -50,9 +50,9 @@ class PointTests {
 	 */
 	@Test
 	void testDistanceSquared() {
-		Point poi = new Point(2,3,-5);
-		Point poi2 = new Point(1,2,3);
-		assertEquals(poi.distanceSquared(poi2),66 ,"wrong resulte distance squared");
+		Point point23m5 = new Point(2,3,-5);
+		Point point123 = new Point(1,2,3);
+		assertEquals(point23m5.distanceSquared(point123),66 ,"wrong resulte distance squared");
 	}
 
 	/**
@@ -60,9 +60,9 @@ class PointTests {
 	 */
 	@Test
 	void testDistance() {
-		Point poi = new Point(2,3,-5);
-		Point poi2 = new Point(1,2,3);
-		assertEquals(poi.distance(poi2),Math.sqrt(66) ,"wrong resulte distance squared");
+		Point point23m5 = new Point(2,3,-5);
+		Point point123 = new Point(1,2,3);
+		assertEquals(point23m5.distance(point123),Math.sqrt(66) ,"wrong resulte distance squared");
 	}
 
 }
