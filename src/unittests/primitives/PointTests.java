@@ -52,7 +52,7 @@ class PointTests {
 	void testDistanceSquared() {
 		Point poi = new Point(2,3,-5);
 		Point poi2 = new Point(1,2,3);
-		assertEquals(poi.distanceSquared(poi2),66 ,"wrong resulte distance squared"); //8.12403840463596 Math.sqrt(66)
+		assertEquals(poi.distanceSquared(poi2),66 ,"wrong resulte distance squared");
 	}
 
 	/**
@@ -62,7 +62,7 @@ class PointTests {
 	void testDistance() {
 		Point poi = new Point(2,3,-5);
 		Point poi2 = new Point(1,2,3);
-		assertEquals(poi.distance(poi2),Math.sqrt(66) ,"wrong resulte distance squared"); //8.12403840463596 
+		assertEquals(poi.distance(poi2),Math.sqrt(66) ,"wrong resulte distance squared");
 	}
 
 }

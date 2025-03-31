@@ -15,7 +15,7 @@ public class Vector extends Point {
     public Vector(double d1, double d2, double d3) {
         super(d1, d2, d3);
         if (super.equals(ZERO))
-            throw new IllegalArgumentException("Vector cannot be zero vector.");
+            throw new IllegalArgumentException("Vector constractor of three Double cannot be zero vector");
     }
 
     /**
@@ -26,7 +26,7 @@ public class Vector extends Point {
     public Vector(Double3 d) {
         super(d);
         if (super.equals(ZERO))
-            throw new IllegalArgumentException("Vector cannot be zero vector.");
+            throw new IllegalArgumentException("Vector onstractor of Double3 cannot be zero vector");
     }
 
     /**
