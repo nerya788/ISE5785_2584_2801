@@ -7,24 +7,24 @@ public class Vector extends Point {
 
     /**
      * Constructs a vector with given x, y, and z values.
-     * @param d1 The x-coordinate.
-     * @param d2 The y-coordinate.
-     * @param d3 The z-coordinate.
+     * @param x The x-coordinate.
+     * @param y The y-coordinate.
+     * @param z The z-coordinate.
      * @throws IllegalArgumentException if the vector is the zero vector.
      */
-    public Vector(double d1, double d2, double d3) {
-        super(d1, d2, d3);
-        if (super.equals(ZERO))
+    public Vector(double x, double y, double z) {
+        super(x, y, z);
+        if (xyz.equals(Double3.ZERO))
             throw new IllegalArgumentException("Vector constractor of three Double cannot be zero vector");
     }
 
     /**
      * Constructs a vector from a Double3 object.
-     * @param d The Double3 representing the vector coordinates.
+     * @param xyz The Double3 representing the vector coordinates.
      * @throws IllegalArgumentException if the vector is the zero vector.
      */
-    public Vector(Double3 d) {
-        super(d);
+    public Vector(Double3 xyz) {
+        super(xyz);
         if (super.equals(ZERO))
             throw new IllegalArgumentException("Vector onstractor of Double3 cannot be zero vector");
     }
@@ -109,6 +109,6 @@ public class Vector extends Point {
      */
     @Override
     public String toString() {
-        return "Vector: " + xyz.toString();
+        return "->" + xyz;
     }
 }

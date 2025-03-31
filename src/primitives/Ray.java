@@ -44,6 +44,6 @@ public class Ray {
      */
     @Override
     public String toString() {
-        return "Ray: head=" + head.toString() + ", direction=" + direction.toString();
+        return "Ray: " + head + " " + direction;
     }
 }

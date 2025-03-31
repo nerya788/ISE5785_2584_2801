@@ -38,7 +38,7 @@ public class Point {
      */
     @Override
     public String toString() {
-        return "Point: " + xyz.toString();
+        return xyz + "";
     }
 
     /**
