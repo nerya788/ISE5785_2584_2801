@@ -17,7 +17,7 @@ public class Cylinder extends Tube {
      * @param ray The central axis of the cylinder
      * @param radius The radius of the cylinder
      */
-    public Cylinder(double newHeight, Ray ray, double radius) {
+    public Cylinder(Ray ray, double radius, double newHeight) {
         super(ray, radius);
         height = newHeight;
     }
@@ -29,6 +29,16 @@ public class Cylinder extends Tube {
      * @return The normal vector at the given point
      */
     public Vector getNormal(Point point) {
-        return null; // TODO: Compute and return the actual normal vector
+    	if ( point.equals(axis.getHead()) || point.subtract(axis.getHead()).dotProduct(axis.getDirection()) == 0)
+    		return axis.getDirection().scale(-1).normalize();
+    	else if (	point.equals(axis.getHead().add(axis.getDirection().scale(height)))
+            	||  point.subtract(axis.getHead().add(axis.getDirection().scale(height))).dotProduct(axis.getDirection()) == 0)
+    		return axis.getDirection().normalize();
+    	else {
+    	Vector u = point.subtract(axis.getHead());
+    	double t = axis.getDirection().dotProduct(u);
+    	Point o = axis.getHead().add(axis.getDirection().scale(t));
+    	return point.subtract(o).normalize();
+    	}
     }
 }

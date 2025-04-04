@@ -18,7 +18,7 @@ public class Plane extends Geometry {
      */
     public Plane(Point point1, Point point2, Point point3) {
         head = point1;
-        direction = null; // TODO: Compute the normal vector from the three points
+        direction = (point3.subtract(point1).crossProduct(point2.subtract(point1))).normalize();
     }
 
     /**
@@ -31,7 +31,7 @@ public class Plane extends Geometry {
         head = point;
         direction = null; // TODO: Assign vector after normalization //vec.normalize(); why error?
     }
-
+    
     /**
      * Returns the normal vector of the plane.
      * 

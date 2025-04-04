@@ -19,6 +19,7 @@ public class Tube extends RadialGeometry {
         super(num);
         axis = ray;
     }
+    
 
     /**
      * Returns the normal vector to the tube at a given point on its surface.
@@ -27,6 +28,13 @@ public class Tube extends RadialGeometry {
      * @return The normal vector at the given point
      */
     public Vector getNormal(Point point) {
-        return null; // TODO: Compute and return the actual normal vector
+    	if (point.subtract(axis.getHead()).dotProduct(axis.getDirection())==0 || point.equals(axis.getHead()))
+    		return axis.getDirection().scale(-1).normalize();
+    	else {
+    	Vector u = point.subtract(axis.getHead());
+    	double t = axis.getDirection().dotProduct(u);
+    	Point o = axis.getHead().add(axis.getDirection().scale(t));
+    	return point.subtract(o).normalize();
+    	}
     }
 }

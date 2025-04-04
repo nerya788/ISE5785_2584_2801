@@ -8,11 +8,12 @@ import primitives.*;
 
 import org.junit.jupiter.api.Test;
 
+
 /**
  * 
  */
 class VectorTests {
-
+	double DELTA=0.00000000001;
 	/**
 	 * Test method for {@link primitives.Vector#Vector(double, double, double)}.
 	 */
@@ -49,11 +50,22 @@ class VectorTests {
 		// ============================ Equivalence Partitions Tests ============================
 		Vector vec123 = new Vector(1,2,3);
 		Vector vecm23m4 = new Vector(-2,3,-4);
-		assertEquals(new Vector (-1,5,-1),vec123.add(vecm23m4) ,"wrong resulte for connecting two vectors");
+		assertEquals(new Vector (-1,5,-1),vec123.add(vecm23m4) ,"wrong resulte for add two vectors");
 		
 		// ============================ Boundary Values Tests ============================
 		Vector vecMinus123 = new Vector(-1,-2,-3);
 		assertThrowsExactly(IllegalArgumentException.class, () -> vec123.add(vecMinus123) ,"Vector onstractor of Double3 cannot be zero vector");
+		
+	}
+	
+	void testSubVector() {
+		// ============================ Equivalence Partitions Tests ============================
+		Vector vec123 = new Vector(1,2,3);
+		Vector vecm23m4 = new Vector(-2,3,-4);
+		assertEquals(new Vector (3,-1,7),vec123.subtract(vecm23m4),"wrong resulte for subtract two vectors");
+		
+		// ============================ Boundary Values Tests ============================
+		assertThrowsExactly(IllegalArgumentException.class, () -> vec123.subtract(vec123) ,"Vector onstractor of Double3 cannot be zero vector");
 		
 	}
 
@@ -94,17 +106,18 @@ class VectorTests {
 
 		 Vector vec123 = new Vector(1,2,3);
 		 Vector vec224 = new Vector(2,2,4);
-		 Vector vec246 = new Vector(2,4,6);
 		 Vector vec22m2 = new Vector(2,2,-2);
+		 Vector vec246 = new Vector(2,4,6);
+		 
 		 
 		// ============================ Equivalence Partitions Tests ============================
 		 
-		 assertEquals(vec123.crossProduct(vec224),vec22m2,  "crossProduct() wrong result");
+		 assertEquals(vec123.crossProduct(vec224),vec22m2,  "cross product give wrong result");
 		 
 		// ============================ Boundary Values Tests ============================
 		 
 		 assertThrows(IllegalArgumentException.class, () -> vec246.crossProduct(vec123),"Vector constractor of three Double cannot be zero vector");
-		 assertEquals(vec123.length()*vec22m2.length(), (Math.sqrt(42) * 2), 0.00000000001 ,  "wrong cross product of ortogonal vectors");
+		 assertEquals(vec123.length()*vec22m2.length(), (Math.sqrt(42) * 2), DELTA ,  "wrong cross product of ortogonal vectors");
 		 assertEquals(0.0, vec22m2.dotProduct(vec123),  "wrong cross product of ortogonal vectors");
 		 assertEquals(0.0, vec22m2.dotProduct(vec224),  "wrong cross product of ortogonal vectors");
 	}
