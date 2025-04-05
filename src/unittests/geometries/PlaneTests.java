@@ -8,11 +8,15 @@ import primitives.*;
 import geometries.*;
 import org.junit.jupiter.api.Test;
 
+
 /**
- * 
+ * Testing Planes
+ * @author Nerya
  */
 class PlaneTests {
-	double DELTA=0.00000000001;
+	final double DELTA = 0.00000000001;
+	final double Zero = 0.0;
+	
 	/**
 	 * Test method for {@link geometries.Plane#getNormal(primitives.Point)}.
 	 */
@@ -40,8 +44,8 @@ class PlaneTests {
 		 
 		// ============================ Equivalence Partitions Tests ============================
 		 
-		 assertEquals(0.0, plane.getNormal(point321).dotProduct(point321.subtract(point123)),  "wrong normal of plane");
-		 assertEquals(0.0, plane.getNormal(point321).dotProduct(point224.subtract(point123)),  "wrong normal of plane");
+		 assertEquals(Zero, plane.getNormal(point321).dotProduct(point321.subtract(point123)),  "wrong normal of plane");
+		 assertEquals(Zero, plane.getNormal(point321).dotProduct(point224.subtract(point123)),  "wrong normal of plane");
 		 
 		// ============================ Boundary Values Tests ====================================
 

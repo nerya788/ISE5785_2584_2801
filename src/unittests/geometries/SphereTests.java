@@ -9,7 +9,8 @@ import geometries.*;
 import org.junit.jupiter.api.Test;
 
 /**
- * 
+ * Testing Spheres
+ * @author Nerya
  */
 class SphereTests {
 	double DELTA = 0.00000000001;
@@ -25,7 +26,7 @@ class SphereTests {
 		
 		// ============================ Equivalence Partitions Tests ============================
 		 
-		assertEquals(new Vector (0,0,-1), sphere.getNormal(point121), DELTA, "wrong normal of plane");
+		assertEquals(new Vector (0,0,-1), sphere.getNormal(point121),  "wrong normal of plane");
 	}
 
 }

@@ -10,7 +10,8 @@ import org.junit.jupiter.api.Test;
 
 
 /**
- * 
+ * Testing Vectors
+ * @authors Neriya_and_Yehuda
  */
 class VectorTests {
 	double DELTA=0.00000000001;

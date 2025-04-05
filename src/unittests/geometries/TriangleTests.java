@@ -9,7 +9,8 @@ import geometries.*;
 import org.junit.jupiter.api.Test;
 
 /**
- * 
+ * Testing Triangles
+ * @author Nerya
  */
 class TriangleTests {
 	double DELTA=0.00000000001;
@@ -26,7 +27,7 @@ class TriangleTests {
 		
 		// ============================ Equivalence Partitions Tests ============================
 		 
-		assertEquals(new Vector(0,-1,0), triangle.getNormal(point213), DELTA, "wrong normal of plane");
+		assertEquals(new Vector(0,-1,0), triangle.getNormal(point213),  "wrong normal of plane");
 	}
 
 }

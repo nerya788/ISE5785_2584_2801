@@ -10,7 +10,8 @@ import org.junit.jupiter.api.Test;
 import primitives.*;
 
 /**
- * 
+ * Testing Points
+ * @authors Neriya_and_Yehuda
  */
 class PointTests {
 
