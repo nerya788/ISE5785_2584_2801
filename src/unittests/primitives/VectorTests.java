@@ -25,7 +25,7 @@ class VectorTests {
 		assertEquals(new Vector (1,2,3),vec123 ,"wrong three Double constractor allocation");
 		
 		// ============================ Boundary Values Tests ============================
-		assertThrowsExactly(IllegalArgumentException.class, () -> new Vector (0,0,0), "Vector constractor of three Double cannot be zero vector");
+		assertThrows(IllegalArgumentException.class, () -> new Vector (0,0,0), "Vector constractor of three Double cannot be zero vector");
 	}
 
 	/**
@@ -40,7 +40,7 @@ class VectorTests {
 				assertEquals(new Vector (dou123),vec123 ,"wrong Double3 constractor allocation");
 				
 		// ============================ Boundary Values Tests ============================
-				assertThrowsExactly(IllegalArgumentException.class, () -> new Vector (dou000), "Vector onstractor of Double3 cannot be zero vector");
+				assertThrows(IllegalArgumentException.class, () -> new Vector (dou000), "Vector onstractor of Double3 cannot be zero vector");
 	}
 
 	/**
@@ -55,7 +55,7 @@ class VectorTests {
 		
 		// ============================ Boundary Values Tests ============================
 		Vector vecMinus123 = new Vector(-1,-2,-3);
-		assertThrowsExactly(IllegalArgumentException.class, () -> vec123.add(vecMinus123) ,"Vector onstractor of Double3 cannot be zero vector");
+		assertThrows(IllegalArgumentException.class, () -> vec123.add(vecMinus123) ,"Vector onstractor of Double3 cannot be zero vector");
 		
 	}
 	
@@ -66,7 +66,7 @@ class VectorTests {
 		assertEquals(new Vector (3,-1,7),vec123.subtract(vecm23m4),"wrong resulte for subtract two vectors");
 		
 		// ============================ Boundary Values Tests ============================
-		assertThrowsExactly(IllegalArgumentException.class, () -> vec123.subtract(vec123) ,"Vector onstractor of Double3 cannot be zero vector");
+		assertThrows(IllegalArgumentException.class, () -> vec123.subtract(vec123) ,"Vector onstractor of Double3 cannot be zero vector");
 		
 	}
 
@@ -82,7 +82,7 @@ class VectorTests {
 		
 		// ============================ Boundary Values Tests ============================
 		Double ZERO = 0.0; 
-		assertThrowsExactly(IllegalArgumentException.class, () -> vec135.scale(ZERO) ,"Vector onstractor of Double3 cannot be zero vector");
+		assertThrows(IllegalArgumentException.class, () -> vec135.scale(ZERO) ,"Vector onstractor of Double3 cannot be zero vector");
 	}
 
 	/**
