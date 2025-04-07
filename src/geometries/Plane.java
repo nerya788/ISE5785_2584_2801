@@ -1,5 +1,7 @@
 package geometries;
 
+import java.util.List;
+
 import primitives.*;
 
 /**
@@ -29,7 +31,7 @@ public class Plane extends Geometry {
      */
     public Plane(Point point, Vector vector) {
         head = point;
-        direction = null; // TODO: Assign vector after normalization //vec.normalize(); why error?
+        direction = vector.normalize(); 
     }
     
     /**
@@ -41,6 +43,11 @@ public class Plane extends Geometry {
     @Override
     public Vector getNormal(Point point) {
         return direction;
+    }
+    
+    @Override
+    public List<Point> findIntersections(Ray ray){
+    	return null;
     }
 }
 

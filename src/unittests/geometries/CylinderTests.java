@@ -47,5 +47,10 @@ class CylinderTests {
 		assertEquals(new Vector (1, 0, 0),  cylinder.getNormal(point310),  "wrong normal of edge center base2 cylinder");	
 
 	}
+	
+	@Test
+	void testFindIntersections() {
+		fail("Not yet implemented");
+	}
 
 }

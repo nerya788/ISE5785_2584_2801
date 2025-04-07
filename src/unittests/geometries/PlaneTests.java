@@ -58,5 +58,10 @@ class PlaneTests {
 		 Point point369 = new Point(3,6,9);
 		 assertThrows(IllegalArgumentException.class, () -> new Plane (point123,point246,point369) ,"all the point on same direct, normal vector cannot be zero vector");
 	}
+	
+	@Test
+	void testFindIntersections() {
+		fail("Not yet implemented");
+	}
 
 }

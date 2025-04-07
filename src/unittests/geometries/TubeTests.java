@@ -33,5 +33,10 @@ class TubeTests {
 		// ============================ Equivalence Partitions Tests ============================
 		assertEquals(new Vector (0,1,0), tube.getNormal(point110),  "wrong normal of side tube");	
 	}
+	
+	@Test
+	void testFindIntersections() {
+		fail("Not yet implemented");
+	}
 
 }
