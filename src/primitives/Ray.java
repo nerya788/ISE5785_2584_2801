@@ -33,7 +33,7 @@ public class Ray {
     
 
     /**
-     * getter head
+     * getter direction
      */
     public Vector getDirection() {
     	return direction;

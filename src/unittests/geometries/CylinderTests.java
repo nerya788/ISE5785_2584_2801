@@ -15,7 +15,7 @@ import geometries.*;
  * @author Nerya
  */
 class CylinderTests {
-	final double Two = 2.0;
+	final double Radius = 2.0;
 	/**
 	 * Test method for {@link geometries.Cylinder#getNormal(primitives.Point)}.
 	 */
@@ -25,7 +25,7 @@ class CylinderTests {
 		Point point100 = new Point(1, 0, 0);
 		Vector vec200 = new Vector(2, 0, 0);
 		Ray ray = new Ray (point100, vec200);
-		Cylinder cylinder = new Cylinder(ray, Two, height);
+		Cylinder cylinder = new Cylinder(ray, Radius, height);
 		
 		Point point1050 = new Point(1, 0.5, 0);
 		Point point210 = new Point(2, 1, 0);

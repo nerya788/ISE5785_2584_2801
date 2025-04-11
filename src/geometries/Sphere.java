@@ -1,6 +1,7 @@
 package geometries;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import primitives.*;
 
@@ -31,9 +32,48 @@ public class Sphere extends RadialGeometry {
     	
         return (point.subtract(center)).normalize();
     }
-    
+ 
     @Override
-    public List<Point> findIntersections(Ray ray){
-    	return null;
+    public List<Point> findIntersections(Ray ray) {
+    	if (ray.getHead()==center)
+    		return List.of(ray.getPoint(radius)); 
+    	Vector u = center.subtract(ray.getHead());
+    	double tm = u.dotProduct(ray.getDirection());
+    	double d = Math.sqrt(u.length()*u.length() - tm*tm);
+    	if (d>=radius)
+    		return null;
+    	else
+    	{
+    		double th = Math.sqrt(radius*radius - d*d);
+    		if ((tm-th)>0 && (tm+th)>0)
+    			return List.of((ray.getPoint(tm-th)),ray.getPoint(tm+th));
+    		else if ((tm-th)>0 && (tm+th)<=0)
+    			return List.of((ray.getPoint(tm-th)));
+    		else if ((tm-th)<=0 && (tm+th)>0)
+    			return List.of(ray.getPoint(tm+th));
+    		
+    		return null;
+    	}
     }
 }
+
+/*
+  @Override
+    public List<Point> findIntersections(Ray ray){
+    	List<Point> intersections = new ArrayList<Point>();
+    	Vector u = center.subtract(ray.getHead());
+    	double tm = u.dotProduct(ray.getDirection());
+    	double d = Math.sqrt(u.length()*u.length() - tm*tm);
+    	if (d>=radius) {
+    		return null;
+    	}
+    	else
+    	{
+    		double th = Math.sqrt(radius*radius - d*d);
+    		if ((tm-th)>0) intersections.add(ray.getPoint(tm-th));
+    		if ((tm+th)>0) intersections.add(ray.getPoint(tm+th));
+    		return intersections;
+    	}
+   }  
+}
+*/
