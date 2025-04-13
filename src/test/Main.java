@@ -2,7 +2,7 @@
  * student1: name: nerya cohen    id: 316482801 email: neryh1997@gmail.com
  * student2: name: yehuda kupperman id: 207012584 email: yehudtray@gmail.com‏
  */
- 
+
 package test;
 
 import static java.lang.System.out;
