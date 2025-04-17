@@ -2,6 +2,10 @@ package geometries;
 
 import primitives.*;
 
+import java.util.List;
+import java.util.LinkedList;
+
+
 /**
  * Represents a finite cylinder in 3D space, defined by a central axis, a
  * radius, and a height. It extends the Tube class by adding a height
@@ -41,5 +45,55 @@ public class Cylinder extends Tube {
 			Point o = axis.getHead().add(axis.getDirection().scale(t));
 			return point.subtract(o).normalize();
 		}
+	}
+	@Override
+	public List<Point> findIntersections(Ray ray) {
+    List<Point> result = new LinkedList<>();
+
+	    // Step 1: Find intersections with the infinite tube part
+	    List<Point> tubeIntersections = super.findIntersections(ray);
+	    if (tubeIntersections != null) {
+	        for (Point pt : tubeIntersections) {
+	            // Check if point lies between the two bases of the finite cylinder
+	            double projection = axis.getDirection().dotProduct(pt.subtract(axis.getHead()));
+	            if (projection >= 0 && projection <= height) {
+	                result.add(pt);
+	            }
+	        }
+	    }
+
+	    // Step 2: Check intersection with bottom base
+	    Point baseCenter = axis.getHead();
+	    Vector va = axis.getDirection();
+	    double denom = va.dotProduct(ray.getDirection());
+
+	    if (!Util.isZero(denom)) {
+	        double t = va.dotProduct(baseCenter.subtract(ray.getHead())) / denom;
+	        if (t > 0) {
+	            Point p = ray.getPoint(t);
+	            if (p.subtract(baseCenter).lengthSquared() <= radius * radius + 1e-12) {
+	                result.add(p);
+	            }
+	        }
+	    }
+
+	    // Step 3: Check intersection with top base
+	    Point topCenter = axis.getHead().add(va.scale(height));
+	    denom = va.dotProduct(ray.getDirection());
+	    if (!Util.isZero(denom)) {
+	        double t = va.dotProduct(topCenter.subtract(ray.getHead())) / denom;
+	        if (t > 0) {
+	            Point p = ray.getPoint(t);
+	            if (p.subtract(topCenter).lengthSquared() <= radius * radius + 1e-12) {
+	                result.add(p);
+	            }
+	        }
+	    }
+
+	    if (result.isEmpty())
+	        return null;
+	    if (result.size() == 2)
+	        return List.of(result.get(0), result.get(1));
+	    return List.of(result.get(0));
 	}
 }

@@ -144,8 +144,7 @@ class SphereTests {
 		assertNull(sphere.findIntersections(new Ray(new Point(2, 1, 0), v100)), "Ray tangent after point");
 
 		// **** Group 4: Special cases
-		// TC41: Ray's line is outside sphere, ray is orthogonal to start-to-center line
-		// (0 points)
+		// TC41: Ray's line is outside sphere, ray is orthogonal to start-to-center line (0 points)
 		assertNull(sphere.findIntersections(new Ray(new Point(-1, 0, 0), v010)), "Orthogonal ray outside sphere");
 
 		// TC42: Ray starts inside, orthogonal to center line (1 point)
