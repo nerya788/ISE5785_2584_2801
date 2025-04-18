@@ -10,6 +10,7 @@ import static java.lang.System.out;
 import static primitives.Util.isZero;
 
 import primitives.*;
+import geometries.*;
 
 /**
  * Test program for the 1st stage
@@ -17,6 +18,10 @@ import primitives.*;
  * @author Dan Zilberstein
  */
 public final class Main {
+	Sphere sphere = new Sphere (new Point (1,1,1),2);
+	Geometries geo = new Geometries(tube);
+
+
 	/** A point for tests at (1,2,3) */
 	private static final Point P1 = new Point(1, 2, 3);
 	/** A point for tests at (2,4,6) */

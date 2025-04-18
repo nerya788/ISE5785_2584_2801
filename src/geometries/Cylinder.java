@@ -3,6 +3,11 @@ package geometries;
 import primitives.*;
 
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import java.util.LinkedList;
 
 
@@ -46,6 +51,7 @@ public class Cylinder extends Tube {
 			return point.subtract(o).normalize();
 		}
 	}
+	
 	@Override
 	public List<Point> findIntersections(Ray ray) {
     List<Point> result = new LinkedList<>();
@@ -67,11 +73,11 @@ public class Cylinder extends Tube {
 	    Vector va = axis.getDirection();
 	    double denom = va.dotProduct(ray.getDirection());
 
-	    if (!Util.isZero(denom)) {
+	    if (!Util.isZero(denom) && (!baseCenter.equals(ray.getHead()))) {
 	        double t = va.dotProduct(baseCenter.subtract(ray.getHead())) / denom;
 	        if (t > 0) {
 	            Point p = ray.getPoint(t);
-	            if (p.subtract(baseCenter).lengthSquared() <= radius * radius + 1e-12) {
+	            if (p.equals(baseCenter) || p.subtract(baseCenter).lengthSquared() <= radius * radius - 1e-12) {
 	                result.add(p);
 	            }
 	        }
@@ -80,20 +86,25 @@ public class Cylinder extends Tube {
 	    // Step 3: Check intersection with top base
 	    Point topCenter = axis.getHead().add(va.scale(height));
 	    denom = va.dotProduct(ray.getDirection());
-	    if (!Util.isZero(denom)) {
+	    if (!Util.isZero(denom) && (!topCenter.equals(ray.getHead()))) {
 	        double t = va.dotProduct(topCenter.subtract(ray.getHead())) / denom;
 	        if (t > 0) {
 	            Point p = ray.getPoint(t);
-	            if (p.subtract(topCenter).lengthSquared() <= radius * radius + 1e-12) {
+	            if (p.equals(topCenter) || p.subtract(topCenter).lengthSquared() <= radius * radius - 1e-12) {
 	                result.add(p);
 	            }
 	        }
 	    }
-
+	    
+	    //return the list result
 	    if (result.isEmpty())
 	        return null;
 	    if (result.size() == 2)
-	        return List.of(result.get(0), result.get(1));
+	    	if (result.get(0).subtract(ray.getHead()).length()<result.get(1).subtract(ray.getHead()).length())
+	    		return List.of(result.get(0), result.get(1));
+	    	else
+	    		return List.of(result.get(1), result.get(0));
 	    return List.of(result.get(0));
 	}
 }
+

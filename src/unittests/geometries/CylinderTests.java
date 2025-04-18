@@ -58,6 +58,7 @@ class CylinderTests {
 	void testFindIntersections() {
 		
 		final Point p100 = new Point(1, 0, 0);
+		final Point p103 = new Point(1, 0, 3);
 		final Point p200 = new Point(2, 0, 0);
 	    final Point p2500 = new Point(2.5, 0, 0);
 	    final Point p120 = new Point(1, 2, 0);
@@ -77,11 +78,12 @@ class CylinderTests {
 	    final Vector vm302 = new Vector(-3, 0, 2);
 	    final Vector vm102 = new Vector(-1, 0, 2);
 	    final Vector vm101 = new Vector(-1, 0, 1);
-	    final Vector vm1052 = new Vector(-1, 0.5, 2);
+	    final Vector vm112 = new Vector(-1, 1, 2);
 		final Vector v0m10 = new Vector(0, -1, 0);
 		final Vector v310 = new Vector(3, 1, 0);
+		final Vector vm1015 = new Vector(-1, 0, 1.5);
 
-		Tube tube = new Tube(new Ray(p100, v001), 1);
+		Tube tube = new Cylinder(new Ray(p100, v001), 1, 3);
 		
 
         // ============ Equivalence Partitions Tests ==============
@@ -111,17 +113,25 @@ class CylinderTests {
 		
 		//**** Group 2: parallel and orthogonal line
 		// TC05: Ray parallel and orthogonal to the tube axis, inside the tube, length the tube (0 points)
-		assertNull(tube.findIntersections(new Ray(new Point(1, 0.5, 0), v001)), "Ray is parallel and inside tube, down base");
-		
-		//TC06: Ray parallel and orthogonal to the tube axis, inside the tube, length the tube, down base (1 points)
-        List<Point> result3 = tube.findIntersections(new Ray(new Point(1, 0.5, -1), v001));
-        final var exp3 = List.of(new Point(1, 0.5, 0));
+        List<Point> result3 = tube.findIntersections(new Ray(new Point(1, 0.5, 0), v001));
+        final var exp3 = List.of(new Point(1, 0.5, 3));
         assertNotNull(result3, "Ray starts inside the tube");
         assertEquals(1, result2.size(), "TC02: Expected one intersection point");
         assertEquals(exp3, result3, "Ray crosses plant the tube");
+		
+		//TC06: Ray parallel and orthogonal to the tube axis, inside the tube, length the tube, down base (1 points)
+        List<Point> result33 = tube.findIntersections(new Ray(new Point(1, 0.5, -1), v001));
+        final var exp33 = List.of(new Point(1, 0.5, 0),new Point(1, 0.5, 3));
+        assertNotNull(result33, "Ray starts inside the tube");
+        assertEquals(2, result33.size(), "TC02: Expected one intersection point");
+        assertEquals(exp33, result33, "Ray crosses plant the tube");
 
 		//TC07: Ray parallel and orthogonal to the tube axis, inside the tube, length the tube, up base (0 points)
-		assertNull(tube.findIntersections(new Ray(new Point(1, 0.5, 1), v001)) ,"Ray is parallel and inside tube, up base");
+        List<Point> result34 = tube.findIntersections(new Ray(new Point(1, 0.5, 1), v001));
+        final var exp34 = List.of(new Point(1, 0.5, 3));
+        assertNotNull(result34, "Ray starts inside the tube");
+        assertEquals(1, result34.size(), "TC02: Expected one intersection point");
+        assertEquals(exp34, result34, "Ray crosses plant the tube");
 
 		//TC08: Ray parallel and orthogonal to the tube axis, inside the tube, length the tube, up base (0 points)
 		assertNull(tube.findIntersections(new Ray(new Point(1, 0.5, -1), v00m1)) ,"Ray is parallel and inside tube, up base");
@@ -136,14 +146,14 @@ class CylinderTests {
         List<Point> result31 = tube.findIntersections(new Ray(new Point(-1.5, 0.5, 1), v100));
         final var exp31 = List.of(new Point(0.133974596215561,0.5,1),new Point(1.866025403784438, 0.5, 1));
         assertNotNull(result31, "Ray starts inside the tube");
-        assertEquals(2, result2.size(), "TC02: Expected one intersection point");
+        assertEquals(2, result31.size(), "TC02: Expected one intersection point");
         assertEquals(exp31, result31, "Ray crosses plant the tube");
 
 		//TC10B: Ray parallel and orthogonal to the tube axis, inside the tube, length the tube, up base on the center(2 points)
         List<Point> result32 = tube.findIntersections(new Ray(new Point(-1.5, 0, 1), v100));
         final var exp32 = List.of(new Point(0,0,1),new Point(2,0,1));
         assertNotNull(result32, "Ray starts inside the tube");
-        assertEquals(2, result2.size(), "TC02: Expected one intersection point");
+        assertEquals(2, result32.size(), "TC02: Expected one intersection point");
         assertEquals(exp32, result32, "Ray crosses plant the tube");
 
 		
@@ -171,7 +181,7 @@ class CylinderTests {
 		assertNull(tube.findIntersections(new Ray( new Point (0.1055122253, 0.5, 1.9296585165), vm302)), "Ray start began the tube");
 
 		// TC15: Ray start at the end of the tube(1 points)
-        final var result6 = tube.findIntersections(new Ray(new Point (1.8660254038, 0.5, 0.7559830641), vm302));
+        final var result6 = tube.findIntersections(new Ray(new Point (1.866025403784439, 0.5, 0.755983064143708), vm302));
 		final var exp6 = List.of(new Point (0.133974596215561,0.5,1.910683602522959));
 		assertNotNull(result6, "Can't be empty list");
 		assertEquals(1, result6.size(), "Wrong number of points");
@@ -184,7 +194,7 @@ class CylinderTests {
 		//**** Group 4: the line passes inside the tube, start down base of tube
         // TC16: Ray start before the tube (2 points)
         final var result7 = tube.findIntersections(new Ray(new Point(2, 0.5, -2.5), vm102));
-		final var exp7 = List.of(new Point (0.75, 0.5, 0), new Point (0.133974596215561,0.5,1.232050807568877));
+		final var exp7 = List.of(new Point (0.75, 0.5, 0), new Point (0.13397459621613872,0.5,1.2320508075677226));
 		assertNotNull(result7, "Can't be empty list");
 		assertEquals(2, result7.size(), "Wrong number of points");
 		assertEquals(exp7, result7, "Ray start before the tub");
@@ -192,9 +202,9 @@ class CylinderTests {
 
 		// TC17: Ray start in the tube(1 points)
         final var result8 = tube.findIntersections(new Ray(new Point(1, 0.5, -0.5), vm102));
-		final var exp8 = List.of(new Point (0.133974596215561,0.5,1.232050807568877));
+		final var exp8 = List.of(new Point (0.75,0.5,0),new Point (0.13397459621613872,0.5,1.2320508075677226));
 		assertNotNull(result8, "Can't be empty list");
-		assertEquals(1, result8.size(), "Wrong number of points");
+		assertEquals(2, result8.size(), "Wrong number of points");
 		assertEquals(exp8, result8, "Ray start in the tube");
 		
 		// TC18: Ray start after the tube(0 points)
@@ -202,13 +212,13 @@ class CylinderTests {
 		
 		// TC19: Ray start began the tube(1 points)
         final var result9 = tube.findIntersections(new Ray(new Point (0.75,0.5,0), vm102));
-		final var exp9 = List.of(new Point (0.133974596215561,0.5,1.232050807568877));
+		final var exp9 = List.of(new Point (0.13397459621613872,0.5,1.2320508075677226));
 		assertNotNull(result9, "Can't be empty list");
 		assertEquals(1, result9.size(), "Wrong number of points");
 		assertEquals(exp9, result9, "Ray start began the tube");
 
 		// TC20: Ray start at the end of the tube(0 points)
-		assertNull(tube.findIntersections(new Ray(new Point (0.133974596215561,0.5,1.232050807568877), vm102)), "Ray start at the end of the tube");
+		assertNull(tube.findIntersections(new Ray(new Point (0.13397459621613872,0.5,1.2320508075677226), vm102)), "Ray start at the end of the tube");
 
 		
 		
@@ -216,28 +226,28 @@ class CylinderTests {
 		
 		//**** Group 5: line passes inside the tube, start between the base along the tube
         // TC21: Ray start before the tube (2 points)
-        final var result10 = tube.findIntersections(new Ray(new Point(3, -0.5, -2), vm1052));
-		final var exp10 = List.of(new Point (2, 0, 0), new Point (0.4, 0.8, 3.2));
+        final var result10 = tube.findIntersections(new Ray(new Point(4,0,-3), vm1015));
+		final var exp10 = List.of(new Point (2, 0, 0), new Point (0,0,3));
 		assertNotNull(result10, "Can't be empty list");
 		assertEquals(2, result10.size(), "Wrong number of points");
 		assertEquals(exp10, result10, "Ray start before the tube");
 
 		// TC22: Ray start in the tube(1 points)
-        final var result11 = tube.findIntersections(new Ray(new Point(1.5, 0.25, 1), vm1052));
-		final var exp11 = List.of(new Point (0.4, 0.8, 3.2));
+        final var result11 = tube.findIntersections(new Ray(new Point(1.5,0,0.75), vm1015));
+		final var exp11 = List.of( new Point (0,0,3));
 		assertNotNull(result11, "Can't be empty list");
 		assertEquals(1, result11.size(), "Wrong number of points");
 		assertEquals(exp11, result11, "Ray start in the tube");
 				
 		// TC23: Ray start after the tube(0 points)
-		assertNull(tube.findIntersections(new Ray( new Point (0,1,4), vm1052)), "Ray start after the tube");
+		assertNull(tube.findIntersections(new Ray( new Point (-2,0,6), vm1015)), "Ray start after the tube");
 
 		// TC24:  Ray start at the end of the tube(0 points)
-		assertNull(tube.findIntersections(new Ray(new Point(0.4, 0.8, 3.2), vm1052)), "Ray start at the end of the tube");
+		assertNull(tube.findIntersections(new Ray(new Point(0,0,3), vm1015)), "Ray start at the end of the tube");
 
 		// TC25: Ray start began the tube(1 points)
-        final var result12 = tube.findIntersections(new Ray(new Point (2,0,0), vm1052));
-		final var exp12 = List.of(new Point (0.4, 0.8, 3.2));
+        final var result12 = tube.findIntersections(new Ray(new Point (2,0,0), vm1015));
+		final var exp12 = List.of(new Point (0,0,3));
 		assertNotNull(result12, "Can't be empty list");
 		assertEquals(1, result12.size(), "Wrong number of points");
 		assertEquals(exp12, result12, "Ray start began the tube");
@@ -287,15 +297,15 @@ class CylinderTests {
 		
 		//**** Group 7: line passes inside the tube, start down base of tube on center
         // TC32: Ray start before the tube (2 points)
-        final var result17 = tube.findIntersections(new Ray(new Point(2.5, 0, -2), vm102));
-		final var exp17 = List.of(new Point (1.5, 0, 0), new Point (0, 0, 3));
+        final var result17 = tube.findIntersections(new Ray(new Point(2.5, 0, -2), vm1015));
+		final var exp17 = List.of(new Point (1.1666666666666667, 0, 0), new Point (0, 0, 1.75));
 		assertNotNull(result17, "Can't be empty list");
 		assertEquals(2, result17.size(), "Wrong number of points");
 		assertEquals(exp17, result17, "Ray start before the tube");
 
 		// TC33: Ray start in the tube(1 points)
-        final var result18 = tube.findIntersections(new Ray(new Point(0.5, 0, 2), vm102));
-		final var exp18 = List.of( new Point (0, 0, 3));
+        final var result18 = tube.findIntersections(new Ray(new Point(0.5, 0, 1), vm1015));
+		final var exp18 = List.of(new Point (0, 0, 1.75));
 		assertNotNull(result18, "Can't be empty list");
 		assertEquals(1, result18.size(), "Wrong number of points");
 		assertEquals(exp18, result18, "Ray start in the tube");
@@ -308,15 +318,15 @@ class CylinderTests {
 		
 
 		// TC36: Ray start began the tube(1 points)
-        final var result19 = tube.findIntersections(new Ray(new Point(1.5, 0, 0), vm102));
-		final var exp19 = List.of( new Point (0, 0, 3));
+        final var result19 = tube.findIntersections(new Ray(new Point(1.1666666666666667, 0, 0), vm1015));
+		final var exp19 = List.of( new Point (0, 0, 1.75));
 		assertNotNull(result19, "Can't be empty list");
 		assertEquals(1, result19.size(), "Wrong number of points");
 		assertEquals(exp19, result19, "Ray start began the tube");
 
 		// TC37: Ray start at the center of tube(0 points)
-        final var result20 = tube.findIntersections(new Ray(new Point (1, 0, 1), vm102));
-		final var exp20 = List.of(new Point (0, 0, 3));
+        final var result20 = tube.findIntersections(new Ray(new Point (1, 0, 0.25), vm1015));
+		final var exp20 = List.of(new Point (0, 0, 1.75));
 		assertNotNull(result20, "Can't be empty list");
 		assertEquals(1, result20.size(), "Wrong number of points");
 		assertEquals(exp20, result20, "Ray start at the center of tube");
@@ -335,7 +345,7 @@ class CylinderTests {
 
 		// TC39: Ray start in the tube(1 points)
         final var result22 = tube.findIntersections(new Ray(new Point(1.5, 0, 0.5), vm101));
-		final var exp22 = List.of( new Point (0, 0, 3));
+		final var exp22 = List.of( new Point (0, 0, 2));
 		assertNotNull(result22, "Can't be empty list");
 		assertEquals(1, result22.size(), "Wrong number of points");
 		assertEquals(exp22, result22, "Ray start in the tube");
@@ -348,14 +358,14 @@ class CylinderTests {
 
 		// TC42: Ray start began the tube(1 points)
         final var result23 = tube.findIntersections(new Ray(new Point(2, 0, 0), vm101));
-		final var exp23 = List.of( new Point (0, 0, 3));
+		final var exp23 = List.of( new Point (0, 0, 2));
 		assertNotNull(result23, "Can't be empty list");
 		assertEquals(1, result23.size(), "Wrong number of points");
 		assertEquals(exp23, result23, "Ray start began the tube");
 
 		// TC43: Ray start at the center of tube(1 points)
         final var result24 = tube.findIntersections(new Ray(new Point (1, 0, 1), vm101));
-		final var exp24 = List.of(new Point (0, 0, 3));
+		final var exp24 = List.of(new Point (0, 0, 2));
 		assertNotNull(result24, "Can't be empty list");
 		assertEquals(1, result24.size(), "Wrong number of points");
 		assertEquals(exp24, result24, "Ray start at the center of tube");
@@ -433,14 +443,14 @@ class CylinderTests {
         
 		// **** Group 12: Ray's start on the base
 		// TC57: Ray starts at sphere and goes inside (1 point)
-		final var result29 = tube.findIntersections(new Ray(p200, v1m10));
+		final var result29 = tube.findIntersections(new Ray(p200, vm110));
 		final var exp29 = List.of(p110);
 		assertNotNull(result29, "Can't be empty list");
 		assertEquals(1, result29.size(), "Wrong number of points");
 		assertEquals(exp29, result29, "Ray starts at sphere and goes inside");
 
 		// TC58: Ray starts at sphere and goes outside (0 points)
-		assertNull(tube.findIntersections(new Ray(p200, vm110)), "Ray starts at sphere and goes outside");
+		assertNull(tube.findIntersections(new Ray(p200, v1m10)), "Ray starts at sphere and goes outside");
 
 		
 		
@@ -449,17 +459,25 @@ class CylinderTests {
 		assertNull(tube.findIntersections(new Ray(new Point(-1, 0, 0), v010)), "Orthogonal ray outside tube");
 		
 		// TC60: Ray is orthogonal and inside center of tube, inside the tube center(0 points)
-		assertNull(tube.findIntersections(new Ray(p100, v001)), "Ray is orthogonal and inside center of tube");
-
-		// TC61: Ray is orthogonal and inside center of tube, inside up the tube length(0 points)
-		assertNull(tube.findIntersections(new Ray(new Point(1, 0, 1), v001)), "Ray is orthogonal and inside center of tube");
-
-		// TC62: Ray is orthogonal and inside center of tube, outside down tube length(0 points)
-		List<Point> result30 = tube.findIntersections(new Ray(new Point(1,0,-1), v001));
-        final var exp30 = List.of(p100);
+		List<Point> result30 = tube.findIntersections(new Ray(p100, v001));
+        final var exp30 = List.of(p103);
         assertNotNull(result30, "Ray starts inside the tube");
         assertEquals(1, result30.size(), "TC02: Expected one intersection point");
         assertEquals(exp30, result30, "Ray is orthogonal and inside center of tube");
+
+		// TC61: Ray is orthogonal and inside center of tube, inside up the tube length(0 points)
+		List<Point> result36 = tube.findIntersections(new Ray(new Point(1,0,1), v001));
+        final var exp36 = List.of(p103);
+        assertNotNull(result36, "Ray starts inside the tube");
+        assertEquals(1, result36.size(), "TC02: Expected one intersection point");
+        assertEquals(exp36, result36, "Ray is orthogonal and inside center of tube");
+
+		// TC62: Ray is orthogonal and inside center of tube, outside down tube length(0 points)
+		List<Point> result37 = tube.findIntersections(new Ray(new Point(1,0,-1), v001));
+        final var exp37 = List.of(p100,p103);
+        assertNotNull(result37, "Ray starts inside the tube");
+        assertEquals(2, result37.size(), "TC02: Expected one intersection point");
+        assertEquals(exp37, result37, "Ray is orthogonal and inside center of tube");
 
 		// TC63: Ray is orthogonal and outside vis versa center of tube(0 points)
 		assertNull(tube.findIntersections(new Ray(new Point(1, 0, -1), v00m1)), "Ray is orthogonal and outside vers versa center of tube");
@@ -469,7 +487,11 @@ class CylinderTests {
 		assertNull(tube.findIntersections(new Ray(new Point(2, 0, 0), v001)), "Ray is contained in tube length");
 
         //TC65: Ray is contained in tube width
-		assertNull(tube.findIntersections(new Ray(new Point(-1,0,0), v100)), "Ray is contained in tube width");
+		List<Point> result38 = tube.findIntersections(new Ray(new Point(-1,0,0), v100));
+        final var exp38 = List.of(new Point(0,0,0),p200);
+        assertNotNull(result38, "Ray starts inside the tube");
+        assertEquals(2, result38.size(), "TC02: Expected one intersection point");
+        assertEquals(exp38, result38, "Ray is orthogonal and inside center of tube");
 
 	}
 
