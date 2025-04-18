@@ -10,7 +10,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.LinkedList;
 
-
 /**
  * Represents a finite cylinder in 3D space, defined by a central axis, a
  * radius, and a height. It extends the Tube class by adding a height
@@ -51,60 +50,76 @@ public class Cylinder extends Tube {
 			return point.subtract(o).normalize();
 		}
 	}
-	
+
 	@Override
+    /**
+     * Finds and returns intersection points between the cylinder and a given ray.
+     * The method considers the intersections with the infinite tube, as well as 
+     * the top and bottom bases of the cylinder.
+     *
+     * @param ray The ray to find intersections with.
+     * @return A list of intersection points, or {@code null} if there are no intersections.
+     */
 	public List<Point> findIntersections(Ray ray) {
-    List<Point> result = new LinkedList<>();
+		List<Point> result = null;//new LinkedList<>()
 
-	    // Step 1: Find intersections with the infinite tube part
-	    List<Point> tubeIntersections = super.findIntersections(ray);
-	    if (tubeIntersections != null) {
-	        for (Point pt : tubeIntersections) {
-	            // Check if point lies between the two bases of the finite cylinder
-	            double projection = axis.getDirection().dotProduct(pt.subtract(axis.getHead()));
-	            if (projection >= 0 && projection <= height) {
+		// Step 1: Find intersections with the infinite tube part
+		List<Point> tubeIntersections = super.findIntersections(ray);
+		if (tubeIntersections != null) {
+			for (Point pt : tubeIntersections) {
+				// Check if point lies between the two bases of the finite cylinder
+				double projection = axis.getDirection().dotProduct(pt.subtract(axis.getHead()));
+				if (projection >= 0 && projection <= height) {
+	                if (result == null)
+	                	result = new LinkedList<>();
 	                result.add(pt);
-	            }
-	        }
-	    }
 
-	    // Step 2: Check intersection with bottom base
-	    Point baseCenter = axis.getHead();
-	    Vector va = axis.getDirection();
-	    double denom = va.dotProduct(ray.getDirection());
+				}
+			}
+		}
 
-	    if (!Util.isZero(denom) && (!baseCenter.equals(ray.getHead()))) {
-	        double t = va.dotProduct(baseCenter.subtract(ray.getHead())) / denom;
-	        if (t > 0) {
-	            Point p = ray.getPoint(t);
-	            if (p.equals(baseCenter) || p.subtract(baseCenter).lengthSquared() <= radius * radius - 1e-12) {
+		// Step 2: Check intersection with bottom base
+		Point baseCenter = axis.getHead();
+		Vector va = axis.getDirection();
+		double denom = va.dotProduct(ray.getDirection());
+
+		if (!Util.isZero(denom) && (!baseCenter.equals(ray.getHead()))) {
+			double t = va.dotProduct(baseCenter.subtract(ray.getHead())) / denom;
+			if (t > 0) {
+				Point p = ray.getPoint(t);
+				if (p.equals(baseCenter) || p.subtract(baseCenter).lengthSquared() <= radius * radius - 1e-12) {
+	                if (result == null)
+	                	result = new LinkedList<>();
 	                result.add(p);
-	            }
-	        }
-	    }
 
-	    // Step 3: Check intersection with top base
-	    Point topCenter = axis.getHead().add(va.scale(height));
-	    denom = va.dotProduct(ray.getDirection());
-	    if (!Util.isZero(denom) && (!topCenter.equals(ray.getHead()))) {
-	        double t = va.dotProduct(topCenter.subtract(ray.getHead())) / denom;
-	        if (t > 0) {
-	            Point p = ray.getPoint(t);
-	            if (p.equals(topCenter) || p.subtract(topCenter).lengthSquared() <= radius * radius - 1e-12) {
+				}
+			}
+		}
+
+		// Step 3: Check intersection with top base
+		Point topCenter = axis.getHead().add(va.scale(height));
+		denom = va.dotProduct(ray.getDirection());
+		if (!Util.isZero(denom) && (!topCenter.equals(ray.getHead()))) {
+			double t = va.dotProduct(topCenter.subtract(ray.getHead())) / denom;
+			if (t > 0) {
+				Point p = ray.getPoint(t);
+				if (p.equals(topCenter) || p.subtract(topCenter).lengthSquared() <= radius * radius - 1e-12) {
+	                if (result == null)
+	                	result = new LinkedList<>();
 	                result.add(p);
-	            }
-	        }
-	    }
-	    
-	    //return the list result
-	    if (result.isEmpty())
-	        return null;
-	    if (result.size() == 2)
-	    	if (result.get(0).subtract(ray.getHead()).length()<result.get(1).subtract(ray.getHead()).length())
-	    		return List.of(result.get(0), result.get(1));
-	    	else
-	    		return List.of(result.get(1), result.get(0));
-	    return List.of(result.get(0));
+
+				}
+			}
+		}
+
+		// return the list result
+		if (result.isEmpty())
+			return null;
+		if (result.size() == 2)
+			if (result.get(0).subtract(ray.getHead()).length() < result.get(1).subtract(ray.getHead()).length())
+				return List.of(result.get(0), result.get(1));
+			else
+				return List.of(result.get(1), result.get(0));
+		return List.of(result.get(0));
 	}
 }
-

@@ -42,20 +42,23 @@ public class Tube extends RadialGeometry {
 
 	@Override
 	public List<Point> findIntersections(Ray ray) {
-	    /**
-	     * Finds the intersection points of a given ray with the infinite tube.
-	     * 
-	     * @param ray The ray to check for intersections with the tube.
-	     * @return A list of intersection points (may be empty if there are no intersections).
-	     * If there are two intersections, they will be returned in order of distance from the ray's head.
-	     * If there is only one intersection, it will be returned as a single element list.
-	     * If there are no intersections, null will be returned.
-	     */
+		/**
+		 * Finds the intersection points of a given ray with the infinite tube.
+		 * 
+		 * @param ray The ray to check for intersections with the tube.
+		 * @return A list of intersection points (may be empty if there are no
+		 *         intersections). If there are two intersections, they will be returned
+		 *         in order of distance from the ray's head. If there is only one
+		 *         intersection, it will be returned as a single element list. If there
+		 *         are no intersections, null will be returned.
+		 */
 
 		// Compute deltaP = p0 - o (assume not equal to avoid zero vector)
-		Vector deltaP = ray.getHead().equals(axis.getHead()) ? axis.getDirection() : ray.getHead().subtract(axis.getHead());
+		Vector deltaP = ray.getHead().equals(axis.getHead()) ? axis.getDirection()
+				: ray.getHead().subtract(axis.getHead());
 
-		// Compute the orthogonal component of the ray direction (vOrth) relative to the tube axis.
+		// Compute the orthogonal component of the ray direction (vOrth) relative to the
+		// tube axis.
 		double vDotVa = ray.getDirection().dotProduct(axis.getDirection());
 
 		Vector vOrth;
@@ -63,21 +66,24 @@ public class Tube extends RadialGeometry {
 			// If the ray is parallel to the axis
 			vOrth = ray.getDirection();
 		else if (ray.getDirection().equals(axis.getDirection().scale(vDotVa)))
-			// If the ray direction is aligned with the axis, return null since they don't intersect.
+			// If the ray direction is aligned with the axis, return null since they don't
+			// intersect.
 			return null;
 		else
 			// Otherwise, calculate the perpendicular component of the ray direction.
 			vOrth = ray.getDirection().subtract(axis.getDirection().scale(vDotVa));
 
-	    // Compute the orthogonal component of deltaP (dpOrth) relative to the tube axis.
+		// Compute the orthogonal component of deltaP (dpOrth) relative to the tube
+		// axis.
 		Vector dpOrth;
 		double dpDotVa = deltaP.dotProduct(axis.getDirection());
 		if (Util.isZero(deltaP.lengthSquared()) || deltaP.normalize().equals(axis.getDirection())
 				|| deltaP.normalize().equals(axis.getDirection().scale(-1)))
-			/** If deltaP is zero or parallel to the axis, no orthogonal component
-			*Therefore, we will use an alternative calculation, in which we will check what t
-			*for which the beam will reach the tube
-			*/
+			/**
+			 * If deltaP is zero or parallel to the axis, no orthogonal component Therefore,
+			 * we will use an alternative calculation, in which we will check what t for
+			 * which the beam will reach the tube
+			 */
 			dpOrth = null;
 		else if (Util.isZero(dpDotVa))
 			// If deltaP is orthogonal to the axis, keep it as is

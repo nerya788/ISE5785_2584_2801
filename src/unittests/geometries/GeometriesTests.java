@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package unittests.geometries;
 
@@ -10,24 +10,31 @@ import primitives.*;
 import geometries.*;
 
 /**
- * 
+ * Unit tests for the {@link Geometries} class, focusing on its intersection handling.
  */
 class GeometriesTests {
 
-	@Test
-	void testFindIntersections() {
-		final Point p100 = new Point(1, 0, 0);
-	    final Vector v001 = new Vector(0, 0, 1);
-	    final Tube tube = new Tube(new Ray(p100, v001), 1);
+    /**
+     * Tests the {@link Geometries#findIntersections(Ray)} method with various scenarios:
+     * <ul>
+     * <li>Empty collection of geometries</li>
+     * <li>No intersections</li>
+     * <li>Intersections with one or more geometries</li>
+     * <li>All geometries being intersected</li>
+     * </ul>
+     */
+    @Test
+    void testFindIntersections() {
+        final Point p100 = new Point(1, 0, 0);
+        final Vector v001 = new Vector(0, 0, 1);
+        final Tube tube = new Tube(new Ray(p100, v001), 1);
 
-		final Point pm2m20 = new Point(-2, -2, 0);
-		final Point p232 = new Point(2, 3, 2);
-		final Sphere sphere1 = new Sphere(pm2m20,1);
-		final Sphere sphere2 = new Sphere(p232,1);
-		
-	    
-		
-	       // Test: Empty collection (BVA)
+        final Point pm2m20 = new Point(-2, -2, 0);
+        final Point p232 = new Point(2, 3, 2);
+        final Sphere sphere1 = new Sphere(pm2m20, 1);
+        final Sphere sphere2 = new Sphere(p232, 1);
+
+        // Test: Empty collection (BVA)
         Geometries geometries = new Geometries();
         assertNull(geometries.findIntersections(new Ray(new Point(0, 0, 0), new Vector(1, 1, 1))),
                 "Expected null for empty collection");
@@ -51,6 +58,6 @@ class GeometriesTests {
         Ray ray3 = new Ray(new Point(4, 4.875, 2.75), new Vector(-1, -1.25, -0.5)); // Intersects all shapes
         assertEquals(6, geometries.findIntersections(ray3).size(),
                 "Expected intersections with all shapes for a suitable ray");
-        }
+    }
 
 }
