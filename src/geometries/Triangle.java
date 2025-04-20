@@ -19,6 +19,16 @@ public class Triangle extends Polygon {
 		return super.getNormal(point);
 	}
 	
+	/**
+     * Finds the intersection points between a given {@link Ray} and the triangle.
+     * <p>
+     * If there are intersection points, they are calculated and returned as a list.
+     * If there are no intersection points (the ray does not intersect the triangle),
+     * this method returns {@code null}.
+     *
+     * @param ray The {@link Ray} to check for intersections with the triangle
+     * @return A list of intersection points as {@link Point} objects, or {@code null} if none exist
+     */
 	@Override
 	public List<Point> findIntersections(Ray ray) {
 		final List<Point> planeIntersections = plane.findIntersections(ray);

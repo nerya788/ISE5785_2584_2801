@@ -33,7 +33,9 @@ class TriangleTests {
 
 		assertEquals(new Vector(0, -1, 0), triangle.getNormal(point213), "wrong normal of plane");
 	}
-	
+	/**
+	 * Test method for {@link geometries.Triangle#findIntersections(geometries.Ray)}.
+	 */
 	@Test
 	void testFindIntersections() {
 		final Point p234 = new Point(2, 3, 4);
