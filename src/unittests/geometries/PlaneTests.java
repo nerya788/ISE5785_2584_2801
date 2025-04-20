@@ -85,10 +85,10 @@ class PlaneTests {
 		// ============ Equivalence Partitions Tests ==============
 		
 		// TC01: Ray's line that starts outside the plane and have only one intersection.
-		final var res1 = p.findIntersections(new Ray(new Point(4, 2, 1), new Vector(-1, 0, 1)));
+		final var res1 = p.findIntersections(new Ray(new Point(2, 3, 7), new Vector(0, 0, -1)));
 		assertNotNull(res1, "Can't be null");
 		assertEquals(1, res1.size(), "Wrong number of points");
-		assertEquals(List.of(new Point(3.5, 2.5, 1.5)), res1, "Ray crosses plane in a different point");
+		assertEquals(List.of(new Point(2, 3, 4)), res1, "Ray crosses plane in a different point");
 		
 		// TC02: Ray's line that starts outside the plane and dosn't have any intersection.
 		assertNull(p.findIntersections(new Ray(new Point(7, 6, 7), new Vector(1, -2, -2))), "Ray starts after the plane");

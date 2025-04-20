@@ -37,8 +37,8 @@ public class Triangle extends Polygon {
 		
 		final Point planeIntersection = planeIntersections.getFirst();
 		
-		final Point a = this.vertices.get(0);
-		final Point b = this.vertices.get(1);
+		final Point b = this.vertices.get(0);
+		final Point a = this.vertices.get(1);
 		final Point c = this.vertices.get(2);
 		
 		final Vector v0 = c.subtract(a);
