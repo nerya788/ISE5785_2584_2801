@@ -32,5 +32,10 @@ class TriangleTests {
 
 		assertEquals(new Vector(0, -1, 0), triangle.getNormal(point213), "wrong normal of plane");
 	}
+	
+	@Test
+	void testFindIntersections() {
+		fail("Not yet implemented");
+	}
 
 }

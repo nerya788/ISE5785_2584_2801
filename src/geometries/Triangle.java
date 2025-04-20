@@ -1,6 +1,9 @@
 package geometries;
 
 import primitives.*;
+
+import java.util.List;
+
 import geometries.*;
 
 /**
@@ -16,5 +19,10 @@ public class Triangle extends Polygon {
 	@Override
 	public Vector getNormal(Point point) {
 		return super.getNormal(point);
+	}
+	
+	@Override
+	public List<Point> findIntersections(Ray ray) {
+		return null;
 	}
 }
