@@ -18,8 +18,6 @@ import geometries.*;
  * @author Dan Zilberstein
  */
 public final class Main {
-	Sphere sphere = new Sphere(new Point(1, 1, 1), 2);
-	Geometries geo = new Geometries(tube);
 
 	/** A point for tests at (1,2,3) */
 	private static final Point P1 = new Point(1, 2, 3);
