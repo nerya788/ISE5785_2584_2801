@@ -99,10 +99,7 @@ class PlaneTests {
 		assertNull(p.findIntersections(new Ray(new Point(2, 4, 4), vector012)), "Ray is parallel to the plane & not included");
 		
 		// TC04: Ray is parallel to the plane and included in the plane.
-		final var res4 = p.findIntersections(new Ray(point234, vector012));
-		assertNotNull(res4, "Can't be null");
-		assertEquals(0, res4.size(), "Wrong number of points");
-		assertEquals(List.of(), res4, "Ray is parllel to the plane and include in the plane ");
+		assertNull(p.findIntersections(new Ray(point234, vector012)), "Ray is parllel to the plane and include in the plane");
 		
 		// TC05: Ray is orthogonal to the plane and starts before the plane.
 		final var res5 = p.findIntersections(new Ray(new Point(0, 7, 2), vector1m21));
@@ -111,25 +108,16 @@ class PlaneTests {
 		assertEquals(List.of(new Point(2, 3, 4)), res5, "Ray crosses plane in a different point");
 		
 		// TC06: Ray is orthogonal to the plane and starts in the plane.
-		final var res6 = p.findIntersections(new Ray(new Point(3, 4, 5), vector1m21));
-		assertNotNull(res6, "Can't be null");
-		assertEquals(0, res6.size(), "Wrong number of points");
-		assertEquals(List.of(), res6, "Ray is parllel to the plane and the head of ray is in the plane ");
+		assertNull(p.findIntersections(new Ray(new Point(3, 4, 5), vector1m21)), "Ray is parllel to the plane & the head of ray is in the plane");
 		
 		// TC07: Ray is orthogonal to the plane and starts after the plane.
 		assertNull(p.findIntersections(new Ray(new Point(5, -3, 7), vector1m21)), "Ray starts after the plane");
 		
 		// TC08: ray is neither parallel or orthogonal to the plane and begins in the plane.
-		final var res8 = p.findIntersections(new Ray(new Point(3, 4, 5), vector101));
-		assertNotNull(res8, "Can't be null");
-		assertEquals(0, res8.size(), "Wrong number of points");
-		assertEquals(List.of(), res8, "Ray is not parllel to the plane and the head of ray is in the plane ");
+		assertNull(p.findIntersections(new Ray(new Point(3, 4, 5), vector101)), "Ray is not parllel to the plane and the head of ray is in the plane");
 		
 		// TC09: ray is neither parallel or orthogonal to the plane and begins in the same reference point of the plane.
-		final var res9 = p.findIntersections(new Ray(new Point(2, 3, 4), vector101));
-		assertNotNull(res9, "Can't be null");
-		assertEquals(0, res9.size(), "Wrong number of points");
-		assertEquals(List.of(), res9, "Ray is not parllel to the plane and the head of ray is the same as the plane point ");
+		assertNull(p.findIntersections(new Ray(new Point(2, 3, 4), vector101)), "Ray is not parllel to the plane and the head of ray is the same as the plane point");
 	}
 
 }

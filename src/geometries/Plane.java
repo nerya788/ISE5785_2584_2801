@@ -63,15 +63,15 @@ public class Plane extends Geometry {
 	@Override
 	public List<Point> findIntersections(Ray ray) {
 		if (ray.getHead().equals(head))
-			return List.of();
-		Vector v = ray.getHead().subtract(head);
-		if (Util.isZero(ray.getDirection().dotProduct(direction))) {
-			if (Util.isZero(v.dotProduct(direction)))
-				return List.of();
 			return null;
-		}
+		
+		Vector v = ray.getHead().subtract(head);
+		if (Util.isZero(ray.getDirection().dotProduct(direction))) 
+			return null;
+
 		if (Util.isZero(v.dotProduct(direction)))
-			return List.of();
+			return null;
+		
 		Vector v1 = head.subtract(ray.getHead());
 		double numerator = v1.dotProduct(direction);
 		double denominator = ray.getDirection().dotProduct(direction);
