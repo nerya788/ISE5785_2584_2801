@@ -37,10 +37,12 @@ public class Triangle extends Polygon {
 		
 		final Point planeIntersection = planeIntersections.getFirst();
 		
-		final Point b = this.vertices.get(0);
-		final Point a = this.vertices.get(1);
+		final Point a = this.vertices.get(0);
+		final Point b = this.vertices.get(1);
 		final Point c = this.vertices.get(2);
 		
+		if ((planeIntersection.equals(a)) || (planeIntersection.equals(b)) || (planeIntersection.equals(b)))
+			return null; // means that the intersection is located exactly on vertex a 
 		final Vector v0 = c.subtract(a);
 		final Vector v1 = b.subtract(a);
 		final Vector v2 = planeIntersection.subtract(a);
