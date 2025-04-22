@@ -25,13 +25,11 @@ class PointTests {
 		Vector vec123 = new Vector(1, 2, 3);
 		Vector vecm2m35 = new Vector(-2, -3, 5);
 
-		// ============================ Equivalence Partitions Tests
-		// ============================
-		assertEquals(point23m5.add(vec123), new Point(3, 5, -2), "wrong resulte for adding vector to point");
+		// ============================ Equivalence Partitions Tests =====================
+		assertEquals(new Point(3, 5, -2), point23m5.add(vec123), "wrong resulte for adding vector to point");
 
-		// ============================ Boundary Values Tests
-		// ============================
-		assertEquals(point23m5.add(vecm2m35), Point.ZERO, "wrong resulte zero for adding vector to point");
+		// ============================ Boundary Values Tests ============================
+		assertEquals(Point.ZERO, point23m5.add(vecm2m35), "wrong resulte zero for adding vector to point");
 	}
 
 	/**
@@ -43,10 +41,8 @@ class PointTests {
 		Point point23m5 = new Point(2, 3, -5);
 		Point point123 = new Point(1, 2, 3);
 
-		// ============================ Equivalence Partitions Tests
-		// ============================
-		assertEquals(point23m5.subtract(point123), new Vector(1, 1, -8),
-				"wrong resulte vector for subtract point to point");
+		// ============================ Equivalence Partitions Tests ============================
+		assertEquals( new Vector(1, 1, -8), point23m5.subtract(point123), "wrong resulte vector for subtract point to point");
 
 	}
 
@@ -57,7 +53,7 @@ class PointTests {
 	void testDistanceSquared() {
 		Point point23m5 = new Point(2, 3, -5);
 		Point point123 = new Point(1, 2, 3);
-		assertEquals(point23m5.distanceSquared(point123), 66, "wrong resulte distance squared");
+		assertEquals(66 ,point23m5.distanceSquared(point123),"wrong resulte distance squared");
 	}
 
 	/**
@@ -67,7 +63,7 @@ class PointTests {
 	void testDistance() {
 		Point point23m5 = new Point(2, 3, -5);
 		Point point123 = new Point(1, 2, 3);
-		assertEquals(point23m5.distance(point123), Math.sqrt(66), "wrong resulte distance squared");
+		assertEquals(Math.sqrt(66), point23m5.distance(point123), "wrong resulte distance squared");
 	}
 
 }

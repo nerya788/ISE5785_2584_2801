@@ -77,7 +77,6 @@ class CylinderTests {
 		final Vector vm302 = new Vector(-3, 0, 2);
 		final Vector vm102 = new Vector(-1, 0, 2);
 		final Vector vm101 = new Vector(-1, 0, 1);
-		final Vector vm112 = new Vector(-1, 1, 2);
 		final Vector v0m10 = new Vector(0, -1, 0);
 		final Vector v310 = new Vector(3, 1, 0);
 		final Vector vm1015 = new Vector(-1, 0, 1.5);

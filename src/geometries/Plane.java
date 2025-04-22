@@ -62,11 +62,9 @@ public class Plane extends Geometry {
      */
 	@Override
 	public List<Point> findIntersections(Ray ray) {
-		if (ray.getHead().equals(head))
+		if (ray.getHead().equals(head) || Util.isZero(ray.getDirection().dotProduct(direction)))
 			return null; // if the ray's head and the plane's head is exactly the same. 
-		
-		if (Util.isZero(ray.getDirection().dotProduct(direction))) 
-			return null; // if the ray is parallel to the plane.
+	
 
 		Vector v = ray.getHead().subtract(head);
 		if (Util.isZero(v.dotProduct(direction)))
