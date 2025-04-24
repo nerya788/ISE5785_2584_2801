@@ -28,6 +28,10 @@ public class Camera implements Cloneable {
 				camera.vTo = vTo.normalize();
 				camera.vUp = vUp.normalize();
 				camera.vRight = vTo.crossProduct(vUp).normalize();
+				//camera.vRight = vUp.crossProduct(vTo).normalize();
+				//camera.vUp = camera.vTo.crossProduct(camera.vRight).normalize();
+				camera.vUp = camera.vRight.crossProduct(camera.vTo).normalize();
+
 			}
 			else
 				throw new IllegalArgumentException("Vectors vTo and vUp isn't ortogonals.");
@@ -39,7 +43,7 @@ public class Camera implements Cloneable {
                 throw new IllegalStateException("Camera location (p0) must be set before target.");
 
             camera.vTo = target.subtract(camera.p0).normalize();
-            camera.vUp = new Vector(0, 1, 0); // ברירת מחדל כלשהי – אפשר לשנות לפי הצורך
+            camera.vUp = new Vector(0, 0, 1); // ברירת מחדל כלשהי – אפשר לשנות לפי הצורך
 
             return setDirection(camera.vTo, camera.vUp);
           // return this;
@@ -53,6 +57,8 @@ public class Camera implements Cloneable {
 			camera.vTo = target.subtract(camera.p0).normalize();
 			camera.vRight = camera.vTo.crossProduct(vUp).normalize();
 			camera.vUp = camera.vRight.crossProduct(camera.vTo);
+			//camera.vUp = camera.vTo.crossProduct(camera.vRight);
+
 			
 			return this;	
 		}
@@ -126,7 +132,7 @@ public class Camera implements Cloneable {
         return new Camera(this);
     }
 
-    // דוגמת מתודה (עוד לא מומשה)
+    
     public Ray constructRay(int nX, int nY, int j, int i) {
     	
     	Point pc = p0.add(vTo.scale(distance));
@@ -134,15 +140,14 @@ public class Camera implements Cloneable {
     	double rX = width / nX;
     	double rY = height / nY;
     	
-    	double xJ = (j - (nX-1)/2) * rX;
-    	double yI = - (i - (nY-1)/2) * rY;
-    	
+    	double xJ = (j - (double)(nX-1)/2) * rX;
+    	double yI = - (i - (double)(nY-1)/2) * rY;
     	
     	Point pIJ = pc;
     	if (xJ != 0)
-    		pIJ.add(vRight.scale(xJ));
+    		pIJ = pIJ.add(vRight.scale(xJ));
     	if (yI != 0)
-    		pIJ.add(vUp.scale(yI));
+    		pIJ = pIJ.add(vUp.scale(yI));
     	
     	Vector vIJ = pIJ.subtract(p0);
     	
