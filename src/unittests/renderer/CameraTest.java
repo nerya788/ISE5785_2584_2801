@@ -33,8 +33,7 @@ class CameraTest {
 
       // ============ Equivalence Partitions Tests ==============
       // EP01: 4X4 Inside (1,1)
-      assertEquals(new Ray(Point.ZERO, new Vector(1, -1, -10)),
-                   camera1.constructRay(4, 4, 1, 1), BAD_RAY);
+      assertEquals(new Ray(Point.ZERO, new Vector(1, -1, -10)), camera1.constructRay(4, 4, 1, 1), BAD_RAY);
 
       // =============== Boundary Values Tests ==================
       // BV01: 4X4 Corner (0,0)

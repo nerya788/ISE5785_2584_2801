@@ -28,8 +28,6 @@ public class Camera implements Cloneable {
 				camera.vTo = vTo.normalize();
 				camera.vUp = vUp.normalize();
 				camera.vRight = vTo.crossProduct(vUp).normalize();
-				//camera.vRight = vUp.crossProduct(vTo).normalize();
-				//camera.vUp = camera.vTo.crossProduct(camera.vRight).normalize();
 				camera.vUp = camera.vRight.crossProduct(camera.vTo).normalize();
 
 			}
@@ -44,9 +42,10 @@ public class Camera implements Cloneable {
 
             camera.vTo = target.subtract(camera.p0).normalize();
             camera.vUp = new Vector(0, 0, 1); // ברירת מחדל כלשהי – אפשר לשנות לפי הצורך
-
-            return setDirection(camera.vTo, camera.vUp);
-          // return this;
+            camera.vRight = camera.vTo.crossProduct(camera.vUp).normalize();
+			camera.vUp = camera.vTo.crossProduct(camera.vRight).normalize();
+			
+			return this;
         
 		}
 		
@@ -57,7 +56,6 @@ public class Camera implements Cloneable {
 			camera.vTo = target.subtract(camera.p0).normalize();
 			camera.vRight = camera.vTo.crossProduct(vUp).normalize();
 			camera.vUp = camera.vRight.crossProduct(camera.vTo);
-			//camera.vUp = camera.vTo.crossProduct(camera.vRight);
 
 			
 			return this;	
