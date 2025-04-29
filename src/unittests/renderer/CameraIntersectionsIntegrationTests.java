@@ -33,7 +33,7 @@ class CameraIntersectionsIntegrationTests {
         // Loop through all the pixels in the 3x3 view plane
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                Ray ray = camera.constructRayThroughPixel(3, 3, j, i);  // Construct a ray for each pixel
+                Ray ray = camera.constructRay(3, 3, j, i);  // Construct a ray for each pixel
                 if (geometry.findIntersections(ray) != null) {
                     actualIntersections++;
                 }
