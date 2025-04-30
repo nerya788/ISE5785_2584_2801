@@ -36,6 +36,9 @@ public class Camera implements Cloneable {
                 throw new IllegalArgumentException("the vectors vTo and vUp are not perpendicular");
             camera.vUp = vUp.normalize();
             camera.vTo = vTo.normalize();
+			camera.vRight = vTo.crossProduct(vUp).normalize();
+			camera.vUp = camera.vRight.crossProduct(camera.vTo).normalize();
+
             return this;
         }
 		
@@ -69,7 +72,7 @@ public class Camera implements Cloneable {
             camera.vRight = camera.vTo.crossProduct(camera.vUp).normalize();
 
             // חישוב vUp בצורה נכונה אחרי חישוב vRight
-            camera.vUp = camera.vRight.crossProduct(camera.vTo).normalize();  // חישוב מדויק של vUp
+            camera.vUp = camera.vTo.crossProduct(camera.vRight).normalize();  // חישוב מדויק של vUp
 
             return this;
         }
@@ -82,7 +85,6 @@ public class Camera implements Cloneable {
 			camera.vTo = target.subtract(camera.p0).normalize();
 			camera.vRight = camera.vTo.crossProduct(vUp).normalize();
 			camera.vUp = camera.vRight.crossProduct(camera.vTo);
-
 			
 			return this;	
 		}
@@ -152,17 +154,40 @@ public class Camera implements Cloneable {
                 //throw new MissingResourceException("Missing data to render", "Camera", "rayTracer");
             //if (camera.imageWriter == null)
                 //throw new MissingResourceException("Missing data to render", "Camera", "imageWriter");
-
-            camera.vRight = camera.vTo.crossProduct(camera.vUp);    //since the to and up vectors are normalized, we don't need to normalize the right vector
+            
             try {
-                return (Camera) camera.clone();
+                return (Camera) camera.clone(); //fix
             } catch (CloneNotSupportedException ex) {
                 throw new MissingResourceException(ex.getMessage(), "", "");
             }
         }
+        
+public Builder setDegreeClockwise(double angleDegrees) {
+			
+			setDegreeCounterclockwise(-1 * angleDegrees);
+			return this;
+		}
+		
+		public Builder setDegreeCounterclockwise(double angleDegrees) {
+			double radianRadians = Math.toRadians(angleDegrees);
+
+			double cos = Math.cos(radianRadians);
+			double sin = Math.sin(radianRadians);
+
+			// Rodriguez formula:
+			camera.vRight = camera.vRight.scale(cos).add(camera.vTo.crossProduct(camera.vRight).scale(sin))
+					.add(camera.vTo.scale(camera.vTo.dotProduct(camera.vRight) * (1 - cos))).normalize();
+
+			camera.vUp = camera.vRight.crossProduct(camera.vTo).normalize();
+
+			return this;
+		}
+		
+		public Builder setPosition(Point p0, Point target) {
+			//todo 
+			return this;
+		}
     }
-
-
 
 
 	// constructors
