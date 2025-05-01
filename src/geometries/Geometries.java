@@ -13,7 +13,7 @@ import primitives.Ray;
  */
 public class Geometries implements Intersectable {
 
-    private final List<Intersectable> allIntersectable = new LinkedList<>();
+    private final List<Intersectable> allgeometries = new LinkedList<>();
 
     /**
      * Default constructor for the Geometries class.
@@ -39,7 +39,7 @@ public class Geometries implements Intersectable {
      */
     public void add(Intersectable... geometries) {
         for (Intersectable geo : geometries) {
-            allIntersectable.add(geo);
+        	allgeometries.add(geo);
         }
     }
 
@@ -54,7 +54,7 @@ public class Geometries implements Intersectable {
     public List<Point> findIntersections(Ray ray) {
         List<Point> intersections = null;
 
-        for (Intersectable geo : allIntersectable) {
+        for (Intersectable geo : allgeometries) {
             List<Point> points = geo.findIntersections(ray);
             if (points != null) {
                 if (intersections == null)

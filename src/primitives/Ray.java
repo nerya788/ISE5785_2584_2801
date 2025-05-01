@@ -1,6 +1,8 @@
 package primitives;
 
 import primitives.Util;
+import java.util.List;
+
 
 /**
  * Represents a ray in 3D space, defined by a starting point and a direction
@@ -47,6 +49,24 @@ public class Ray {
 		if (Util.isZero(t))
 			return head;
 		return head.add(direction.scale(t));
+	}
+	
+	public Point findClosestPoint(List<Point> list) {
+	    if (list == null || list.isEmpty()) return null;
+		if (list.size() == 1) return list.get(0);
+
+	    Point closest = list.get(0);
+	    double minDistance = head.distance(closest);
+
+	    for (int i = 1; i < list.size(); i++) {
+	        double distance = head.distance(list.get(i));
+	        if (distance < minDistance) {
+	            minDistance = distance;
+	            closest = list.get(i);
+	        }
+	    }
+
+	    return closest;
 	}
 
 	/**
