@@ -7,7 +7,9 @@ import org.junit.jupiter.api.Test;
 import geometries.*;
 import lighting.AmbientLight;
 import primitives.*;
+import renderer.Camera;
 import scene.Scene;
+import renderer.RayTracerType;
 
 /**
  * Test rendering a basic image
@@ -20,8 +22,8 @@ public class RenderTests {
    /** Camera builder of the tests */
    private final Camera.Builder camera = Camera.getBuilder() //
       .setLocation(Point.ZERO).setDirection(new Point(0, 0, -1), Vector.AXIS_Y) //
-      .setVpDistance(100) //
-      .setVpSize(500, 500);
+      .setViewPlaneDistance(100) //
+      .setViewPlaneSize(500, 500);
 
    /**
     * Produce a scene with basic 3D model and render it into a png image with a
