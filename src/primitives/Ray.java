@@ -51,6 +51,14 @@ public class Ray {
 		return head.add(direction.scale(t));
 	}
 	
+	/**
+     * Finds and returns the point from a given list that is closest to the head of this ray.
+     * <p>
+     * If the list is empty or null, returns {@code null}.
+     *
+     * @param list A list of {@link Point} objects to search through.
+     * @return The point in the list that is closest to the head of the ray, or {@code null} if the list is empty or null.
+     */
 	public Point findClosestPoint(List<Point> list) {
 	    if (list == null || list.isEmpty()) return null;
 		if (list.size() == 1) return list.get(0);
