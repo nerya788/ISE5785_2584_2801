@@ -13,12 +13,13 @@ public abstract class RayTracerBase {
 	
 	/**
 	 * 
-	**/
+	 */
 	protected final Scene scene = null; // לתת לו ערך כאן??
 	
 	/**
 	 * 
-	**/
+	 * @param copy
+	 */
 	public RayTracerBase(Scene copy){
 		scene.name = copy.name;
 		scene.setBackground(copy.background);
@@ -29,6 +30,8 @@ public abstract class RayTracerBase {
 	
 	/**
 	 * 
-	**/
+	 * @param ray
+	 * @return
+	 */
 	public abstract Color traceRay(Ray ray);
 }
