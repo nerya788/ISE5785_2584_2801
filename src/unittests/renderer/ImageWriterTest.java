@@ -26,9 +26,9 @@ class ImageWriterTest {
 	 */
 	@Test
 	void testImageWriter() {
-		   ImageWriter images = new ImageWriter(500,800);
-		   for (int i = 0; i < 500; i++) {
-			   for (int j = 0; j < 800; j++) {
+		   ImageWriter images = new ImageWriter(800,500);
+		   for (int i = 0; i < 800; i++) {
+			   for (int j = 0; j < 500; j++) {
 				   
 				   if (i % 50 == 0)
 					   images.writePixel(i, j, new Color(225,0,0));
@@ -40,10 +40,10 @@ class ImageWriterTest {
 		   }
 		   
 		   
-		   for (int i = 0; i < 500; i++) 
-			   images.writePixel(i, 799, new Color(225,0,0));
-		   for (int j = 0; j < 800; j++)
-			   images.writePixel(499, j, new Color(225,0,0));
+		   for (int i = 0; i < 800; i++) 
+			   images.writePixel(i, 499, new Color(225,0,0));
+		   for (int j = 0; j < 500; j++)
+			   images.writePixel(799, j, new Color(225,0,0));
 
 		   images.writeToImage("final");
 	}
