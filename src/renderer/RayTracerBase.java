@@ -14,14 +14,14 @@ public abstract class RayTracerBase {
 	/**
 	 * 
 	 */
-	protected final Scene scene = null; // לתת לו ערך כאן??
+	protected final Scene scene; // לתת לו ערך כאן??
 	
 	/**
 	 * 
 	 * @param copy
 	 */
 	public RayTracerBase(Scene copy){
-		scene.name = copy.name;
+		scene = new Scene(copy.name);
 		scene.setBackground(copy.background);
 		scene.setAmbientLight(copy.ambientLight);
 		scene.setGeometries(copy.geometries);

@@ -65,7 +65,7 @@ class CameraTest {
    }
 
    @Test
-   void testBuilder() {
+   void testBuilder() throws Exception {
       cameraBuilder.setViewPlaneSize(4, 4).setResolution(2, 2);
 
       // ============ Equivalence Partitions Tests ==============

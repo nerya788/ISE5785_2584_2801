@@ -4,7 +4,7 @@ import primitives.*;
 public class AmbientLight {
 	private final Color intensity;
 	
-	AmbientLight(Color _intensity){
+	public AmbientLight(Color _intensity){
 		intensity =  _intensity;
 	}
 

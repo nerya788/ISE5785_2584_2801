@@ -28,9 +28,10 @@ public class RenderTests {
    /**
     * Produce a scene with basic 3D model and render it into a png image with a
     * grid
+ * @throws Exception 
     */
    @Test
-   public void renderTwoColorTest() {
+   public void renderTwoColorTest() throws Exception {
       Scene scene = new Scene("Two color").setBackground(new Color(75, 127, 90))
          .setAmbientLight(new AmbientLight(new Color(255, 191, 191)));
       scene.geometries //
@@ -49,7 +50,7 @@ public class RenderTests {
          .build() //
          .renderImage() //
          .printGrid(100, new Color(YELLOW)) //
-         .writeToImage("Two color render test");
+         .WriteToImage("Two color render test");
    }
 
    // For stage 6 - please disregard in stage 5
@@ -82,9 +83,10 @@ public class RenderTests {
          .writeToImage("color render test");
    }*/
 
-   /** Test for XML based scene - for bonus */
+   /** Test for XML based scene - for bonus 
+ * @throws Exception */
    @Test
-   public void basicRenderXml() {
+   public void basicRenderXml() throws Exception {
       Scene scene = new Scene("Using XML");
       // enter XML file name and parse from XML file into scene object instead of the
       // new Scene above,
@@ -98,12 +100,14 @@ public class RenderTests {
          .build() //
          .renderImage() //
          .printGrid(100, new Color(YELLOW)) //
-         .writeToImage("xml render test");
+         .WriteToImage("xml render test");
    }
 
-   /** Test for JSON based scene - for bonus */
+   /** Test for JSON based scene - for bonus 
+ * @throws Exception */
+   
    @Test
-   public void basicRenderJson() {
+   public void basicRenderJson() throws Exception {
       Scene scene = new Scene("Using Json");
       // enter XML file name and parse from JSON file into scene object instead of the
       // new Scene above,
@@ -117,6 +121,6 @@ public class RenderTests {
          .build() //
          .renderImage() //
          .printGrid(100, new Color(YELLOW)) //
-         .writeToImage("xml render test");
+         .WriteToImage("xml render test");
    }
 }

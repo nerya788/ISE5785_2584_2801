@@ -1,6 +1,7 @@
 package renderer;
 
 import primitives.*;
+import scene.Scene;
 
 import static primitives.Util.isZero;
 import java.util.MissingResourceException;
@@ -15,10 +16,26 @@ public class Camera implements Cloneable {
 	private double height = 0.0;
 	private double width = 0.0;
 	private double distance = 0.0;
-
+	
+	// new fields for stage 5 
+	private ImageWriter imageWriter;
+	private RayTracerBase rayTracer;
+	private int nX = 1;
+	private int nY = 1;
+	
 	// nested class builder
 	public static class Builder {
 		private final Camera camera = new Camera();
+		
+		public Builder setRayTracer(Scene scene, RayTracerType tracerType) {
+			if(tracerType == RayTracerType.SIMPLE) {
+				camera.rayTracer = new SimpleRayTracer(scene);
+			}
+			else {
+				camera.rayTracer = null;
+			}
+			return this;
+		}
 		
 		/**
          * Sets the location for the camera.
@@ -42,21 +59,6 @@ public class Camera implements Cloneable {
             return this;
         }
 		
-		/**
-        public Builder setDirection(Point target) {
-            if (camera.p0 == null)
-                throw new IllegalStateException("Camera location (p0) must be set before target.");
-
-            camera.vTo = target.subtract(camera.p0).normalize();
-            camera.vUp = new Vector(0, 0, 1); // ברירת מחדל כלשהי – אפשר לשנות לפי הצורך
-            camera.vRight = camera.vTo.crossProduct(camera.vUp).normalize();
-			//camera.vUp = camera.vTo.crossProduct(camera.vRight).normalize();
-			camera.vUp = camera.vRight.crossProduct(camera.vTo);
-			
-			return this;
-        
-		}
-        **/
 		
         public Builder setDirection(Point target) {
             if (camera.p0 == null)
@@ -100,8 +102,18 @@ public class Camera implements Cloneable {
 			return this;	
 		}
 		
-		public Builder setResolution(int nX, int nY) {
-			// to implement
+		public Builder setResolution(int nX, int nY) throws Exception {
+			if(nX < 0 || nY < 0) {
+				throw new Exception("the resolution couldnt be negative");
+			}
+			camera.nX = nX;
+			camera.nY = nY;
+			camera.imageWriter = new ImageWriter(nX,nY);
+			
+			if(camera.rayTracer == null) {
+				camera.rayTracer = new SimpleRayTracer(null);
+			}
+			
 			return this;	
 		}
 		
@@ -162,7 +174,7 @@ public class Camera implements Cloneable {
             }
         }
         
-public Builder setDegreeClockwise(double angleDegrees) {
+        public Builder setDegreeClockwise(double angleDegrees) {
 			
 			setDegreeCounterclockwise(-1 * angleDegrees);
 			return this;
@@ -188,26 +200,6 @@ public Builder setDegreeClockwise(double angleDegrees) {
 			return this;
 		}
     }
-
-
-	// constructors
-	public Camera(Point p0, Vector vTo,  Vector vUp) {
-		this.vTo = vTo;
-		this.vUp = vUp;
-		this.p0 = p0;
-		
-		this.vRight = vTo.crossProduct(vUp).normalize(); 
-	}
-	
-	//private Camera(Camera other) {
-        //this.p0 = other.p0;
-        //this.vTo = other.vTo;
-        //this.vUp = other.vUp;
-        //this.vRight = other.vRight;
-        //this.height = other.height;
-        //this.width = other.width;
-        //this.distance = other.distance;
-	//}
 	
 	 /**
      * Private constructor to prevent direct instantiation.
@@ -253,5 +245,66 @@ public Builder setDegreeClockwise(double angleDegrees) {
     	Vector vIJ = pIJ.subtract(p0);
   
         return new Ray(p0,vIJ);
+    }
+    
+    /**
+     * 
+     * @return
+     */
+    public Camera renderImage() {
+    	   ImageWriter images = new ImageWriter(nX,nY);
+		   for (int i = 0; i < nX; i++) {
+			   for (int j = 0; j < nY; j++) {
+				   castRay(i, j);
+			   }
+		   }
+				   
+    	// throw new UnsupportedOperationException("klum bentaim");
+		return this;
+    }
+    
+    /**
+     * 
+     * @param interval
+     * @param color
+     * @return
+     */
+    public Camera printGrid(int interval, Color color) {
+    	 ImageWriter images = new ImageWriter(nX,nY);
+		   for (int i = 0; i < nX; i++) {
+			   for (int j = 0; j < nY; j++) {
+				   castRay(i, j);
+		   
+			    	if (i % interval == 0)
+						   images.writePixel(i, j, new Color(225,0,0));
+					else if (j % interval == 0)
+						   images.writePixel(i, j, new Color(225,0,0));
+					//   else
+					//	   images.writePixel(i, j, new Color(225,225,0));
+			   }
+		   }
+		   
+			for (int i = 0; i < nX; i++) 
+				   images.writePixel(i, nY - 1, new Color(225,0,0));
+			for (int j = 0; j < nY; j++)
+				   images.writePixel(nX - 1, j, new Color(225,0,0));
+			
+    	return this;
+    }
+    
+    /**
+     * 
+     * @param name
+     * @return
+     */
+    public Camera WriteToImage(String name) {
+    	imageWriter.writeToImage(name);
+    	return this;
+    }
+    
+    private void castRay(int i, int j) {
+    	Ray ray = constructRay(nX, nY, i, j);
+    	Color color = rayTracer.traceRay(ray);
+    	imageWriter.writePixel(i, j, color);
     }
 }
