@@ -264,33 +264,32 @@ public class Camera implements Cloneable {
     }
     
     /**
-     * 
-     * @param interval
-     * @param color
-     * @return
+     * Draws a grid on the rendered image by coloring every pixel at the given interval.
+     * The grid is drawn using the specified color on both horizontal and vertical lines,
+     * and also includes the bottom and right borders of the image.
+     *
+     * @param interval the spacing between grid lines, in pixels
+     * @param color the color used to draw the grid lines
+     * @return the current Camera object (for method chaining)
      */
     public Camera printGrid(int interval, Color color) {
-    	 ImageWriter images = new ImageWriter(nX,nY);
-		   for (int i = 0; i < nX; i++) {
-			   for (int j = 0; j < nY; j++) {
-				   castRay(i, j);
-		   
-			    	if (i % interval == 0)
-						   images.writePixel(i, j, new Color(225,0,0));
-					else if (j % interval == 0)
-						   images.writePixel(i, j, new Color(225,0,0));
-					//   else
-					//	   images.writePixel(i, j, new Color(225,225,0));
-			   }
-		   }
-		   
-			for (int i = 0; i < nX; i++) 
-				   images.writePixel(i, nY - 1, new Color(225,0,0));
-			for (int j = 0; j < nY; j++)
-				   images.writePixel(nX - 1, j, new Color(225,0,0));
-			
-    	return this;
+        for (int i = 0; i < nX; i++) {
+            for (int j = 0; j < nY; j++) {
+                if (i % interval == 0 || j % interval == 0) {
+                    imageWriter.writePixel(i, j, color);
+                }
+            }
+        }
+
+        // Draw the right and bottom borders
+        for (int i = 0; i < nX; i++)
+            imageWriter.writePixel(i, nY - 1, color);
+        for (int j = 0; j < nY; j++)
+            imageWriter.writePixel(nX - 1, j, color);
+
+        return this;
     }
+
     
     /**
      * 
