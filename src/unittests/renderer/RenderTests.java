@@ -53,13 +53,13 @@ public class RenderTests {
          .WriteToImage("Two color render test");
    }
 
-   // For stage 6 - please disregard in stage 5
+// For stage 6 - please disregard in stage 5
    /**
     * Produce a scene with basic 3D model - including individual lights of the
     * bodies and render it into a png image with a grid
     */
-   /*@Test
-   public void renderMultiColorTest() {
+   @Test
+   void renderMultiColorTest() {
       Scene scene = new Scene("Multi color").setAmbientLight(new AmbientLight(new Color(51, 51, 51)));
       scene.geometries //
          .add(// center
@@ -81,7 +81,7 @@ public class RenderTests {
          .renderImage() //
          .printGrid(100, new Color(WHITE)) //
          .writeToImage("color render test");
-   }*/
+   }
 
    /** Test for XML based scene - for bonus 
  * @throws Exception */

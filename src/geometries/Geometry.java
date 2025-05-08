@@ -1,14 +1,31 @@
 package geometries;
 
 import primitives.Vector;
+
+import java.awt.Color;
+
 import primitives.Point;
 
 /**
  * Represents a general geometric shape in 3D space. This is an abstract class
  * that serves as a base for specific geometric shapes.
  */
-public abstract class Geometry implements Intersectable {
+public abstract class Geometry extends Intersectable {
 
+	protected Color emission = Color.BLACK;
+
+    /**
+     * Sets the emission color of the geometry.
+     * Chaining-style setter as part of Builder design pattern.
+     *
+     * @param emission the emission color to set
+     * @return this geometry instance (for method chaining)
+     */
+    public Geometry setEmission(Color emission) {
+        this.emission = emission;
+        return this;
+    }
+	
 	/**
 	 * Returns the normal vector to the geometry at a given point.
 	 *

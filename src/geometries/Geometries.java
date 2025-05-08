@@ -11,7 +11,7 @@ import primitives.Ray;
  * can be intersected with a ray. It allows aggregation of multiple
  * geometries and provides a unified interface for intersection calculations.
  */
-public class Geometries implements Intersectable {
+public class Geometries extends Intersectable {
 
     private final List<Intersectable> allgeometries = new LinkedList<>();
 
