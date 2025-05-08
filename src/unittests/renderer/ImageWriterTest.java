@@ -17,13 +17,21 @@ import primitives.Color;
 
 
 /**
- * 
+ * Unit test class for the {@link renderer.ImageWriter} class.
+ * <p>
+ * This test verifies correct pixel coloring and image file generation.
+ * It creates a grid pattern image and writes it to disk using the {@code writeToImage} method.
  */
 class ImageWriterTest {
-
+	
 	/**
-	 * Test method for {@link renderer.ImageWriter#ImageWriter(int nX, int nY)}.
-	 */
+     * Test method for {@link renderer.ImageWriter#ImageWriter(int, int)} and
+     * {@link renderer.ImageWriter#writePixel(int, int, primitives.Color)}.
+     * <p>
+     * Generates a test image (800x500) with red grid lines every 50 pixels
+     * and yellow background, then writes it to a file named {@code final.png}.
+     * Also verifies that the border lines are colored.
+     */
 	@Test
 	void testImageWriter() {
 		   ImageWriter images = new ImageWriter(800,500);

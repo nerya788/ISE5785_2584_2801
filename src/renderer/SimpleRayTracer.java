@@ -8,22 +8,36 @@ import primitives.Ray;
 import scene.Scene;
 
 /**
- * 
+ * A simple implementation of the {@link RayTracerBase} class.
+ * <p>
+ * This basic ray tracer computes the color of a pixel based only on
+ * ambient lighting and the first intersection point between a ray and
+ * the scene geometries.
+ * <p>
+ * It does not account for reflections, refractions, shading, or lighting sources.
  */
 public class SimpleRayTracer extends RayTracerBase {
 
 	/**
-	 * מפעיל את קונטרקטור האבא
-	 * @param copy
-	 */
+     * Constructs a {@code SimpleRayTracer} using the provided scene.
+     * 
+     * @param copy the scene to be copied into the tracer engine
+     */
 	public SimpleRayTracer(Scene copy) {
 		super(copy);
 	}
 
+	/**
+     * Traces a given {@link Ray} and returns the resulting {@link Color}.
+     * <p>
+     * If no intersection is found, the background color is returned.
+     * Otherwise, returns the ambient light at the closest intersection point.
+     *
+     * @param ray the ray to trace
+     * @return the resulting color at the ray's closest intersection point
+     */
 	@Override
 	public Color traceRay(Ray ray) {
-		// TODO Auto-generated method stub
-		// למצוא חת=יתוכמ
 		List<Point> intersections = scene.geometries.findIntersections(ray);
 		if(intersections == null) {
 			return scene.background;
@@ -35,10 +49,13 @@ public class SimpleRayTracer extends RayTracerBase {
 	}
 	
 	/**
-	 * 
-	 * @param point
-	 * @return
-	 */
+     * Computes the color at a given point.
+     * <p>
+     * Currently returns only the ambient light intensity.
+     *
+     * @param point the point to evaluate
+     * @return the color at the given point
+     */
 	private Color calcColor(Point point) {
 		return scene.ambientLight.getIntensity(); 
 	}
