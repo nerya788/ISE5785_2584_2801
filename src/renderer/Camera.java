@@ -34,24 +34,7 @@ public class Camera implements Cloneable {
 					 */
 					public static class Builder {
 						private final Camera camera = new Camera();
-						
-						/**
-						 * Sets the ray tracer engine based on the selected type.
-						 *
-						 * @param scene the scene to trace rays in
-						 * @param tracerType the type of ray tracer to use (e.g., SIMPLE)
-						 * @return the Builder instance
-						 */
-						public Builder setRayTracer(Scene scene, RayTracerType tracerType) {
-							if(tracerType == RayTracerType.SIMPLE) {
-								camera.rayTracer = new SimpleRayTracer(scene);
-							}
-							else {
-								camera.rayTracer = null;
-							}
-							return this;
-						}
-						
+												
 						/**
 				         * Sets the location for the camera.
 				         *
@@ -158,10 +141,6 @@ public class Camera implements Cloneable {
 							camera.nY = nY;
 							camera.imageWriter = new ImageWriter(nX,nY);
 							
-							if(camera.rayTracer == null) {
-								camera.rayTracer = new SimpleRayTracer(null);
-							}
-							
 							return this;	
 						}
 				        
@@ -239,6 +218,24 @@ public class Camera implements Cloneable {
 						    Vector v3 = axis.scale(axis.dotProduct(setVector) * (1 - Math.cos(angle)));
 						    return v1.add(v2).add(v3);
 						}
+						
+						/**
+						 * Sets the ray tracer engine based on the selected type.
+						 *
+						 * @param scene the scene to trace rays in
+						 * @param tracerType the type of ray tracer to use (e.g., SIMPLE)
+						 * @return the Builder instance
+						 */
+						public Builder setRayTracer(Scene scene, RayTracerType tracerType) {
+							if(tracerType == RayTracerType.SIMPLE) {
+								camera.rayTracer = new SimpleRayTracer(scene);
+							}
+							else {
+								camera.rayTracer = null;
+							}
+							return this;
+						}
+
 
 						/**
 						 * Finalizes the construction of the camera, verifying all required fields are initialized.
@@ -272,11 +269,11 @@ public class Camera implements Cloneable {
 							if(camera.nX < 0 || camera.nY < 0)
 								throw new IllegalArgumentException("the resolution couldnt be negative");
 
-				            if (camera.rayTracer == null)
+				       /*   if (camera.rayTracer == null)
 				                throw new MissingResourceException("Missing data to render", "Camera", "rayTracer");
 				            if (camera.imageWriter == null)
 				                throw new MissingResourceException("Missing data to render", "Camera", "imageWriter");
-				            
+				            */
 				            try {
 				                return (Camera) camera.clone(); //fix
 				            } catch (CloneNotSupportedException ex) {

@@ -2,6 +2,7 @@ package primitives;
 
 import primitives.Util;
 import java.util.List;
+import geometries.Intersectable.Intersection;
 
 
 /**
@@ -59,15 +60,20 @@ public class Ray {
      * @param list A list of {@link Point} objects to search through.
      * @return The point in the list that is closest to the head of the ray, or {@code null} if the list is empty or null.
      */
-	public Point findClosestPoint(List<Point> list) {
+	public Point findClosestPoint(List<Point> points) {
+		return points == null ? null :
+			findClosestIntersection(points.stream().map(p -> new Intersection(null, p)).toList()).point;
+		}	
+	
+	public Intersection findClosestIntersection(List<Intersection> list) {
 	    if (list == null || list.isEmpty()) return null;
 		if (list.size() == 1) return list.get(0);
 
-	    Point closest = list.get(0);
-	    double minDistance = head.distance(closest);
+		Intersection closest = list.get(0);
+	    double minDistance = head.distance(closest.point);
 
 	    for (int i = 1; i < list.size(); i++) {
-	        double distance = head.distance(list.get(i));
+	        double distance = head.distance(list.get(i).point);
 	        if (distance < minDistance) {
 	            minDistance = distance;
 	            closest = list.get(i);
