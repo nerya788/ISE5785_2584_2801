@@ -27,13 +27,13 @@ public abstract class RayTracerBase {
      * Only essential components of the scene are copied (name, background, ambient light, geometries),
      * not including camera, lights, or advanced settings.
      *
-     * @param copy the scene to copy into the ray tracer
+     * @param newScen the scene to copy into the ray tracer
      */
-	public RayTracerBase(Scene copy){
-		scene = new Scene(copy.name);
-		scene.setBackground(copy.background);
-		scene.setAmbientLight(copy.ambientLight);
-		scene.setGeometries(copy.geometries);
+	public RayTracerBase(Scene newScen){
+		scene = new Scene(newScen.name);
+		scene.setBackground(newScen.background);
+		scene.setAmbientLight(newScen.ambientLight);
+		scene.setGeometries(newScen.geometries);
 		
 	}
 	

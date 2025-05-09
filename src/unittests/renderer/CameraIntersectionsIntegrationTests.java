@@ -31,7 +31,7 @@ class CameraIntersectionsIntegrationTests {
      * @param geometry the Geometry object to intersect with the rays
      * @return the number of intersection points found
      */
-    int rays(Camera camera, Geometry geometry) {
+    int intersects(Camera camera, Geometry geometry) {
         List<Point> intersects = new LinkedList<>(); // Initialize an empty list to store intersection points.
         // Iterate over all the pixels in the camera's view plane.
         for (int i = 0; i < NX; i++) {
@@ -64,9 +64,9 @@ class CameraIntersectionsIntegrationTests {
                 .setViewPlaneSize(NX, NY)
                 .setViewPlaneDistance(1)
                 .build();
-        assertEquals(2, rays(camera, sphere), "Wrong number of intersections (sphere test 01)");
+        assertEquals(2, intersects(camera, sphere), "Wrong number of intersections (sphere test 01)");
 
-        // TC02: Testing a larger sphere that intersects multiple rays
+        // TC02: Testing a larger sphere that intersects multiple intersects
         sphere = new Sphere(new Point(0, 0, -2.5), 2.5);
         camera = Camera.getBuilder()
                 .setLocation(new Point(0, 0, 0.5))
@@ -74,7 +74,7 @@ class CameraIntersectionsIntegrationTests {
                 .setViewPlaneSize(NX, NY)
                 .setViewPlaneDistance(1)
                 .build();
-        assertEquals(18, rays(camera, sphere), "Wrong number of intersections (sphere test 02)");
+        assertEquals(18, intersects(camera, sphere), "Wrong number of intersections (sphere test 02)");
 
         // TC03: Testing a sphere with adjusted camera position
         sphere = new Sphere(new Point(0, 0, -2), 2);
@@ -84,9 +84,9 @@ class CameraIntersectionsIntegrationTests {
                 .setViewPlaneSize(NX, NY)
                 .setViewPlaneDistance(1)
                 .build();
-        assertEquals(10, rays(camera, sphere), "Wrong number of intersections (sphere test 03)");
+        assertEquals(10, intersects(camera, sphere), "Wrong number of intersections (sphere test 03)");
 
-        // TC04: Testing a sphere that intersects many rays
+        // TC04: Testing a sphere that intersects many intersects
         sphere = new Sphere(new Point(0, 0, -2), 4);
         camera = Camera.getBuilder()
                 .setLocation(new Point(0, 0, 0.5))
@@ -94,9 +94,9 @@ class CameraIntersectionsIntegrationTests {
                 .setViewPlaneSize(NX, NY)
                 .setViewPlaneDistance(1)
                 .build();
-        assertEquals(9, rays(camera, sphere), "Wrong number of intersections (sphere test 04)");
+        assertEquals(9, intersects(camera, sphere), "Wrong number of intersections (sphere test 04)");
 
-        // TC05: Testing a sphere that does not intersect with rays
+        // TC05: Testing a sphere that does not intersect with intersects
         sphere = new Sphere(new Point(0, 0, 1), 0.5);
         camera = Camera.getBuilder()
                 .setLocation(new Point(0, 0, 0.5))
@@ -104,7 +104,7 @@ class CameraIntersectionsIntegrationTests {
                 .setViewPlaneSize(NX, NY)
                 .setViewPlaneDistance(1)
                 .build();
-        assertEquals(0, rays(camera, sphere), "Wrong number of intersections (sphere test 05)");
+        assertEquals(0, intersects(camera, sphere), "Wrong number of intersections (sphere test 05)");
     }
 
     
@@ -123,15 +123,15 @@ class CameraIntersectionsIntegrationTests {
                 .setViewPlaneSize(NX, NY)
                 .setViewPlaneDistance(1)
                 .build();
-        assertEquals(9, rays(camera, plane), "Failed to find all intersection points with the plane (plane test 01)");
+        assertEquals(9, intersects(camera, plane), "Failed to find all intersection points with the plane (plane test 01)");
 
         // TC02: Testing a plane at an angle to the view plane
         plane = new Plane(new Point(0, 0, -1), new Vector(0, 2, 4));
-        assertEquals(9, rays(camera, plane), "Failed to find all intersection points with the plane (plane test 02)");
+        assertEquals(9, intersects(camera, plane), "Failed to find all intersection points with the plane (plane test 02)");
 
         // TC03: Testing a plane at a different angle to the view plane
         plane = new Plane(new Point(0, 0, -1), new Vector(0, 2, 2));
-        assertEquals(6, rays(camera, plane), "Failed to find all intersection points with the plane (plane test 03)");
+        assertEquals(6, intersects(camera, plane), "Failed to find all intersection points with the plane (plane test 03)");
     }
     
     
@@ -142,7 +142,7 @@ class CameraIntersectionsIntegrationTests {
      */
     @Test
     void testTriangle() throws CloneNotSupportedException {
-        // TC01: Testing a triangle that does not intersect with any rays
+        // TC01: Testing a triangle that does not intersect with any intersects
         Triangle triangle = new Triangle(new Point(0, 1, -2), new Point(1, -1, -2), new Point(-1, -1, -2));
         Camera camera = Camera.getBuilder()
                 .setLocation(new Point(0, 0, 0))
@@ -150,11 +150,11 @@ class CameraIntersectionsIntegrationTests {
                 .setViewPlaneSize(NX, NY)
                 .setViewPlaneDistance(1)
                 .build();
-        assertEquals(1, rays(camera, triangle), "Failed to find all intersection points with the triangle (triangle test 01)");
+        assertEquals(1, intersects(camera, triangle), "Failed to find all intersection points with the triangle (triangle test 01)");
 
-        // TC02: Testing a triangle that intersects with multiple rays
+        // TC02: Testing a triangle that intersects with multiple intersects
         triangle = new Triangle(new Point(0, 20, -2), new Point(1, -1, -2), new Point(-1, -1, -2));
-        assertEquals(2, rays(camera, triangle), "Failed to find all intersection points with the triangle (triangle test 02)");
+        assertEquals(2, intersects(camera, triangle), "Failed to find all intersection points with the triangle (triangle test 02)");
     }
 
 }

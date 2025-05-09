@@ -21,10 +21,10 @@ public class SimpleRayTracer extends RayTracerBase {
 	/**
      * Constructs a {@code SimpleRayTracer} using the provided scene.
      * 
-     * @param copy the scene to be copied into the tracer engine
+     * @param newScene the scene to be copied into the tracer engine
      */
-	public SimpleRayTracer(Scene copy) {
-		super(copy);
+	public SimpleRayTracer(Scene newScene) {
+		super(newScene);
 	}
 
 	/**
@@ -39,13 +39,10 @@ public class SimpleRayTracer extends RayTracerBase {
 	@Override
 	public Color traceRay(Ray ray) {
 		List<Point> intersections = scene.geometries.findIntersections(ray);
-		if(intersections == null) {
+		if(intersections == null)
 			return scene.background;
-		}
-		else {
-			Point point = ray.findClosestPoint(intersections);
-			return calcColor(point);
-		}
+		else
+			return calcColor(ray.findClosestPoint(intersections));
 	}
 	
 	/**
