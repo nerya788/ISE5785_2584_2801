@@ -1,6 +1,9 @@
 package geometries;
 
 import java.util.List;
+
+import geometries.Intersectable.Intersection;
+
 import static primitives.Util.*;
 import primitives.*;
 
@@ -84,7 +87,7 @@ public class Polygon extends Geometry {
 	}
 
 	@Override
-	public List<Point> findIntersections(Ray ray) {
+	public List<Intersection> calculateIntersectionsHelper(Ray ray) {
 		return null;
 	}
 

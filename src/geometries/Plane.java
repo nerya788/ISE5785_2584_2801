@@ -61,7 +61,7 @@ public class Plane extends Geometry {
      * @return A list of intersection points as {@link Point} objects, or {@code null} if none exist
      */
 	@Override
-	public List<Point> findIntersections(Ray ray) {
+	public List<Intersection> calculateIntersectionsHelper(Ray ray) {
 		if (ray.getHead().equals(head) || Util.isZero(ray.getDirection().dotProduct(direction)))
 			return null; // if the ray's head and the plane's head is exactly the same. 
 	
@@ -76,7 +76,7 @@ public class Plane extends Geometry {
 		double t = Util.alignZero(numerator / denominator); 
 		
 		if (t <= Zero) return null;
-		Point intersection = ray.getPoint(t); 
-		return List.of(intersection);
+		Point point = ray.getPoint(t); 
+		return List.of(new Intersection (this,point));
 	}	
 }

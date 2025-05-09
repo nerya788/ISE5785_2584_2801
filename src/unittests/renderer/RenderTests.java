@@ -58,7 +58,7 @@ public class RenderTests {
     * Produce a scene with basic 3D model - including individual lights of the
     * bodies and render it into a png image with a grid
     */
- /*  @Test
+   @Test
    void renderMultiColorTest() {
       Scene scene = new Scene("Multi color").setAmbientLight(new AmbientLight(new Color(51, 51, 51)));
       scene.geometries //
@@ -82,7 +82,7 @@ public class RenderTests {
          .printGrid(100, new Color(WHITE)) //
          .writeToImage("color render test");
    }
-*/
+
    /** Test for XML based scene - for bonus 
  * @throws Exception */
    @Test

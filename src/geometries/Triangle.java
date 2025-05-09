@@ -41,7 +41,7 @@ public class Triangle extends Polygon {
      * @return A list of intersection points as {@link Point} objects, or {@code null} if none exist
      */
 	@Override
-	public List<Point> findIntersections(Ray ray) {
+	public List<Intersection> calculateIntersectionsHelper(Ray ray) {
 		final List<Point> planeIntersections = plane.findIntersections(ray);
 		if (planeIntersections == null)
 			return null;
@@ -71,7 +71,7 @@ public class Triangle extends Polygon {
 		final double u = 1.0 - v - w;
 		
 		if (u > 0 && v > 0 && w > 0)
-			return planeIntersections;
+			return List.of(new Intersection (this,planeIntersection));
 		
 		return null;
 	}

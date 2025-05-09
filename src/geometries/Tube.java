@@ -41,7 +41,7 @@ public class Tube extends RadialGeometry {
 	}
 
 	@Override
-	public List<Point> findIntersections(Ray ray) {
+	public List<Intersection> calculateIntersectionsHelper(Ray ray) {
 		/**
 		 * Finds the intersection points of a given ray with the infinite tube.
 		 * 
@@ -118,11 +118,11 @@ public class Tube extends RadialGeometry {
 
 		// Return valid intersection points
 		if ((p1 != null && p2 != null) && (!p2.equals(ray.getHead())))
-			return List.of(p2, p1);
+			return List.of(new Intersection (this,p2),new Intersection (this,p1));
 		if (p1 != null)
-			return List.of(p1);
+			return List.of(new Intersection (this,p1));
 		if (p2 != null)
-			return List.of(p2);
+			return List.of(new Intersection (this,p2));
 		return null;
 	}
 

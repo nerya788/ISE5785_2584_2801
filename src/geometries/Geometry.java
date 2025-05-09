@@ -25,7 +25,11 @@ public abstract class Geometry extends Intersectable {
         this.emission = emission;
         return this;
     }
-	
+
+    public Color getEmission() {
+        return this.emission;
+    }
+
 	/**
 	 * Returns the normal vector to the geometry at a given point.
 	 *

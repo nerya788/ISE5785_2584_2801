@@ -4,6 +4,8 @@ import primitives.*;
 
 import java.util.List;
 
+import geometries.Intersectable.Intersection;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -60,19 +62,19 @@ public class Cylinder extends Tube {
      * @param ray The ray to find intersections with.
      * @return A list of intersection points, or {@code null} if there are no intersections.
      */
-	public List<Point> findIntersections(Ray ray) {
+	public List<Intersection> calculateIntersectionsHelper(Ray ray) {
 		List<Point> result = null;//new LinkedList<>()
 
 		// Step 1: Find intersections with the infinite tube part
-		List<Point> tubeIntersections = super.findIntersections(ray);
+		List<Intersection> tubeIntersections = super.calculateIntersectionsHelper(ray);
 		if (tubeIntersections != null) {
-			for (Point pt : tubeIntersections) {
+			for (Intersection pt : tubeIntersections) {
 				// Check if point lies between the two bases of the finite cylinder
-				double projection = axis.getDirection().dotProduct(pt.subtract(axis.getHead()));
+				double projection = axis.getDirection().dotProduct(pt.point.subtract(axis.getHead()));
 				if (projection >= 0 && projection <= height) {
 	                if (result == null)
 	                	result = new LinkedList<>();
-	                result.add(pt);
+	                result.add(pt.point);
 
 				}
 			}
@@ -107,19 +109,20 @@ public class Cylinder extends Tube {
 	                if (result == null)
 	                	result = new LinkedList<>();
 	                result.add(p);
-
 				}
 			}
 		}
 
 		// return the list result
-		if (result.isEmpty())
+		if (result == null || result.isEmpty())
 			return null;
+		
 		if (result.size() == 2)
 			if (result.get(0).subtract(ray.getHead()).length() < result.get(1).subtract(ray.getHead()).length())
-				return List.of(result.get(0), result.get(1));
+				return List.of(new Intersection (this,result.get(0)),new Intersection (this,result.get(1)));
 			else
-				return List.of(result.get(1), result.get(0));
-		return List.of(result.get(0));
+				return List.of(new Intersection (this,result.get(1)),new Intersection (this,result.get(0)));
+		
+		return List.of(new Intersection (this,result.get(0)));
 	}
 }

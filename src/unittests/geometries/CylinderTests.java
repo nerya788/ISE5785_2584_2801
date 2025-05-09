@@ -53,7 +53,7 @@ class CylinderTests {
 	}
 
 	@Test
-	void testFindIntersections() {
+	void testCalculateIntersectionsHelper() {
 
 		final Point p100 = new Point(1, 0, 0);
 		final Point p103 = new Point(1, 0, 3);

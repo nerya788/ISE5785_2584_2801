@@ -36,9 +36,9 @@ public abstract class Intersectable {
 		public boolean equals(Object obj) {
 		    if (this == obj) return true;
 		    if (obj == null || getClass() != obj.getClass()) return false;
-		    Intersection other = (Intersection) obj;
-		    return geometry.equals(other.geometry) &&
-		           point.equals(other.point);
+		    Intersection otherIntersection = (Intersection) obj;
+		    return geometry == otherIntersection.geometry &&
+		           point.equals(otherIntersection.point);
 		}
 	}
 
@@ -53,7 +53,6 @@ public abstract class Intersectable {
 	
 	public final List<Intersection> calculateIntersections(Ray ray){
 		return calculateIntersectionsHelper(ray);
-		
 	}
 	
     /**
