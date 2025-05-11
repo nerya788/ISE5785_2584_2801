@@ -15,7 +15,7 @@ public class Color {
    private final Double3     rgb;
 
    /** Black color = (0,0,0) */
-   public static final Color BLACK = new Color();
+   public static final Color BLACK = new Color(0.0,0.0,0.0);
 
    /** Default constructor - to generate Black Color (privately) */
    private Color() { rgb = new Double3(225,225,0); }  //{ rgb = Double3.ZERO; }
@@ -79,7 +79,7 @@ public class Color {
       }
       return new Color(rr, rg, rb);
    }
-
+   
    /**
     * Scale the color by a scalar triad per rgb
     * @param  k scale factor per rgb
@@ -113,4 +113,5 @@ public class Color {
 
    @Override
    public String toString() { return "rgb:" + rgb; }
+
 }

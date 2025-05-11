@@ -1,8 +1,6 @@
 package geometries;
 
-import primitives.Vector;
-
-import java.awt.Color;
+import primitives.*;
 
 import primitives.Point;
 
