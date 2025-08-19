@@ -8,6 +8,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import renderer.*;
 
+import static java.awt.Color.*;
+
 import java.awt.image.BufferedImage;
 import java.io.*;
 
@@ -35,24 +37,24 @@ class ImageWriterTest {
 	@Test
 	void testImageWriter() {
 		   ImageWriter images = new ImageWriter(800,500);
-		   for (int i = 0; i < 800; i++) {
-			   for (int j = 0; j < 500; j++) {
-				   
-				   if (i % 50 == 0)
-					   images.writePixel(i, j, new Color(225,0,0));
-				   else if (j % 50 == 0)
-					   images.writePixel(i, j, new Color(225,0,0));
-				   else
-					   images.writePixel(i, j, new Color(225,225,0));
+		   for (int i = 0; i < images.nX(); i++) {
+			   for (int j = 0; j < images.nY(); j++) {
+					   images.writePixel(i, j, new Color(YELLOW));
 			   }
 		   }
 		   
 		   
-		   for (int i = 0; i < 800; i++) 
-			   images.writePixel(i, 499, new Color(225,0,0));
-		   for (int j = 0; j < 500; j++)
-			   images.writePixel(799, j, new Color(225,0,0));
-
+		   for (int i = 0; i < 800; i+=50) {
+			   for (int j = 0; j < 500; j++) {
+				   images.writePixel(i, j, new Color(RED));
+			   }
+		   }
+		   
+		   for (int i = 0; i < 800; i++) {
+			   for (int j = 0; j < 500; j+=50) {
+				   images.writePixel(i, j, new Color(RED));
+			   }
+		   }
 		   images.writeToImage("final");
 	}
 }

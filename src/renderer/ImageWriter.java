@@ -47,13 +47,13 @@ public final class ImageWriter {
     * View Plane Y axis resolution
     * @return the amount of vertical pixels
     */
-   int nY() { return nY; }
+   public int nY() { return nY; }
 
    /**
     * View Plane X axis resolution
     * @return the amount of horizontal pixels
     */
-   int nX() { return nX; }
+   public int nX() { return nX; }
 
    // ***************** Operations ******************** //
 
