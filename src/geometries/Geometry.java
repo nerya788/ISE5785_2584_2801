@@ -11,6 +11,7 @@ import primitives.Point;
 public abstract class Geometry extends Intersectable {
 
 	protected Color emission = Color.BLACK;
+	private Material material = new Material();
 
     /**
      * Sets the emission color of the geometry.
@@ -26,6 +27,15 @@ public abstract class Geometry extends Intersectable {
 
     public Color getEmission() {
         return this.emission;
+    }
+    
+    public Material getMaterial() {
+    	return material;
+    }
+    
+    public Geometry setMaterial(Material _material) {
+    	material = _material;
+    	return this;
     }
 
 	/**
