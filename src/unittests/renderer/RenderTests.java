@@ -21,7 +21,8 @@ public class RenderTests {
 
    /** Camera builder of the tests */
    private final Camera.Builder camera = Camera.getBuilder() //
-      .setLocation(Point.ZERO).setDirection(new Point(0, 0, -1), Vector.AXIS_Y) //
+      .setLocation(Point.ZERO)
+      .setDirection(new Point(0, 0, -1), Vector.AXIS_Y) //
       .setViewPlaneDistance(100) //
       .setViewPlaneSize(500, 500);
 
@@ -82,6 +83,38 @@ public class RenderTests {
          .renderImage() //
          .printGrid(100, new Color(WHITE)) //
          .WriteToImage("color render test");
+   }
+
+// For stage 6 - please disregard in stage 5
+   /**
+    * Produce a scene with basic 3D model - including individual lights of the
+    * bodies and render it into a png image with a grid
+ * @throws Exception 
+    */
+   @Test
+   void renderMultiColorTestWithAmbientLight() throws Exception {
+      Scene scene = new Scene("Multi color with ambient light").setAmbientLight(new AmbientLight(new Color(WHITE)));
+      scene.geometries //
+         .add(// center
+              new Sphere(new Point(0, 0, -100), 50)
+              .setMaterial(new Material().setKA(new Double3 (0.4))),
+              // up left
+              new Triangle(new Point(-100, 0, -100), new Point(0, 100, -100), new Point(-100, 100, -100)) //
+              .setMaterial(new Material().setKA(new Double3(0,0.8,0))),
+              // down left
+              new Triangle(new Point(-100, 0, -100), new Point(0, -100, -100), new Point(-100, -100, -100)) //
+              .setMaterial(new Material().setKA(new Double3(0.8,0,0))),
+              // down right
+              new Triangle(new Point(100, 0, -100), new Point(0, -100, -100), new Point(100, -100, -100)) //
+              .setMaterial(new Material().setKA(new Double3(0,0,0.8))));
+
+      camera //
+         .setRayTracer(scene, RayTracerType.SIMPLE) //
+         .setResolution(1000, 1000) //
+         .build() //
+         .renderImage() //
+         .printGrid(100, new Color(WHITE)) //
+         .WriteToImage("color render test with ambient light");
    }
 
    /** Test for XML based scene - for bonus 
