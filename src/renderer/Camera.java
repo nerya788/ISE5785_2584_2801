@@ -136,7 +136,7 @@ public class Camera implements Cloneable {
 						 * @return the Builder instance
 						 * @throws Exception if resolution values are negative
 						 */
-						public Builder setResolution(int nX, int nY) throws Exception {
+						public Builder setResolution(int nX, int nY) {
 							camera.nX = nX;
 							camera.nY = nY;
 							camera.imageWriter = new ImageWriter(nX,nY);
@@ -397,7 +397,7 @@ public class Camera implements Cloneable {
      * @param name the name of the image file (with or without path and/or extension)
      * @return the Camera instance (for chaining)
      */
-    public Camera WriteToImage(String name) {
+    public Camera writeToImage(String name) {
     	imageWriter.writeToImage(name);
     	return this;
     }

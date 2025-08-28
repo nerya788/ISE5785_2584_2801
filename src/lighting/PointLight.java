@@ -18,35 +18,34 @@ public class PointLight extends Light implements LightSource {
 	private double kL = 0.0;
 	private double kQ = 0.0;
 	
-	public PointLight(Point _position, Color _intensity) {
+	public PointLight( Color _intensity, Point _position) {
 		super(_intensity);
 		position = _position;
 	}
 	
-	public PointLight setkC(double _kC) {
+	public PointLight setKc(double _kC) {
 		kC = _kC;
 		return this;
 	}
 	
-	public PointLight setkL(double _kL) {
-		kC = _kL;
+	public PointLight setKl(double _kL) {
+		kL = _kL;
 		return this;
 	}
-	public PointLight setkQ(double _kQ) {
-		kC = _kQ;
+	public PointLight setKq(double _kQ) {
+		kQ = _kQ;
 		return this;
 	}
 	
 	@Override
-	public Color getIntensity(Point p) {
-		// TODO Auto-generated method stub
-		return null;
+	public Color getIntensity(Point target) {
+		double distance = target.distance(position);
+		return intensity.scale (1 / (kC + kL * distance + kQ * distance * distance));
 	}
 
 	@Override
-	public Vector getL(Point p) {
-		// TODO Auto-generated method stub
-		return null;
+	public Vector getL(Point target) {
+		return target.subtract(position).normalize();
 	}
 
 }
