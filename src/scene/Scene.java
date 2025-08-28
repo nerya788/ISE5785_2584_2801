@@ -34,47 +34,47 @@ public class Scene {
 	/**
      * Constructs a new {@code Scene} with the given name.
      *
-     * @param _name the name of the scene
+     * @param name the name of the scene
      */
-	public Scene(String _name){
-		name =_name;
+	public Scene(String name){
+		this.name =name;
 	}
 	
 	/**
      * Sets the background color of the scene.
      *
-     * @param _background the background {@link Color}
+     * @param background the background {@link Color}
      * @return the current {@code Scene} instance (for method chaining)
      */
-	public Scene setBackground(Color _background) {
-		background =_background;
+	public Scene setBackground(Color background) {
+		this.background =background;
 		return this;
 	}
 	
 	/**
      * Sets the ambient light of the scene.
      *
-     * @param _ambientLight the {@link AmbientLight} to use
+     * @param ambientLight the {@link AmbientLight} to use
      * @return the current {@code Scene} instance (for method chaining)
      */
-	public Scene setAmbientLight(AmbientLight _ambientLight) {
-		ambientLight = _ambientLight;
+	public Scene setAmbientLight(AmbientLight ambientLight) {
+		this.ambientLight = ambientLight;
 		return this;
 	}
 	
 	/**
      * Sets the geometries of the scene.
      *
-     * @param _geometries the {@link Geometries} collection to use
+     * @param geometries the {@link Geometries} collection to use
      * @return the current {@code Scene} instance (for method chaining)
      */
-	public Scene setGeometries (Geometries _geometries)  {
-		geometries = _geometries;
+	public Scene setGeometries (Geometries geometries)  {
+		this.geometries = geometries;
 		return this;
 	}
 	
-	public Scene setlights(List<LightSource> _lights) {
-		lights = _lights;
+	public Scene setlights(List<LightSource> lights) {
+		this.lights = lights;
 		return this;
 	}
 }

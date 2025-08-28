@@ -35,66 +35,66 @@ public class Material {
 	/**
      * Sets the ambient reflection coefficient.
      * 
-     * @param _kA ambient coefficient as {@link Double3}
+     * @param kA ambient coefficient as {@link Double3}
      * @return this material (for method chaining)
      */
-	public Material setKA(Double3 _kA) {
-		kA = _kA;
+	public Material setKA(Double3 kA) {
+		this.kA = kA;
 		return this;
 	}
 	
 	/**
      * Sets the ambient reflection coefficient.
      * 
-     * @param _kA ambient coefficient as scalar (applied to all components)
+     * @param kA ambient coefficient as scalar (applied to all components)
      * @return this material (for method chaining)
      */
-	public Material setKA(double _kA) {
-		kA = new Double3(_kA);
+	public Material setKA(double kA) {
+		this.kA = new Double3(kA);
 		return this;
 	}
 	
 	/**
      * Sets the diffuse reflection coefficient.
      * 
-     * @param _kD diffuse coefficient as {@link Double3}
+     * @param kD diffuse coefficient as {@link Double3}
      * @return this material (for method chaining)
      */
-	public Material setKD(Double3 _kD) {
-		kD = _kD;
+	public Material setKD(Double3 kD) {
+		this.kD = kD;
 		return this;
 	}
 	
 	/**
      * Sets the diffuse reflection coefficient.
      * 
-     * @param _kD diffuse coefficient as scalar (applied to all components)
+     * @param kD diffuse coefficient as scalar (applied to all components)
      * @return this material (for method chaining)
      */
-	public Material setKD(double _kD) {
-		kD = new Double3(_kD);
+	public Material setKD(double kD) {
+		this.kD = new Double3(kD);
 		return this;
 	}
 	
 	/**
      * Sets the specular reflection coefficient.
      * 
-     * @param _kS specular coefficient as {@link Double3}
+     * @param kS specular coefficient as {@link Double3}
      * @return this material (for method chaining)
      */
-	public Material setKS(Double3 _kS) {
-		kS = _kS;
+	public Material setKS(Double3 kS) {
+		this.kS = kS;
 		return this;
 	}
 	
 	/**
      * Sets the specular reflection coefficient.
      * 
-     * @param _kS specular coefficient as scalar (applied to all components)
+     * @param kS specular coefficient as scalar (applied to all components)
      * @return this material (for method chaining)
      */
-	public Material setKS(double _kS) {
-		kS = new Double3(_kS);
+	public Material setKS(double kS) {
+		this.kS = new Double3(kS);
 		return this;
 	}
 	
@@ -102,11 +102,11 @@ public class Material {
      * Sets the shininess factor (Phong exponent) that controls
      * the size and intensity of specular highlights.
      * 
-     * @param _nsh shininess value (higher = smaller, sharper highlights)
+     * @param nsh shininess value (higher = smaller, sharper highlights)
      * @return this material (for method chaining)
      */
-	public Material setShininess(int _nsh) {
-		nsh = _nsh;
+	public Material setShininess(int nsh) {
+		this.nsh = nsh;
 		return this;
 	}
 }

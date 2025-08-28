@@ -15,7 +15,7 @@ public abstract class Intersectable {
 		public final Geometry geometry;
 		public final Point point;
 		
-		public final Material material = new Material();
+		//public final Material material = new Material();
 		
 		public Vector directionIntersect;
 		public Vector directionLight;

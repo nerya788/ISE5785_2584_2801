@@ -23,8 +23,8 @@ public class SimpleRayTracer extends RayTracerBase {
      * 
      * @param newScene the scene to be copied into the tracer engine
      */
-	public SimpleRayTracer(Scene newScene) {
-		super(newScene);
+	public SimpleRayTracer(Scene scene) {
+		super(scene);
 	}
 
 	/**
@@ -49,13 +49,13 @@ public class SimpleRayTracer extends RayTracerBase {
      * Computes the light direction, dot products, and validates contribution.
      *
      * @param target     the intersection object to update
-     * @param _typeLight the light source affecting the point
+     * @param typeLight the light source affecting the point
      * @return {@code true} if the light contributes to shading, {@code false} otherwise
      */
-	public boolean setLightSource (Intersection target ,LightSource _typeLight) {
+	public boolean setLightSource (Intersection target ,LightSource typeLight) {
 		
-		target.lightType = _typeLight;
-		target.directionLight = _typeLight.getL(target.point).scale(-1.0).normalize();
+		target.lightType = typeLight;
+		target.directionLight = typeLight.getL(target.point).scale(-1.0).normalize();
 		target.dotNormalAndLight = Util.alignZero(target.directionLight.dotProduct(target.normal));
 		
 		return !(Util.isZero(target.dotNormalAndLight) && Util.isZero(target.dotNormalAndIntersect));
