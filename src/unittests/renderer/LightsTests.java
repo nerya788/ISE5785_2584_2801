@@ -29,7 +29,8 @@ class LightsTests {
       .setRayTracer(scene1, RayTracerType.SIMPLE)                                                                      //
       .setLocation(new Point(0, 0, 1000))                                                                              //
       .setDirection(Point.ZERO, Vector.AXIS_Y)                                                                         //
-      .setViewPlaneSize(150, 150).setViewPlaneDistance(1000);
+      .setViewPlaneSize(150, 150)
+      .setViewPlaneDistance(1000);
 
    /** Second camera builder for some of tests */
    private final Camera.Builder camera2                 = Camera.getBuilder()                                          //

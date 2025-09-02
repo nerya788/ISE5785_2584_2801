@@ -14,8 +14,7 @@ public abstract class Intersectable {
 	public static class Intersection {
 		public final Geometry geometry;
 		public final Point point;
-		
-		//public final Material material = new Material();
+		public final Material material;;
 		
 		public Vector directionIntersect;
 		public Vector directionLight;
@@ -33,11 +32,11 @@ public abstract class Intersectable {
 		public Intersection(Geometry geometry, Point point) {
 			this.geometry = geometry;
 		    this.point = point;
-		    
-		    if (geometry.getMaterial() != null) {
-		//    	material = geometry.getMaterial();
-		    
-		    }
+
+		    if (geometry != null)
+		    	this.material = geometry.getMaterial();
+		    else
+		    	this.material = null;
 		}
 		
 		@Override

@@ -18,6 +18,9 @@ import static java.lang.System.out;
  */
 public class SimpleRayTracer extends RayTracerBase {
 
+	//Delta of distance for shading rays that we take from the body to the light source to prevent self-shading 
+	private static final double DELTA = 1;
+	
 	/**
      * Constructs a {@code SimpleRayTracer} using the provided scene.
      * 
@@ -25,6 +28,12 @@ public class SimpleRayTracer extends RayTracerBase {
      */
 	public SimpleRayTracer(Scene scene) {
 		super(scene);
+	}
+	
+	private boolean unshaded(Intersection intersection) {
+		//Point point = intersection.point.add(intersection.normal.scale(DELTA));
+		Ray ray = new Ray(intersection.point, intersection.directionLight.scale(-1));
+		return scene.geometries.findIntersections(ray) == null;
 	}
 
 	/**
@@ -55,7 +64,7 @@ public class SimpleRayTracer extends RayTracerBase {
 	public boolean setLightSource (Intersection target ,LightSource typeLight) {
 		
 		target.lightType = typeLight;
-		target.directionLight = typeLight.getL(target.point).scale(-1.0).normalize();
+		target.directionLight = typeLight.getL(target.point).normalize();
 		target.dotNormalAndLight = Util.alignZero(target.directionLight.dotProduct(target.normal));
 		
 		return !(Util.isZero(target.dotNormalAndLight) && Util.isZero(target.dotNormalAndIntersect));
@@ -74,7 +83,7 @@ public class SimpleRayTracer extends RayTracerBase {
         for (LightSource lightSource: scene.lights) {
             if (!setLightSource(intersection,lightSource))
                 continue;
-            if (intersection.dotNormalAndLight * intersection.dotNormalAndIntersect  < 0)
+            if ((intersection.dotNormalAndLight * intersection.dotNormalAndIntersect  > 0) /*&& unshaded(intersection)*/)
             { 
                 Color iL = lightSource.getIntensity(intersection.point);
                 color = color
@@ -86,26 +95,35 @@ public class SimpleRayTracer extends RayTracerBase {
         return color;
     }
 
-	/**
-     * Calculates the specular reflection coefficient using the Phong reflection model.
-     *
-     * @param intersection the intersection to evaluate
-     * @return the specular reflection component as a {@link Double3}
-     */
-	private Double3 calcSpecular(Intersection intersection)  {
-		return intersection.geometry.getMaterial().kD.scale(Math.abs(intersection.directionLight.dotProduct(intersection.normal)));
-	}
-	
-	/**
+
+    /**
      * Calculates the diffuse reflection component using the Lambertian model
      * combined with a specular highlight factor.
      *
      * @param intersection the intersection to evaluate
      * @return the diffuse reflection component as a {@link Double3}
      */
-	private Double3 calcDiffusive(Intersection intersection) {
-		Vector reflect = intersection.normal.scale(intersection.directionLight.dotProduct(intersection.normal)).scale(2.0).subtract(intersection.directionLight).normalize();
-		return intersection.geometry.getMaterial().kS.scale(Math.pow(Math.max(0,intersection.directionIntersect.dotProduct(reflect) * -1.0), intersection.geometry.getMaterial().nsh));
+	private Double3 calcDiffusive(Intersection intersection)  {
+		return intersection.material.kD.scale(Math.abs(intersection.dotNormalAndLight));
+	}
+	
+	/**
+     * Calculates the specular reflection coefficient using the Phong reflection model.
+     * 
+     * use the formula:
+     * VectorReflect = directionLight - 2 * directionLight.dotProduct(normal)  * normal.
+     * specularColor = Ks * (-1  *  directionIntersect.dotProduct(VectorReflect)) ^ nsh.
+     * 
+     * Which in short, if we put everything together, we get:
+     * specularColor = Ks * (-1  *  directionIntersect.dotProduct(directionLight - 2 * directionLight.dotProduct(normal)  * normal)) ^ nsh.
+     * 
+     * @param intersection the intersection to evaluate
+     * @return the specular reflection component as a {@link Double3}
+     */
+	private Double3 calcSpecular(Intersection intersection) {
+
+		return intersection.material.kS.scale(Math.pow(Math.max(0,intersection.directionIntersect.scale(-1).dotProduct(intersection.directionLight
+						   .subtract(intersection.normal.scale(intersection.dotNormalAndLight).scale(2.0)).normalize())),intersection.material.nsh));
 	}
 	
 	/**
@@ -137,7 +155,7 @@ public class SimpleRayTracer extends RayTracerBase {
 	private Color calcColor(Intersection intersection, Ray ray) {
 		if (!preprocessIntersection(intersection ,ray.getDirection()))
 			return Color.BLACK;
-		return calcLocalEffects(intersection).add(scene.ambientLight.getIntensity().scale(intersection.geometry.getMaterial().kA)); 
+		return calcLocalEffects(intersection).add(scene.ambientLight.getIntensity().scale(intersection.material.kA)); 
 	}
 
 }

@@ -61,7 +61,7 @@ public class Ray {
      * @return The point in the list that is closest to the head of the ray, or {@code null} if the list is empty or null.
      */
 	public Point findClosestPoint(List<Point> points) {
-		return points.isEmpty() || points == null ? null :
+		return points == null || points.isEmpty() ? null :
 			findClosestIntersection(points.stream().map(p -> new Intersection(null, p)).toList()).point;
 		}	
 	
