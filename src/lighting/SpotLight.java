@@ -20,12 +20,6 @@ public class SpotLight extends PointLight {
 	private final Vector direction;
 	
 	/**
-     * Cosine of the maximum allowed angle between the light’s axis and the direction
-     * toward the target point. Effectively defines the spotlight’s beam width.
-     */
-	private double narrowBeam = 90;
-	
-	/**
      * Constructs a {@code SpotLight} with the given intensity, position, and direction.
      *
      * @param intensity the {@link Color} intensity of the light
@@ -35,22 +29,8 @@ public class SpotLight extends PointLight {
 	public SpotLight(Color intensity ,Point position, Vector direction) {
 		super(intensity, position);
 		this.direction = direction.normalize();
-		this.narrowBeam = 0;
 	}
 	
-	/**
-     * Constructs a {@code SpotLight} with the given intensity, position, direction, and cone angle.
-     *
-     * @param intensity the {@link Color} intensity of the light
-     * @param position  the {@link Point} position of the light source
-     * @param direction the {@link Vector} direction of the spotlight’s axis (will be normalized)
-     * @param angleDeg   the spotlight cone angle in degrees (narrower angle = tighter beam)
-     */
-	public SpotLight(Color intensity ,Point position, Vector direction, double angleDeg) {
-		super(intensity, position);
-		this.direction = direction.normalize();
-		this.narrowBeam = Math.cos(Math.toRadians(angleDeg));
-	}
 	
 	/**
      * Sets the constant attenuation factor.
@@ -84,11 +64,7 @@ public class SpotLight extends PointLight {
 		super.setKq(kQ);
 		return this;
 	}
-
-	public SpotLight setNarrowBeam(double angleDeg) {
-		narrowBeam = Math.cos(Math.toRadians(angleDeg));
-		return this;
-	}	
+	
 	
 	/**
      * Returns the intensity of the spotlight at a given point.
@@ -100,13 +76,20 @@ public class SpotLight extends PointLight {
 	@Override
 	public Color getIntensity(Point target) {
 
- 		double dot = direction.normalize().dotProduct(super.getL(target).normalize());
-		if (dot < narrowBeam)
+ 		double dot = direction.dotProduct(super.getL(target));
+		if (dot < 0)
 			return Color.BLACK;
-		else if (dot >= narrowBeam - Math.cos(Math.toRadians(20)))
-			return super.getIntensity(target).scale(dot);
-		else
-			return super.getIntensity(target).scale((dot -  narrowBeam - Math.cos(Math.toRadians(20))) / -30);
+		return super.getIntensity(target).scale(dot);
 	}
+	
+	/**
+	 * Return the distance between point light to a point
+	 * @param point intersection {@link Point} from the distance
+	 */
+	@Override
+	public double getDistance(Point pointIntersection) {
+		return position.distance(pointIntersection);	
+	}
+
 }
 

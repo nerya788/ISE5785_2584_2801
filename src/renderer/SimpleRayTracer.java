@@ -19,7 +19,7 @@ import static java.lang.System.out;
 public class SimpleRayTracer extends RayTracerBase {
 
 	//Delta of distance for shading rays that we take from the body to the light source to prevent self-shading 
-	private static final double DELTA = 1;
+	private static final double DELTA = 0.1;
 	
 	/**
      * Constructs a {@code SimpleRayTracer} using the provided scene.
@@ -30,10 +30,34 @@ public class SimpleRayTracer extends RayTracerBase {
 		super(scene);
 	}
 	
+	/**
+	 * Determines whether a given intersection point is illuminated (unshaded)
+	 * with respect to a specific light source.
+
+	 *
+	 * @param intersection the {@link Intersection} containing the hit point,
+	 *                     its normal, and the light source being evaluated
+	 * @return {@code true} if the light source is visible from the intersection
+	 *         point (no blocking geometry exists between them), {@code false}
+	 *         if the point is in shadow
+	 */
 	private boolean unshaded(Intersection intersection) {
-		//Point point = intersection.point.add(intersection.normal.scale(DELTA));
-		Ray ray = new Ray(intersection.point, intersection.directionLight.scale(-1));
-		return scene.geometries.findIntersections(ray) == null;
+		Vector directionShaded = intersection.directionLight.scale(-1);
+		Vector deltaVector = intersection.normal.scale(intersection.dotNormalAndLight < 0 ? DELTA : -DELTA);
+		Point point =  intersection.point.add(deltaVector);
+	    Ray lightRay = new Ray(point, directionShaded);
+		
+		  var intersections = scene.geometries.findIntersections(lightRay);
+		  if(intersections == null) return true;
+		  
+		  double distance = intersection.lightType.getDistance(intersection.point); 
+		   
+		  for (Point intersect : intersections) { 
+	      if( intersection.point.distance(intersect) < distance )
+	    	  return false;
+		  }
+		  
+		return true;
 	}
 
 	/**
@@ -64,7 +88,7 @@ public class SimpleRayTracer extends RayTracerBase {
 	public boolean setLightSource (Intersection target ,LightSource typeLight) {
 		
 		target.lightType = typeLight;
-		target.directionLight = typeLight.getL(target.point).normalize();
+		target.directionLight = typeLight.getL(target.point);
 		target.dotNormalAndLight = Util.alignZero(target.directionLight.dotProduct(target.normal));
 		
 		return !(Util.isZero(target.dotNormalAndLight) && Util.isZero(target.dotNormalAndIntersect));
@@ -83,7 +107,8 @@ public class SimpleRayTracer extends RayTracerBase {
         for (LightSource lightSource: scene.lights) {
             if (!setLightSource(intersection,lightSource))
                 continue;
-            if ((intersection.dotNormalAndLight * intersection.dotNormalAndIntersect  > 0) /*&& unshaded(intersection)*/)
+			if ((intersection.dotNormalAndLight * intersection.dotNormalAndIntersect > 0)
+					&& unshaded(intersection))
             { 
                 Color iL = lightSource.getIntensity(intersection.point);
                 color = color
@@ -111,7 +136,7 @@ public class SimpleRayTracer extends RayTracerBase {
      * Calculates the specular reflection coefficient using the Phong reflection model.
      * 
      * use the formula:
-     * VectorReflect = directionLight - 2 * directionLight.dotProduct(normal)  * normal.
+     * VectorReflect = 2 * directionLight.dotProduct(normal)  * normal - directionLight.
      * specularColor = Ks * (-1  *  directionIntersect.dotProduct(VectorReflect)) ^ nsh.
      * 
      * Which in short, if we put everything together, we get:

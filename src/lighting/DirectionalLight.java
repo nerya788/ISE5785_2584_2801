@@ -42,8 +42,18 @@ public class DirectionalLight extends Light implements LightSource {
      */
 	@Override
 	public Vector getL(Point p) {		// point not Unnecessary
-		return direction.normalize();
+		return direction;
 	}
+	
+	/**
+	 * Return the distance between point light to a point
+	 * @param point intersection {@link Point} from the distance
+	 */
+	@Override
+	public double getDistance(Point pointIntersection) {
+		return Double.POSITIVE_INFINITY;	
+	}
+
 
 }
 

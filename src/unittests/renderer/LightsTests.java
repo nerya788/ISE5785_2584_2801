@@ -176,8 +176,8 @@ class LightsTests {
          .writeToImage("lightTrianglesSpot");
    }
    
-
-   /** Produce a picture of a sphere lighted by a narrow spotlight */
+/**
+   /** Produce a picture of a sphere lighted by a narrow spotlight 
    @Test
    void sphereSpotSharp() {
       scene1.geometries.add(sphere);
@@ -191,7 +191,7 @@ class LightsTests {
          .writeToImage("lightSphereSpotSharp");
    }
 
-   /** Produce a picture of two triangles lighted by a narrow spotlight */
+   /** Produce a picture of two triangles lighted by a narrow spotlight 
    @Test
    void trianglesSpotSharp() {
       scene2.geometries.add(triangle1, triangle2);
@@ -203,5 +203,5 @@ class LightsTests {
          .renderImage() //
          .writeToImage("lightTrianglesSpotSharp");
    }
-
+**/
 }

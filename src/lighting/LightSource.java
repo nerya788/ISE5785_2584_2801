@@ -29,6 +29,12 @@ public interface LightSource {
      * @return a {@link Vector} representing the light’s direction relative to the point
      */
 	Vector getL(Point p);
+	
+	/**
+	 * Return the distance between point light to a point
+	 * @param point intersection {@link Point} from the distance
+	 */
+	double getDistance(Point p);
 
 }
 

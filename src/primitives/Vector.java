@@ -32,7 +32,7 @@ public class Vector extends Point {
 	public Vector(Double3 xyz) {
 		super(xyz);
 		if (super.equals(ZERO))
-			throw new IllegalArgumentException("Vector onstractor of Double3 cannot be zero vector");
+			throw new IllegalArgumentException("Vector constructs of Double3 cannot be zero vector");
 	}
 
 	/**
