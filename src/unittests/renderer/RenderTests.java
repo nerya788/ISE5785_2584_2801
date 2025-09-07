@@ -51,7 +51,7 @@ public class RenderTests {
          .build() //
          .renderImage() //
          .printGrid(100, new Color(YELLOW)) //
-         .WriteToImage("Two color render test");
+         .writeToImage("Two color render test");
    }
 
 // For stage 6 - please disregard in stage 5
@@ -82,7 +82,7 @@ public class RenderTests {
          .build() //
          .renderImage() //
          .printGrid(100, new Color(WHITE)) //
-         .WriteToImage("color render test");
+         .writeToImage("color render test");
    }
 
 // For stage 6 - please disregard in stage 5
@@ -114,7 +114,7 @@ public class RenderTests {
          .build() //
          .renderImage() //
          .printGrid(100, new Color(WHITE)) //
-         .WriteToImage("color render test with ambient light");
+         .writeToImage("color render test with ambient light");
    }
 
    /** Test for XML based scene - for bonus 
@@ -134,7 +134,7 @@ public class RenderTests {
          .build() //
          .renderImage() //
          .printGrid(100, new Color(YELLOW)) //
-         .WriteToImage("xml render test");
+         .writeToImage("xml render test");
    }
 
    /** Test for JSON based scene - for bonus 
@@ -155,6 +155,6 @@ public class RenderTests {
          .build() //
          .renderImage() //
          .printGrid(100, new Color(YELLOW)) //
-         .WriteToImage("xml render test");
+         .writeToImage("xml render test");
    }
 }

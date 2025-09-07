@@ -30,7 +30,7 @@ class VectorTests {
 		// ============================ Boundary Values Tests =============================
 		Vector vecMinus123 = new Vector(-1, -2, -3);
 		assertThrows(IllegalArgumentException.class, () -> vec123.add(vecMinus123),
-				"Vector onstractor of Double3 cannot be zero vector");
+				"Vector constructs of Double3 cannot be zero vector");
 
 	}
 
@@ -42,7 +42,7 @@ class VectorTests {
 
 		// ============================ Boundary Values Tests =============================
 		assertThrows(IllegalArgumentException.class, () -> vec123.subtract(vec123),
-				"Vector onstractor of Double3 cannot be zero vector");
+				"Vector constructs of Double3 cannot be zero vector");
 	}
 
 	/**
@@ -58,7 +58,7 @@ class VectorTests {
 		// ============================ Boundary Values Tests ================================
 		Double ZERO = 0.0;
 		assertThrows(IllegalArgumentException.class, () -> vec135.scale(ZERO),
-				"Vector onstractor of Double3 cannot be zero vector");
+				"Vector constructs of Double3 cannot be zero vector");
 	}
 
 	/**

@@ -55,11 +55,11 @@ public class Sphere extends RadialGeometry {
 			return null;
 		else {
 			double th = Math.sqrt(radius * radius - d * d);
-			if ((tm - th) > 0 && (tm + th) > 0)
+			if (Util.alignZero(tm - th) > 0 && Util.alignZero(tm + th) > 0)
 				return List.of(new Intersection (this,(ray.getPoint(tm - th))),new Intersection (this,ray.getPoint(tm + th)));   
-			else if ((tm - th) > 0 && (tm + th) <= 0)
+			else if (Util.alignZero(tm - th) > 0 && Util.alignZero(tm + th) <= 0)
 				return List.of(new Intersection (this,(ray.getPoint(tm - th))));
-			else if ((tm - th) <= 0 && (tm + th) > 0)
+			else if (Util.alignZero(tm - th) <= 0 && Util.alignZero(tm + th) > 0)
 				return List.of(new Intersection (this,(ray.getPoint(tm + th))));
 
 			return null;

@@ -3,15 +3,25 @@ package geometries;
 import java.util.List;
 
 import primitives.*;
+import lighting.*;
 
 /**
  * Interface representing geometric objects that can be intersected by a {@link Ray}.
  * Classes implementing this interface provide methods for finding intersections.
  */
 public abstract class Intersectable {
+	
 	public static class Intersection {
 		public final Geometry geometry;
 		public final Point point;
+		public final Material material;;
+		
+		public Vector directionIntersect;
+		public Vector directionLight;
+		public Vector normal ;
+		public double dotNormalAndIntersect;
+		public double dotNormalAndLight;		
+		public LightSource lightType;
 		
 		/**
 		 * Constructs a new Intersection object with a given geometry and intersection point.
@@ -22,6 +32,11 @@ public abstract class Intersectable {
 		public Intersection(Geometry geometry, Point point) {
 			this.geometry = geometry;
 		    this.point = point;
+
+		    if (geometry != null)
+		    	this.material = geometry.getMaterial();
+		    else
+		    	this.material = null;
 		}
 		
 		@Override

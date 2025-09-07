@@ -34,6 +34,7 @@ public abstract class RayTracerBase {
 		scene.setBackground(newScen.background);
 		scene.setAmbientLight(newScen.ambientLight);
 		scene.setGeometries(newScen.geometries);
+		scene.setlights(newScen.lights);
 		
 	}
 	

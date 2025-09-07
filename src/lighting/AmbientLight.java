@@ -11,10 +11,10 @@ public class AmbientLight extends Light {
 	/**
      * Constructs an AmbientLight with a given intensity.
      * 
-     * @param _intensity the {@link Color} representing the light intensity
+     * @param intensity the {@link Color} representing the light intensity
      */
-	public AmbientLight(Color _intensity){
-		super(_intensity);
+	public AmbientLight(Color intensity){
+		super(intensity);
 	}
 
 	/**

@@ -75,7 +75,7 @@ public class Plane extends Geometry {
 		double denominator = ray.getDirection().dotProduct(direction);
 		double t = Util.alignZero(numerator / denominator); 
 		
-		if (t <= Zero) return null;
+		if (Util.alignZero(t) <= Zero) return null;
 		Point point = ray.getPoint(t); 
 		return List.of(new Intersection (this,point));
 	}	
