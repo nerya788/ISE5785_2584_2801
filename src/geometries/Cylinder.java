@@ -54,16 +54,17 @@ public class Cylinder extends Tube {
 	}
 
 	@Override
-    /**
-     * Finds and returns intersection points between the cylinder and a given ray.
-     * The method considers the intersections with the infinite tube, as well as 
-     * the top and bottom bases of the cylinder.
-     *
-     * @param ray The ray to find intersections with.
-     * @return A list of intersection points, or {@code null} if there are no intersections.
-     */
+	/**
+	 * Finds and returns intersection points between the cylinder and a given ray.
+	 * The method considers the intersections with the infinite tube, as well as the
+	 * top and bottom bases of the cylinder.
+	 *
+	 * @param ray The ray to find intersections with.
+	 * @return A list of intersection points, or {@code null} if there are no
+	 *         intersections.
+	 */
 	public List<Intersection> calculateIntersectionsHelper(Ray ray) {
-		List<Point> result = null;//new LinkedList<>()
+		List<Point> result = null;// new LinkedList<>()
 
 		// Step 1: Find intersections with the infinite tube part
 		List<Intersection> tubeIntersections = super.calculateIntersectionsHelper(ray);
@@ -72,9 +73,9 @@ public class Cylinder extends Tube {
 				// Check if point lies between the two bases of the finite cylinder
 				double projection = axis.getDirection().dotProduct(pt.point.subtract(axis.getHead()));
 				if (projection >= 0 && projection <= height) {
-	                if (result == null)
-	                	result = new LinkedList<>();
-	                result.add(pt.point);
+					if (result == null)
+						result = new LinkedList<>();
+					result.add(pt.point);
 
 				}
 			}
@@ -90,9 +91,9 @@ public class Cylinder extends Tube {
 			if (t > 0) {
 				Point p = ray.getPoint(t);
 				if (p.equals(baseCenter) || p.subtract(baseCenter).lengthSquared() <= radius * radius - 1e-12) {
-	                if (result == null)
-	                	result = new LinkedList<>();
-	                result.add(p);
+					if (result == null)
+						result = new LinkedList<>();
+					result.add(p);
 
 				}
 			}
@@ -106,9 +107,9 @@ public class Cylinder extends Tube {
 			if (t > 0) {
 				Point p = ray.getPoint(t);
 				if (p.equals(topCenter) || p.subtract(topCenter).lengthSquared() <= radius * radius - 1e-12) {
-	                if (result == null)
-	                	result = new LinkedList<>();
-	                result.add(p);
+					if (result == null)
+						result = new LinkedList<>();
+					result.add(p);
 				}
 			}
 		}
@@ -116,13 +117,13 @@ public class Cylinder extends Tube {
 		// return the list result
 		if (result == null || result.isEmpty())
 			return null;
-		
+
 		if (result.size() == 2)
 			if (result.get(0).subtract(ray.getHead()).length() < result.get(1).subtract(ray.getHead()).length())
-				return List.of(new Intersection (this,result.get(0)),new Intersection (this,result.get(1)));
+				return List.of(new Intersection(this, result.get(0)), new Intersection(this, result.get(1)));
 			else
-				return List.of(new Intersection (this,result.get(1)),new Intersection (this,result.get(0)));
-		
-		return List.of(new Intersection (this,result.get(0)));
+				return List.of(new Intersection(this, result.get(1)), new Intersection(this, result.get(0)));
+
+		return List.of(new Intersection(this, result.get(0)));
 	}
 }

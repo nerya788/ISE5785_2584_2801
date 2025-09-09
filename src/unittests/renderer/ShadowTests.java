@@ -115,6 +115,7 @@ class ShadowTests {
 						.setKl(4E-4).setKq(2E-5));
 
 		camera//
+			  //.setRayTracer(scene, RayTracerType.SIMPLE)
 				.setResolution(600, 600) //
 				.build() //
 				.renderImage() //

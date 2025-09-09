@@ -13,30 +13,30 @@ public abstract class Geometry extends Intersectable {
 	protected Color emission = Color.BLACK;
 	private Material material = new Material();
 
-    /**
-     * Sets the emission color of the geometry.
-     * Chaining-style setter as part of Builder design pattern.
-     *
-     * @param emission the emission color to set
-     * @return this geometry instance (for method chaining)
-     */
-    public Geometry setEmission(Color emission) {
-        this.emission = emission;
-        return this;
-    }
+	/**
+	 * Sets the emission color of the geometry. Chaining-style setter as part of
+	 * Builder design pattern.
+	 *
+	 * @param emission the emission color to set
+	 * @return this geometry instance (for method chaining)
+	 */
+	public Geometry setEmission(Color emission) {
+		this.emission = emission;
+		return this;
+	}
 
-    public Color getEmission() {
-        return this.emission;
-    }
-    
-    public Material getMaterial() {
-    	return material;
-    }
-    
-    public Geometry setMaterial(Material material) {
-    	this.material = material;
-    	return this;
-    }
+	public Color getEmission() {
+		return this.emission;
+	}
+
+	public Material getMaterial() {
+		return material;
+	}
+
+	public Geometry setMaterial(Material material) {
+		this.material = material;
+		return this;
+	}
 
 	/**
 	 * Returns the normal vector to the geometry at a given point.

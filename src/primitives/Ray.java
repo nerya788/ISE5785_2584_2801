@@ -3,7 +3,7 @@ package primitives;
 import primitives.Util;
 import java.util.List;
 import geometries.Intersectable.Intersection;
-
+//import renderer.SimpleRayTracer;
 
 /**
  * Represents a ray in 3D space, defined by a starting point and a direction
@@ -29,6 +29,16 @@ public class Ray {
 		direction = vec.normalize();
 	}
 
+	public Ray(Point point, Vector vec, Vector normal, double DELTA) {
+
+		direction = vec.normalize();
+
+		if (!Util.isZero(direction.dotProduct(normal)))
+			head = point.add(normal.scale(direction.dotProduct(normal) > 0 ? DELTA : -DELTA));
+		else
+			head = point;
+	}
+
 	/**
 	 * getter head
 	 */
@@ -51,36 +61,40 @@ public class Ray {
 			return head;
 		return head.add(direction.scale(t));
 	}
-	
+
 	/**
-     * Finds and returns the point from a given list that is closest to the head of this ray.
-     * <p>
-     * If the list is empty or null, returns {@code null}.
-     *
-     * @param list A list of {@link Point} objects to search through.
-     * @return The point in the list that is closest to the head of the ray, or {@code null} if the list is empty or null.
-     */
+	 * Finds and returns the point from a given list that is closest to the head of
+	 * this ray.
+	 * <p>
+	 * If the list is empty or null, returns {@code null}.
+	 *
+	 * @param list A list of {@link Point} objects to search through.
+	 * @return The point in the list that is closest to the head of the ray, or
+	 *         {@code null} if the list is empty or null.
+	 */
 	public Point findClosestPoint(List<Point> points) {
-		return points == null || points.isEmpty() ? null :
-			findClosestIntersection(points.stream().map(p -> new Intersection(null, p)).toList()).point;
-		}	
-	
+		return points == null || points.isEmpty() ? null
+				: findClosestIntersection(points.stream().map(p -> new Intersection(null, p)).toList()).point;
+	}
+
 	public Intersection findClosestIntersection(List<Intersection> list) {
-	    if (list == null || list.isEmpty()) return null;
-		if (list.size() == 1) return list.get(0);
+		if (list == null || list.isEmpty())
+			return null;
+		if (list.size() == 1)
+			return list.get(0);
 
 		Intersection closest = list.get(0);
-	    double minDistance = head.distance(closest.point);
+		double minDistance = head.distance(closest.point);
 
-	    for (int i = 1; i < list.size(); i++) {
-	        double distance = head.distance(list.get(i).point);
-	        if (distance < minDistance) {
-	            minDistance = distance;
-	            closest = list.get(i);
-	        }
-	    }
+		for (int i = 1; i < list.size(); i++) {
+			double distance = head.distance(list.get(i).point);
+			if (distance < minDistance) {
+				minDistance = distance;
+				closest = list.get(i);
+			}
+		}
 
-	    return closest;
+		return closest;
 	}
 
 	/**

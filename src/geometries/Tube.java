@@ -118,11 +118,11 @@ public class Tube extends RadialGeometry {
 
 		// Return valid intersection points
 		if ((p1 != null && p2 != null) && (!p2.equals(ray.getHead())))
-			return List.of(new Intersection (this,p2),new Intersection (this,p1));
+			return List.of(new Intersection(this, p2), new Intersection(this, p1));
 		if (p1 != null)
-			return List.of(new Intersection (this,p1));
+			return List.of(new Intersection(this, p1));
 		if (p2 != null)
-			return List.of(new Intersection (this,p2));
+			return List.of(new Intersection(this, p2));
 		return null;
 	}
 

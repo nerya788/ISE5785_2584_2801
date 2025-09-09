@@ -11,9 +11,9 @@ import primitives.*;
 public class Plane extends Geometry {
 	private final Point head; // A point on the plane
 	private final Vector direction; // The normal vector to the plane
-	
+
 	public static final double Zero = 0.0;
-	
+
 	/**
 	 * Constructs a plane from three points in 3D space.
 	 * 
@@ -49,34 +49,35 @@ public class Plane extends Geometry {
 	}
 
 	/**
-     * Finds the intersection points between a given {@link Ray} and the plane.
-     * 
-     * If there are intersection points, they are calculated and returned as a list.
-     * If there are no intersection points (the ray does not intersect the plane),
-     * this method returns {@code null}.
-     * if the ray head and the plane head is equals the result is null.
-     * if the ray is a subset of the plane (infinity points) then returns null.
-     *
-     * @param ray The {@link Ray} to check for intersections with the plane
-     * @return A list of intersection points as {@link Point} objects, or {@code null} if none exist
-     */
+	 * Finds the intersection points between a given {@link Ray} and the plane.
+	 * 
+	 * If there are intersection points, they are calculated and returned as a list.
+	 * If there are no intersection points (the ray does not intersect the plane),
+	 * this method returns {@code null}. if the ray head and the plane head is
+	 * equals the result is null. if the ray is a subset of the plane (infinity
+	 * points) then returns null.
+	 *
+	 * @param ray The {@link Ray} to check for intersections with the plane
+	 * @return A list of intersection points as {@link Point} objects, or
+	 *         {@code null} if none exist
+	 */
 	@Override
 	public List<Intersection> calculateIntersectionsHelper(Ray ray) {
 		if (ray.getHead().equals(head) || Util.isZero(ray.getDirection().dotProduct(direction)))
-			return null; // if the ray's head and the plane's head is exactly the same. 
-	
+			return null; // if the ray's head and the plane's head is exactly the same.
 
 		Vector v = ray.getHead().subtract(head);
 		if (Util.isZero(v.dotProduct(direction)))
-			return null;  // if the ray's head is somewhere on the plane.
-		
+			return null; // if the ray's head is somewhere on the plane.
+
 		Vector v1 = head.subtract(ray.getHead());
 		double numerator = v1.dotProduct(direction);
 		double denominator = ray.getDirection().dotProduct(direction);
-		double t = Util.alignZero(numerator / denominator); 
-		
-		if (Util.alignZero(t) <= Zero) return null;
-		Point point = ray.getPoint(t); 
-		return List.of(new Intersection (this,point));
-	}	
+		double t = Util.alignZero(numerator / denominator);
+
+		if (Util.alignZero(t) <= Zero)
+			return null;
+		Point point = ray.getPoint(t);
+		return List.of(new Intersection(this, point));
+	}
 }
