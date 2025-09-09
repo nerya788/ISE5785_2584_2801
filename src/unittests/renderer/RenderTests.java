@@ -6,10 +6,15 @@ import org.junit.jupiter.api.Test;
 
 import geometries.*;
 import lighting.AmbientLight;
+import lighting.DirectionalLight;
+import lighting.PointLight;
+import lighting.SpotLight;
 import primitives.*;
 import renderer.Camera;
 import scene.Scene;
 import renderer.RayTracerType;
+
+
 
 /**
  * Test rendering a basic image
