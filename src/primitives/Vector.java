@@ -13,9 +13,9 @@ public class Vector extends Point {
 	 * @param z The z-coordinate.
 	 * @throws IllegalArgumentException if the vector is the zero vector.
 	 */
-	public final static Vector AXIS_X = new Vector(1,0,0);
-	public final static Vector AXIS_Y = new Vector(0,1,0);
-	public final static Vector AXIS_Z = new Vector(0,0,1);
+	public final static Vector AXIS_X = new Vector(1, 0, 0);
+	public final static Vector AXIS_Y = new Vector(0, 1, 0);
+	public final static Vector AXIS_Z = new Vector(0, 0, 1);
 
 	public Vector(double x, double y, double z) {
 		super(x, y, z);

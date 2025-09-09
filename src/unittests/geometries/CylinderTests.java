@@ -39,12 +39,14 @@ class CylinderTests {
 		Point point310 = new Point(3, 1, 0);
 		Point point300 = new Point(3, 0, 0);
 
-		// ============================ Equivalence Partitions Tests ============================
+		// ============================ Equivalence Partitions Tests
+		// ============================
 		assertEquals(new Vector(0, 1, 0), cylinder.getNormal(point210), "wrong normal of side cylinder");
 		assertEquals(new Vector(-1, 0, 0), cylinder.getNormal(point1050), "wrong normal of base1 cylinder");
 		assertEquals(new Vector(1, 0, 0), cylinder.getNormal(point3050), "wrong normal of base2 cylinder");
 
-		// ============================ Boundary Values Tests  ===================================
+		// ============================ Boundary Values Tests
+		// ===================================
 		assertEquals(new Vector(-1, 0, 0), cylinder.getNormal(point100), "wrong normal of center base1 cylinder");
 		assertEquals(new Vector(1, 0, 0), cylinder.getNormal(point300), "wrong normal of center base2 cylinder");
 		assertEquals(new Vector(-1, 0, 0), cylinder.getNormal(point110), "wrong normal of edge center base1 cylinder");

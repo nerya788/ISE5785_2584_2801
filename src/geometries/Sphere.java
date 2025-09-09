@@ -33,21 +33,22 @@ public class Sphere extends RadialGeometry {
 		return (point.subtract(center)).normalize();
 	}
 
-    /**
-     * Finds the intersection points between a given {@link Ray} and the sphere.
-     * <p>
-     * If there are intersection points, they are calculated and returned as a list.
-     * If there are no intersection points (the ray does not intersect the sphere),
-     * this method returns {@code null}.
-     *
-     * @param ray The {@link Ray} to check for intersections with the sphere
-     * @return A list of intersection points as {@link Point} objects, or {@code null} if none exist
-     */
+	/**
+	 * Finds the intersection points between a given {@link Ray} and the sphere.
+	 * <p>
+	 * If there are intersection points, they are calculated and returned as a list.
+	 * If there are no intersection points (the ray does not intersect the sphere),
+	 * this method returns {@code null}.
+	 *
+	 * @param ray The {@link Ray} to check for intersections with the sphere
+	 * @return A list of intersection points as {@link Point} objects, or
+	 *         {@code null} if none exist
+	 */
 
 	@Override
 	public List<Intersection> calculateIntersectionsHelper(Ray ray) {
 		if (ray.getHead() == center)
-			return List.of(new Intersection (this,ray.getPoint(radius)));
+			return List.of(new Intersection(this, ray.getPoint(radius)));
 		Vector u = center.subtract(ray.getHead());
 		double tm = u.dotProduct(ray.getDirection());
 		double d = Math.sqrt(u.length() * u.length() - tm * tm);
@@ -56,11 +57,12 @@ public class Sphere extends RadialGeometry {
 		else {
 			double th = Math.sqrt(radius * radius - d * d);
 			if (Util.alignZero(tm - th) > 0 && Util.alignZero(tm + th) > 0)
-				return List.of(new Intersection (this,(ray.getPoint(tm - th))),new Intersection (this,ray.getPoint(tm + th)));   
+				return List.of(new Intersection(this, (ray.getPoint(tm - th))),
+						new Intersection(this, ray.getPoint(tm + th)));
 			else if (Util.alignZero(tm - th) > 0 && Util.alignZero(tm + th) <= 0)
-				return List.of(new Intersection (this,(ray.getPoint(tm - th))));
+				return List.of(new Intersection(this, (ray.getPoint(tm - th))));
 			else if (Util.alignZero(tm - th) <= 0 && Util.alignZero(tm + th) > 0)
-				return List.of(new Intersection (this,(ray.getPoint(tm + th))));
+				return List.of(new Intersection(this, (ray.getPoint(tm + th))));
 
 			return null;
 		}
