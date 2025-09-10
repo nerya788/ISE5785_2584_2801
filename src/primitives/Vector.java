@@ -19,8 +19,8 @@ public class Vector extends Point {
 
 	public Vector(double x, double y, double z) {
 		super(x, y, z);
-		if (xyz.equals(Double3.ZERO))
-			throw new IllegalArgumentException("Vector constractor of three Double cannot be zero vector");
+		//if (xyz.equals(Double3.ZERO))
+		//	throw new IllegalArgumentException("Vector constractor of three Double cannot be zero vector");
 	}
 
 	/**
@@ -31,8 +31,8 @@ public class Vector extends Point {
 	 */
 	public Vector(Double3 xyz) {
 		super(xyz);
-		if (super.equals(ZERO))
-			throw new IllegalArgumentException("Vector constructs of Double3 cannot be zero vector");
+		//if (super.equals(ZERO))
+		//	throw new IllegalArgumentException("Vector constructs of Double3 cannot be zero vector");
 	}
 
 	/**
@@ -99,8 +99,19 @@ public class Vector extends Point {
 	 * 
 	 * @return A new Vector representing the normalized version of this vector.
 	 */
+	//public Vector normalize() {
+	//	return new Vector(xyz.scale((double) 1 / this.length()));
+	//}
+	
 	public Vector normalize() {
-		return new Vector(xyz.scale((double) 1 / this.length()));
+	    double len = this.length();
+	    // אם האורך הוא 0, אל תנסה לחלק בו.
+	    // במקום לקרוס, אפשר להחזיר וקטור אפס או לזרוק שגיאה ברורה יותר.
+	    if (len == 0) {
+	        throw new ArithmeticException("Cannot normalize the zero vector");
+	    }
+	    // רק אם האורך תקין, בצע את החילוק.
+	    return new Vector(xyz.scale(1 / len));
 	}
 
 	/**

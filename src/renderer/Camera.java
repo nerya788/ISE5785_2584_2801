@@ -27,6 +27,26 @@ public class Camera implements Cloneable {
 	private RayTracerBase rayTracer;
 	private int nX = 1;
 	private int nY = 1;
+	
+	public Point getP0() {
+        return p0;
+    }
+
+    public Vector getvTo() {
+        return vTo;
+    }
+
+    public Vector getvUp() {
+        return vUp;
+    }
+
+    public Vector getvRight() {
+        return vRight;
+    }
+    
+    public double getViewPlaneDistance() {
+        return distance;
+    }
 
 	/**
 	 * Builder class for constructing a {@link Camera} instance using the Builder
@@ -34,7 +54,65 @@ public class Camera implements Cloneable {
 	 */
 	public static class Builder {
 		private final Camera camera = new Camera();
+		
+		/**
+		 * Orbits the camera around its target point.
+		 * The camera moves along an arc while continuously facing the target.
+		 *
+		 * @param axis  The axis around which to orbit (e.g., vUp for horizontal orbit).
+		 * @param angleDegrees The angle in degrees to orbit. Positive values are clockwise.
+		 * @return The Builder instance.
+		 */
+		public Builder orbit(Vector axis, double angleDegrees) {
+		    // 1. Find the point the camera is currently looking at.
+		    Point target = camera.p0.add(camera.vTo.scale(camera.distance));
 
+		    // 2. Find the vector from the target to the camera's current position.
+		    Vector radius = camera.p0.subtract(target);
+
+		    // 3. Rotate this vector around the given axis.
+		    double angleRad = Math.toRadians(angleDegrees);
+		    double cosAngle = Math.cos(angleRad);
+		    double sinAngle = Math.sin(angleRad);
+
+		    // Using the simplified rotation formula for orthogonal vectors which is robust.
+		    Vector rotatedRadius = radius.scale(cosAngle).add(axis.crossProduct(radius).scale(sinAngle));
+
+		    // 4. The new camera position is the target plus the rotated vector.
+		    camera.p0 = target.add(rotatedRadius);
+
+		    // 5. Finally, re-aim the camera at the target from its new position,
+		    // making sure to preserve the "up" orientation.
+		    setDirection(target, camera.vUp);
+
+		    return this;
+		}
+		
+		/**
+		 * Rotates the camera clockwise around its viewing axis (vTo).
+		 * This simulates a camera roll for an artistic effect.
+		 *
+		 * @param degrees the angle in degrees to roll the camera clockwise
+		 * @return the Builder instance
+		 */
+		public Builder roll(double degrees) {
+		    setDegreeClockwise(degrees);
+		    return this;
+		}
+		
+		/**
+		 * Moves the camera's location by a given vector, without changing its direction.
+		 * This corresponds to the photographer moving to a new spot while looking
+		 * at the same target.
+		 *
+		 * @param moveVector the vector by which to translate the camera's position
+		 * @return the Builder instance
+		 */
+		public Builder translate(Vector moveVector) {
+		    camera.p0 = camera.p0.add(moveVector);
+		    return this;
+		}
+		
 		/**
 		 * Sets the location for the camera.
 		 *
@@ -299,6 +377,28 @@ public class Camera implements Cloneable {
 	 */
 	public static Builder getBuilder() {
 		return new Builder();
+	}
+	
+	/**
+	 * Creates a new Builder instance pre-configured with the settings of an existing camera.
+	 *
+	 * @param oldCamera the camera to copy settings from
+	 * @return a new Builder instance initialized with the old camera's state
+	 */
+	public static Builder getBuilder(Camera oldCamera) {
+	    Builder builder = new Builder();
+	    builder.camera.p0 = oldCamera.p0;
+	    builder.camera.vTo = oldCamera.vTo;
+	    builder.camera.vUp = oldCamera.vUp;
+	    builder.camera.vRight = oldCamera.vRight;
+	    builder.camera.height = oldCamera.height;
+	    builder.camera.width = oldCamera.width;
+	    builder.camera.distance = oldCamera.distance;
+	    builder.camera.imageWriter = oldCamera.imageWriter;
+	    builder.camera.rayTracer = oldCamera.rayTracer;
+	    builder.camera.nX = oldCamera.nX;
+	    builder.camera.nY = oldCamera.nY;
+	    return builder;
 	}
 
 	/**

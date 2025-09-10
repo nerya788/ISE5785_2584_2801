@@ -203,11 +203,47 @@ class ReflectionRefractionTests {
 		myScene.lights.add(new DirectionalLight(new Color(50, 40, 30), new Vector(1, -0.2, 1)));
 
 
+		
+		
 		// --- Render Execution ---
-		myBonusCamera.setResolution(2048, 2048)
-				.build()
-				.renderImage()
-				.writeToImage("stage7Bonus1");
+		// First, build the original camera and render the original image
+		Camera originalCamera = myBonusCamera.setResolution(2048, 2048).build();
+
+		originalCamera.renderImage()
+		              .writeToImage("stage7Bonus1_Original");
+
+		
+		// --- New View 1: Orbit 35 degrees to the left ---
+		// We orbit around the original "up" vector to move horizontally.
+		Camera cameraRightOrbit = Camera.getBuilder(originalCamera)
+		                                .orbit(originalCamera.getvUp(), -35) 
+		                                .build();
+
+		cameraRightOrbit.renderImage()
+		                .writeToImage("stage7Bonus1_LeftOrbit");
+		
+		
+		// --- New View 2: Orbit 38 degrees up ---
+		// We orbit around the original "right" vector to move vertically.
+		Camera cameraTopOrbit = Camera.getBuilder(originalCamera)
+		                              .orbit(originalCamera.getvRight(), -38) 
+		                              .build();
+
+		cameraTopOrbit.renderImage()
+		              .writeToImage("stage7Bonus1_TopOrbit");
+
+		
+		// --- New View 3: A rotated "Dutch Angle" shot (Roll) ---
+		// The roll function remains the same, as it's a different type of rotation.
+		Camera cameraRolledView = Camera.getBuilder(originalCamera)
+		                                .roll(30)
+		                                .build();
+
+		cameraRolledView.renderImage()
+		                .writeToImage("stage7Bonus1_RolledView");
+		
+		
+		
 	}
 
     /**
