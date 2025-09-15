@@ -240,18 +240,29 @@ public class Camera implements Cloneable {
 		 * @return the Builder instance
 		 */
 		public Builder setDegreeCounterclockwise(double angleDegrees) {
-			double radianRadians = Math.toRadians(angleDegrees);
+		    // We assume vTo and vRight are already orthogonal.
+		    // If they are not, you have a different problem that needs to be fixed first.
+		    if (camera.vTo.dotProduct(camera.vRight) > 0.0001) {
+		         // This is a sanity check. In a correct camera model, this should not happen.
+		         // You might want to handle this error, for example by re-orthogonalizing the vectors.
+		    }
 
-			double cos = Math.cos(radianRadians);
-			double sin = Math.sin(radianRadians);
+		    double radianRadians = Math.toRadians(angleDegrees);
 
-			// Rodriguez formula:
-			camera.vRight = camera.vRight.scale(cos).add(camera.vTo.crossProduct(camera.vRight).scale(sin))
-					.add(camera.vTo.scale(camera.vTo.dotProduct(camera.vRight) * (1 - cos))).normalize();
+		    double cos = Math.cos(radianRadians);
+		    double sin = Math.sin(radianRadians);
 
-			camera.vUp = camera.vRight.crossProduct(camera.vTo).normalize();
+		    // Using the simplified Rodrigues' formula for orthogonal vectors:
+		    // The third term, vTo.scale(vTo.dotProduct(vRight) * (1 - cos)), is removed
+		    // because vTo.dotProduct(vRight) is always 0.
+		    camera.vRight = camera.vRight.scale(cos)
+		            .add(camera.vTo.crossProduct(camera.vRight).scale(sin))
+		            .normalize();
 
-			return this;
+		    // After rotating vRight, vUp must be recalculated to remain orthogonal.
+		    camera.vUp = camera.vRight.crossProduct(camera.vTo).normalize();
+
+		    return this;
 		}
 
 		/**

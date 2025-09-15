@@ -2,7 +2,7 @@ package geometries;
 
 import java.util.List;
 
-import geometries.Intersectable.Intersection;
+//import geometries.Intersectable.Intersection;
 
 import static primitives.Util.*;
 import primitives.*;
@@ -81,14 +81,58 @@ public class Polygon extends Geometry {
 		}
 	}
 
-	@Override
-	public Vector getNormal(Point point) {
-		return plane.getNormal(point);
-	}
 
-	@Override
-	public List<Intersection> calculateIntersectionsHelper(Ray ray) {
-		return null;
-	}
+	   @Override
+	   public Vector getNormal(Point point) {
+		   return plane.getNormal(point);
+		   }
+
+	   /**
+	    * Finds the intersection points between a given ray and the Polygon.
+	    *
+	    * @param ray the ray to intersect with the Polygon
+	    * @return a list of intersection points, or null if there are no intersections
+	    */
+	   @Override
+	   protected List<Intersection> calculateIntersectionsHelper(Ray ray) {
+
+	      // Check if the ray intersects the plane of the polygon
+	      List<Point> planeIntersections = plane.findIntersections(ray);
+	      if (planeIntersections == null)
+	         return null;
+
+	      // Retrieve the direction vector and head point of the ray
+	      Vector rayDirection = ray.getDirection();
+	      Point rayPoint = ray.getHead();
+
+	      for(Point p : vertices) {
+	         if (p.equals(rayPoint))
+	            return null; // The ray's head is one of the polygon's vertices
+	      }
+
+	      // Loop through all vertices and edges of the polygon
+	      Boolean positive = null;
+	      for (int i = 0; i < size; i++) {
+	         Point p1 = vertices.get(i);
+	         Point p2 = vertices.get((i + 1) % size);
+
+	         Vector edgeVector1 = p1.subtract(rayPoint);
+	         Vector edgeVector2 = p2.subtract(rayPoint);
+	         // Vector toIntersection = intersectionPoint.subtract(p1);
+	         Vector normal = edgeVector1.crossProduct(edgeVector2).normalize();
+
+	         double dotProduct = alignZero(normal.dotProduct(rayDirection));
+	         if (dotProduct == 0)
+	            return null; // Intersection point is on the edge considered outside the polygon
+
+	         if (positive == null) {
+	            positive = dotProduct > 0;
+	         } else if (positive != dotProduct > 0)
+	            return null; // the sing is not the sane for all vertices
+	      }
+	      // Return the intersection point with the plane of the polygon
+	      return List.of(new Intersection(this, planeIntersections.getFirst()));
+	   }
+
 
 }

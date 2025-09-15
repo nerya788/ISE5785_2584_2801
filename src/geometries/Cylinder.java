@@ -118,12 +118,14 @@ public class Cylinder extends Tube {
 		if (result == null || result.isEmpty())
 			return null;
 
-		if (result.size() == 2)
+		if (result.size() == 2) {
+			if(result.get(0).equals(ray.getHead())) return List.of(new Intersection(this, result.get(1)));
+			if(result.get(1).equals(ray.getHead())) return List.of(new Intersection(this, result.get(0)));
 			if (result.get(0).subtract(ray.getHead()).length() < result.get(1).subtract(ray.getHead()).length())
 				return List.of(new Intersection(this, result.get(0)), new Intersection(this, result.get(1)));
 			else
 				return List.of(new Intersection(this, result.get(1)), new Intersection(this, result.get(0)));
-
+		}
 		return List.of(new Intersection(this, result.get(0)));
 	}
 }
