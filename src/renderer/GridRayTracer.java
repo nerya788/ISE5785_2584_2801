@@ -94,3 +94,4 @@ public class GridRayTracer extends SimpleRayTracer {
 		}
 		return false;
 	}
+}
