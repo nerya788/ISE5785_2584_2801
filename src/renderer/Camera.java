@@ -1,10 +1,17 @@
 package renderer;
 
 import primitives.*;
+import renderer.Camera.rayCreationSpace;
 import scene.Scene;
 
 import static primitives.Util.isZero;
+
+import java.util.LinkedList;
+import java.util.List;
 import java.util.MissingResourceException;
+
+import geometries.Intersectable;
+import geometries.Intersectable.Intersection;
 
 /**
  * The {@code Camera} class represents a virtual camera in 3D space. It defines
@@ -27,26 +34,6 @@ public class Camera implements Cloneable {
 	private RayTracerBase rayTracer;
 	private int nX = 1;
 	private int nY = 1;
-	
-	public Point getP0() {
-        return p0;
-    }
-
-    public Vector getvTo() {
-        return vTo;
-    }
-
-    public Vector getvUp() {
-        return vUp;
-    }
-
-    public Vector getvRight() {
-        return vRight;
-    }
-    
-    public double getViewPlaneDistance() {
-        return distance;
-    }
 
 	/**
 	 * Builder class for constructing a {@link Camera} instance using the Builder
@@ -54,65 +41,42 @@ public class Camera implements Cloneable {
 	 */
 	public static class Builder {
 		private final Camera camera = new Camera();
-		
+
 		/**
-		 * Orbits the camera around its target point.
-		 * The camera moves along an arc while continuously facing the target.
+		 * Orbits the camera around its target point. The camera moves along an arc
+		 * while continuously facing the target.
 		 *
-		 * @param axis  The axis around which to orbit (e.g., vUp for horizontal orbit).
-		 * @param angleDegrees The angle in degrees to orbit. Positive values are clockwise.
+		 * @param axis         The axis around which to orbit (e.g., vUp for horizontal
+		 *                     orbit).
+		 * @param angleDegrees The angle in degrees to orbit. Positive values are
+		 *                     clockwise.
 		 * @return The Builder instance.
 		 */
 		public Builder orbit(Vector axis, double angleDegrees) {
-		    // 1. Find the point the camera is currently looking at.
-		    Point target = camera.p0.add(camera.vTo.scale(camera.distance));
+			// 1. Find the point the camera is currently looking at.
+			Point target = camera.p0.add(camera.vTo.scale(camera.distance));
 
-		    // 2. Find the vector from the target to the camera's current position.
-		    Vector radius = camera.p0.subtract(target);
+			// 2. Find the vector from the target to the camera's current position.
+			Vector radius = camera.p0.subtract(target);
 
-		    // 3. Rotate this vector around the given axis.
-		    double angleRad = Math.toRadians(angleDegrees);
-		    double cosAngle = Math.cos(angleRad);
-		    double sinAngle = Math.sin(angleRad);
+			// 3. Rotate this vector around the given axis.
+			double angleRad = Math.toRadians(angleDegrees);
+			double cosAngle = Math.cos(angleRad);
+			double sinAngle = Math.sin(angleRad);
 
-		    // Using the simplified rotation formula for orthogonal vectors which is robust.
-		    Vector rotatedRadius = radius.scale(cosAngle).add(axis.crossProduct(radius).scale(sinAngle));
+			// Using the simplified rotation formula for orthogonal vectors which is robust.
+			Vector rotatedRadius = radius.scale(cosAngle).add(axis.crossProduct(radius).scale(sinAngle));
 
-		    // 4. The new camera position is the target plus the rotated vector.
-		    camera.p0 = target.add(rotatedRadius);
+			// 4. The new camera position is the target plus the rotated vector.
+			camera.p0 = target.add(rotatedRadius);
 
-		    // 5. Finally, re-aim the camera at the target from its new position,
-		    // making sure to preserve the "up" orientation.
-		    setDirection(target, camera.vUp);
+			// 5. Finally, re-aim the camera at the target from its new position,
+			// making sure to preserve the "up" orientation.
+			setDirection(target, camera.vUp);
 
-		    return this;
+			return this;
 		}
-		
-		/**
-		 * Rotates the camera clockwise around its viewing axis (vTo).
-		 * This simulates a camera roll for an artistic effect.
-		 *
-		 * @param degrees the angle in degrees to roll the camera clockwise
-		 * @return the Builder instance
-		 */
-		public Builder roll(double degrees) {
-		    setDegreeClockwise(degrees);
-		    return this;
-		}
-		
-		/**
-		 * Moves the camera's location by a given vector, without changing its direction.
-		 * This corresponds to the photographer moving to a new spot while looking
-		 * at the same target.
-		 *
-		 * @param moveVector the vector by which to translate the camera's position
-		 * @return the Builder instance
-		 */
-		public Builder translate(Vector moveVector) {
-		    camera.p0 = camera.p0.add(moveVector);
-		    return this;
-		}
-		
+
 		/**
 		 * Sets the location for the camera.
 		 *
@@ -240,29 +204,18 @@ public class Camera implements Cloneable {
 		 * @return the Builder instance
 		 */
 		public Builder setDegreeCounterclockwise(double angleDegrees) {
-		    // We assume vTo and vRight are already orthogonal.
-		    // If they are not, you have a different problem that needs to be fixed first.
-		    if (camera.vTo.dotProduct(camera.vRight) > 0.0001) {
-		         // This is a sanity check. In a correct camera model, this should not happen.
-		         // You might want to handle this error, for example by re-orthogonalizing the vectors.
-		    }
+			double radianRadians = Math.toRadians(angleDegrees);
 
-		    double radianRadians = Math.toRadians(angleDegrees);
+			double cos = Math.cos(radianRadians);
+			double sin = Math.sin(radianRadians);
 
-		    double cos = Math.cos(radianRadians);
-		    double sin = Math.sin(radianRadians);
+			// Using the simplified Rodrigues' formula for orthogonal vectors:
+			camera.vRight = camera.vRight.scale(cos).add(camera.vTo.crossProduct(camera.vRight).scale(sin)).normalize();
 
-		    // Using the simplified Rodrigues' formula for orthogonal vectors:
-		    // The third term, vTo.scale(vTo.dotProduct(vRight) * (1 - cos)), is removed
-		    // because vTo.dotProduct(vRight) is always 0.
-		    camera.vRight = camera.vRight.scale(cos)
-		            .add(camera.vTo.crossProduct(camera.vRight).scale(sin))
-		            .normalize();
+			// After rotating vRight, vUp must be recalculated to remain orthogonal.
+			camera.vUp = camera.vRight.crossProduct(camera.vTo).normalize();
 
-		    // After rotating vRight, vUp must be recalculated to remain orthogonal.
-		    camera.vUp = camera.vRight.crossProduct(camera.vTo).normalize();
-
-		    return this;
+			return this;
 		}
 
 		/**
@@ -295,12 +248,13 @@ public class Camera implements Cloneable {
 
 		/**
 		 * 
-		 * @param setVector - the vector whose direction you want to change
-		 * @param axis      - the reference vector about which you want to rotate the
+		 * @param setVector - The vector whose direction you want to change
+		 * @param axis      - The reference vector about which you want to rotate the
 		 *                  vector
-		 * @param angle     - the angle by which you want to change the direction of the
+		 * @param angle     - The angle by which you want to change the direction of the
 		 *                  vector around the axis
-		 * @return
+		 * 
+		 * @return - The vector after rotate around the axis
 		 */
 		private Vector rotateAroundAxis(Vector setVector, Vector axis, double angle) {
 			Vector v1 = setVector.scale(Math.cos(angle));
@@ -317,11 +271,13 @@ public class Camera implements Cloneable {
 		 * @return the Builder instance
 		 */
 		public Builder setRayTracer(Scene scene, RayTracerType tracerType) {
-			if (tracerType == RayTracerType.SIMPLE) {
+			if (tracerType == RayTracerType.SIMPLE)
 				camera.rayTracer = new SimpleRayTracer(scene);
-			} else {
+			else if (tracerType == RayTracerType.GRID)
+				camera.rayTracer = new GridRayTracer(scene);
+			else
 				camera.rayTracer = null;
-			}
+
 			return this;
 		}
 
@@ -358,13 +314,6 @@ public class Camera implements Cloneable {
 			if (camera.nX < 0 || camera.nY < 0)
 				throw new IllegalArgumentException("the resolution couldnt be negative");
 
-			
-			/*
-			 * if (camera.rayTracer == null) throw new
-			 * MissingResourceException("Missing data to render", "Camera", "rayTracer");
-			 * if(camera.imageWriter == null) throw new
-			 * MissingResourceException("Missing data to render", "Camera", "imageWriter");
-			 */
 			try {
 				return (Camera) camera.clone(); // fix
 			} catch (CloneNotSupportedException ex) {
@@ -389,27 +338,41 @@ public class Camera implements Cloneable {
 	public static Builder getBuilder() {
 		return new Builder();
 	}
-	
+
 	/**
-	 * Creates a new Builder instance pre-configured with the settings of an existing camera.
+	 * Creates a new Builder instance pre-configured with the settings of an
+	 * existing camera.
 	 *
 	 * @param oldCamera the camera to copy settings from
 	 * @return a new Builder instance initialized with the old camera's state
 	 */
 	public static Builder getBuilder(Camera oldCamera) {
-	    Builder builder = new Builder();
-	    builder.camera.p0 = oldCamera.p0;
-	    builder.camera.vTo = oldCamera.vTo;
-	    builder.camera.vUp = oldCamera.vUp;
-	    builder.camera.vRight = oldCamera.vRight;
-	    builder.camera.height = oldCamera.height;
-	    builder.camera.width = oldCamera.width;
-	    builder.camera.distance = oldCamera.distance;
-	    builder.camera.imageWriter = oldCamera.imageWriter;
-	    builder.camera.rayTracer = oldCamera.rayTracer;
-	    builder.camera.nX = oldCamera.nX;
-	    builder.camera.nY = oldCamera.nY;
-	    return builder;
+		Builder builder = new Builder();
+		builder.camera.p0 = oldCamera.p0;
+		builder.camera.vTo = oldCamera.vTo;
+		builder.camera.vUp = oldCamera.vUp;
+		builder.camera.vRight = oldCamera.vRight;
+		builder.camera.height = oldCamera.height;
+		builder.camera.width = oldCamera.width;
+		builder.camera.distance = oldCamera.distance;
+		builder.camera.imageWriter = oldCamera.imageWriter;
+		builder.camera.rayTracer = oldCamera.rayTracer;
+		builder.camera.nX = oldCamera.nX;
+		builder.camera.nY = oldCamera.nY;
+		return builder;
+	}
+
+	/**
+	 * Helper data for ray construction.
+	 *
+	 * @param p0     ray origin
+	 * @param vRight right vector
+	 * @param vUp    up vector
+	 * @param pIJ    pixel point
+	 * @param rX     pixel width
+	 * @param rY     pixel height
+	 */
+	public record rayCreationSpace(Point p0, Vector vRight, Vector vUp, Point pIJ, double rX, double rY) {
 	}
 
 	/**
@@ -419,9 +382,9 @@ public class Camera implements Cloneable {
 	 * @param nY the number of vertical pixels.
 	 * @param j  the pixel column.
 	 * @param i  the pixel row.
-	 * @return the constructed ray.
+	 * @return the rayCreationSpace of ray.
 	 */
-	public Ray constructRay(int nX, int nY, int j, int i) {
+	public rayCreationSpace constructRay(int nX, int nY, int j, int i) {
 		Point pc = p0.add(vTo.scale(distance));
 
 		double rX = width / nX;
@@ -437,9 +400,7 @@ public class Camera implements Cloneable {
 		if (!isZero(yI))
 			pIJ = pIJ.add(vUp.scale(yI));
 
-		Vector vIJ = pIJ.subtract(p0);
-
-		return new Ray(p0, vIJ);
+		return new rayCreationSpace(p0, vRight, vUp, pIJ, rX, rY);
 	}
 
 	/**
@@ -464,8 +425,8 @@ public class Camera implements Cloneable {
 	 * @param j the y-coordinate of the pixel
 	 */
 	private void castRay(int i, int j) {
-		Ray ray = constructRay(nX, nY, i, j);
-		Color color = rayTracer.traceRay(ray);
+		rayCreationSpace details = constructRay(nX, nY, i, j);
+		Color color = rayTracer.traceRay(details);
 		imageWriter.writePixel(i, j, color);
 	}
 

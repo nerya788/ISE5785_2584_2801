@@ -4,6 +4,7 @@ import java.util.List;
 import geometries.Intersectable.Intersection;
 import lighting.LightSource;
 import primitives.*;
+import renderer.Camera.rayCreationSpace;
 import scene.Scene;
 import static java.lang.System.out;
 
@@ -35,7 +36,7 @@ public class SimpleRayTracer extends RayTracerBase {
 		super(scene);
 	}
 
-	private Intersection findClosestIntersection(Ray ray) {
+	protected Intersection findClosestIntersection(Ray ray) {
 		if (scene.geometries.findIntersections(ray) != null)
 			return ray.findClosestIntersection(scene.geometries.calculateIntersectionsHelper(ray));
 		else
@@ -45,6 +46,7 @@ public class SimpleRayTracer extends RayTracerBase {
 	/**
 	 * Determines whether a given intersection point is illuminated (unshaded) with
 	 * respect to a specific light source.
+	 * 
 	 * @param intersection the {@link Intersection} containing the hit point, its
 	 *                     normal, and the light source being evaluated
 	 * @return {@code true} if the light source is visible from the intersection
@@ -100,7 +102,7 @@ public class SimpleRayTracer extends RayTracerBase {
 		target.directionIntersect = ray.normalize();
 		target.normal = target.geometry.getNormal(target.point);
 		target.dotNormalAndIntersect = Util.alignZero(ray.dotProduct(target.normal));
-		
+
 		return !Util.isZero(target.dotNormalAndIntersect);
 	}
 
@@ -158,10 +160,10 @@ public class SimpleRayTracer extends RayTracerBase {
 
 	/**
 	 * Calculates the specular reflection coefficient using the Phong reflection
-	 * model.
-	 * use the formula: VectorReflect = 2 * directionLight.dotProduct(normal) *
-	 * normal - directionLight. specularColor = Ks * (-1 *
+	 * model. use the formula: VectorReflect = 2 * directionLight.dotProduct(normal)
+	 * * normal - directionLight. specularColor = Ks * (-1 *
 	 * directionIntersect.dotProduct(VectorReflect)) ^ nsh.
+	 * 
 	 * @param intersection the intersection to evaluate
 	 * @return the specular reflection component as a {@link Double3}
 	 */
@@ -174,19 +176,20 @@ public class SimpleRayTracer extends RayTracerBase {
 	}
 
 	/**
-	 * Traces a given {@link Ray} and returns the resulting {@link Color}.
+	 * Traces a given {@link rayCreationSpace} and returns the resulting
+	 * {@link Color}.
 	 * <p>
 	 * If no intersection is found, the background color is returned. Otherwise,
 	 * returns the ambient light at the closest intersection point.
 	 *
-	 * @param ray the ray to trace
+	 * @param rayCreationSpace the ray to trace
 	 * @return the resulting color at the ray's closest intersection point
 	 */
 	@Override
-	public Color traceRay(Ray ray) {
-		  Intersection intersection = findClosestIntersection(ray);
-		  return intersection == null ? scene.background :
-		  calcColor(intersection, ray);
+	public Color traceRay(rayCreationSpace details) {
+		Ray ray = new Ray(details.p0(), details.pIJ().subtract(details.p0()));
+		Intersection intersection = findClosestIntersection(ray);
+		return intersection == null ? scene.background : calcColor(intersection, ray);
 	}
 
 	/**
@@ -197,7 +200,7 @@ public class SimpleRayTracer extends RayTracerBase {
 	 * @param ray          the incoming ray that generated this intersection
 	 * @return the resulting color at the intersection point
 	 */
-	private Color calcColor(Intersection intersection, Ray ray) {
+	protected Color calcColor(Intersection intersection, Ray ray) {
 		if (!preprocessIntersection(intersection, ray.getDirection()))
 			return Color.BLACK;
 		return calcColor(intersection, ray, MAX_CALC_COLOR_LEVEL, INITIAL_K)
@@ -216,16 +219,16 @@ public class SimpleRayTracer extends RayTracerBase {
 
 	private Color calcGlobalEffects(Ray ray, int level, Double3 k, Double3 kx) {
 		Double3 kkx = k.product(kx);
-		Intersection nextIntersection  = findClosestIntersection(ray);
+		Intersection nextIntersection = findClosestIntersection(ray);
 
 		if (kkx.lowerThan(MIN_CALC_COLOR_K))
 			return Color.BLACK;
 
-		if (nextIntersection  == null)
+		if (nextIntersection == null)
 			return scene.background.scale(kx);
 
-		return preprocessIntersection(nextIntersection , ray.getDirection())
-				? calcColor(nextIntersection , ray, level - 1, kkx).scale(kx)
+		return preprocessIntersection(nextIntersection, ray.getDirection())
+				? calcColor(nextIntersection, ray, level - 1, kkx).scale(kx)
 				: Color.BLACK;
 	}
 

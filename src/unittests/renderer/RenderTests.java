@@ -14,8 +14,6 @@ import renderer.Camera;
 import scene.Scene;
 import renderer.RayTracerType;
 
-
-
 /**
  * Test rendering a basic image
  * 

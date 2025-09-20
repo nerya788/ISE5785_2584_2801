@@ -4,6 +4,7 @@ import geometries.Geometries;
 import lighting.AmbientLight;
 import primitives.Color;
 import primitives.Ray;
+import renderer.Camera.rayCreationSpace;
 import scene.Scene;
 
 /**
@@ -49,5 +50,5 @@ public abstract class RayTracerBase {
 	 * @return the computed {@link Color} resulting from the intersection of the ray
 	 *         with the scene
 	 */
-	public abstract Color traceRay(Ray ray);
+	public abstract Color traceRay(rayCreationSpace details);
 }

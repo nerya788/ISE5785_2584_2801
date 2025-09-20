@@ -99,12 +99,12 @@ public class Vector extends Point {
 	 * 
 	 * @return A new Vector representing the normalized version of this vector.
 	 */
-	//public Vector normalize() {
-	//	return new Vector(xyz.scale((double) 1 / this.length()));
-	//}
-	
+	// public Vector normalize() {
+	// return new Vector(xyz.scale((double) 1 / this.length()));
+	// }
+
 	public Vector normalize() {
-	    return new Vector(xyz.scale((double)1/this.length()));
+		return new Vector(xyz.scale((double) 1 / this.length()));
 	}
 
 	/**

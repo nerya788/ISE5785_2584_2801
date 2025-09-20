@@ -17,8 +17,6 @@ public class AmbientLight extends Light {
 	public AmbientLight(Color intensity) {
 		super(intensity);
 	}
-	
-	
 
 	/**
 	 * A predefined instance representing no ambient light (black).
