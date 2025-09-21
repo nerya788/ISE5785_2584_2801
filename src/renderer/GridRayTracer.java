@@ -15,8 +15,13 @@ import primitives.*;
 import static java.lang.System.out;
 
 /**
- * 
+ * GridRayTracer — a SimpleRayTracer variant that performs per-pixel
+ * supersampling. For each pixel it shoots multiple sample rays (grid or
+ * jittered) and returns the averaged color to reduce aliasing and smooth
+ * transitions between objects. Optionally uses a cheap corner-sample fast-path
+ * to skip full sampling when the pixel appears uniform.
  */
+
 public class GridRayTracer extends SimpleRayTracer {
 
 	public static final int n = 9;
