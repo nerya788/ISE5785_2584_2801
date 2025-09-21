@@ -19,7 +19,7 @@ import static java.lang.System.out;
  */
 public class GridRayTracer extends SimpleRayTracer {
 
-	public static final int n = 4;
+	public static final int n = 9;
 
 	/**
 	 * Constructs a {@code GridRayTracer} using the provided scene.
@@ -41,7 +41,7 @@ public class GridRayTracer extends SimpleRayTracer {
 	 */
 	@Override
 	public Color traceRay(rayCreationSpace details) {
-		Color color = calcColorGeneral(new Ray(details.p0(), details.pIJ().subtract(details.p0())), Color.BLACK);
+		Color color = super.traceRay(details);
 
 		if (!notSame(details, color))
 			return color;
@@ -53,24 +53,11 @@ public class GridRayTracer extends SimpleRayTracer {
 						.add(details.vUp().scale(
 								(-details.rY() / 2) + j * (details.rY() / n) + Math.random() * (details.rY() / n))));
 
-				color = calcColorGeneral(new Ray(details.p0(), newPIJ.subtract(details.p0())), color);
+				color = color.add(super.traceRay(new rayCreationSpace(details.p0(),details.vRight(),details.vUp(),newPIJ, details.rX(), details.rY())));
 			}
 		}
 
 		return color.scale((double) 1 / (n * n + 1));
-	}
-
-	/**
-	 * Trace a ray, get its color (background if no hit) and add it to the supplied
-	 * accumulated color.
-	 *
-	 * @param ray   the ray to trace
-	 * @param color accumulated color to add to
-	 * @return the updated accumulated color (original + ray color)
-	 */
-	private Color calcColorGeneral(Ray ray, Color color) {
-		Intersection intersection = findClosestIntersection(ray);
-		return color.add(intersection == null ? scene.background : calcColor(intersection, ray));
 	}
 
 	/**
@@ -87,7 +74,7 @@ public class GridRayTracer extends SimpleRayTracer {
 				Point p = details.pIJ().add(details.vRight().scale(i * details.rX() / 2.0))
 						.add(details.vUp().scale(j * details.rY() / 2.0));
 
-				if (!calcColorGeneral(new Ray(details.p0(), p.subtract(details.p0())), Color.BLACK).equals(color)) {
+				if (!super.traceRay(new rayCreationSpace(details.p0(),details.vRight(),details.vUp(),p, details.rX(), details.rY())).equals(color)) {
 					return true;
 				}
 			}
