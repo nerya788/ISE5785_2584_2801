@@ -24,7 +24,7 @@ import static java.lang.System.out;
 
 public class GridRayTracer extends SimpleRayTracer {
 
-	public static final int n = 9;
+	public static final int n = 17;
 
 	/**
 	 * Constructs a {@code GridRayTracer} using the provided scene.

@@ -34,7 +34,27 @@ public class Camera implements Cloneable {
 	private RayTracerBase rayTracer;
 	private int nX = 1;
 	private int nY = 1;
+	
+	/**
+     * The number of threads to use for rendering.
+     * 0: No multithreading (single-threaded).
+     * 1: Single thread via the raw threads mechanism.
+     * -1: Use parallel streams.
+     * -2: Auto-detect cores and use raw threads.
+     * >1: Use a specific number of raw threads.
+     */
+    private int threadsCount = 0;
 
+    /** The interval in seconds for printing progress updates (0 disables printing). */
+    private double printInterval = 0.0;
+
+    /** The manager for distributing pixels to threads. */
+    private PixelManager pixelManager;
+
+    /** A constant to reserve some threads for the OS and JVM. */
+    private static final int SPARE_THREADS = 2;
+
+    
 	/**
 	 * Builder class for constructing a {@link Camera} instance using the Builder
 	 * design pattern.
@@ -42,6 +62,47 @@ public class Camera implements Cloneable {
 	public static class Builder {
 		private final Camera camera = new Camera();
 
+		
+		/**
+	     * Sets the multithreading configuration for the renderer.
+	     *
+	     * @param threads The number of threads to use.
+	     * <ul>
+	     * <li>0 for no multithreading (default).</li>
+	     * <li>-1 for parallel streams.</li>
+	     * <li>-2 for automatic thread count based on available cores.</li>
+	     * <li>>0 for a specific number of raw threads.</li>
+	     * </ul>
+	     * @return The Builder instance.
+	     */
+	    public Builder setMultithreading(int threads) {
+	        if (threads < -2) {
+	            throw new IllegalArgumentException("Multithreading parameter must be -2 or higher");
+	        }
+	        if (threads == -2) {
+	            // Auto-detect number of cores, leaving a few spare for the system
+	            int cores = Runtime.getRuntime().availableProcessors() - SPARE_THREADS;
+	            camera.threadsCount = Math.max(1, cores);
+	        } else {
+	            camera.threadsCount = threads;
+	        }
+	        return this;
+	    }
+
+	    /**
+	     * Sets the interval for printing progress percentage to the console.
+	     *
+	     * @param interval The time in seconds between each progress print. 0 to disable.
+	     * @return The Builder instance.
+	     */
+	    public Builder setDebugPrint(double interval) {
+	        if (interval < 0) {
+	            throw new IllegalArgumentException("Print interval must be a non-negative number");
+	        }
+	        camera.printInterval = interval;
+	        return this;
+	    }
+		
 		/**
          * Enables or disables the Bounding Volume Hierarchy (BVH) optimization.
          * @param enabled true to enable BVH, false to disable.
@@ -413,20 +474,86 @@ public class Camera implements Cloneable {
 		return new rayCreationSpace(p0, vRight, vUp, pIJ, rX, rY);
 	}
 
+	 /**
+     * Renders the image.
+     * This method acts as a dispatcher, selecting the rendering method based on the
+     * threadsCount configuration.
+     * @return The Camera instance for chaining.
+     */
+    public Camera renderImage() {
+        // Initialize the PixelManager for the render process
+        pixelManager = new PixelManager(nY, nX, printInterval);
+
+        // Dispatch to the correct rendering method
+        return switch (threadsCount) {
+            case 0 -> renderImageSingleThreaded();
+            case -1 -> renderImageStream(); // We will implement this next
+            default -> renderImageRawThreads(); // And this one after
+        };
+    }
+	
 	/**
 	 * Renders an image by casting rays through each pixel and writing the color to
 	 * the image buffer.
 	 *
 	 * @return the Camera instance (for chaining)
 	 */
-	public Camera renderImage() {
+	private Camera renderImageSingleThreaded() {
 		for (int i = 0; i < nX; i++)
 			for (int j = 0; j < nY; j++)
 				castRay(i, j);
 
 		return this;
 	}
+	
+	/**
+     * Renders the image using multithreading with Parallel Streams.
+     * This method delegates thread management to the JVM for efficiency.
+     * @return The Camera instance for chaining.
+     */
+    private Camera renderImageStream() {
+        java.util.stream.IntStream.range(0, nY).parallel()
+                .forEach(row -> java.util.stream.IntStream.range(0, nX).parallel()
+                        .forEach(col -> castRay(col, row)));
+        return this;
+    }
+	
+    /**
+     * Renders the image using a pool of manually managed "raw" threads.
+     * Each thread requests pixels from the PixelManager until the job is done.
+     * @return The Camera instance for chaining.
+     */
+    private Camera renderImageRawThreads() {
+        var threads = new java.util.LinkedList<Thread>();
+        
+        // Create the specified number of threads
+        for (int i = 0; i < threadsCount; ++i) {
+            threads.add(new Thread(() -> {
+                PixelManager.Pixel pixel;
+                // Each thread runs in a loop, asking for the next pixel
+                while ((pixel = pixelManager.nextPixel()) != null) {
+                    // If a pixel is available, render it
+                    castRay(pixel.col(), pixel.row());
+                }
+            }));
+        }
 
+        // Start all the threads to run in parallel
+        for (var thread : threads) {
+            thread.start();
+        }
+
+        // Wait for all threads to finish their work before continuing
+        try {
+            for (var thread : threads) {
+                thread.join();
+            }
+        } catch (InterruptedException ignore) {}
+
+        return this;
+    }
+	
+    
 	/**
 	 * Casts a ray through the given pixel and writes the computed color to the
 	 * image.
@@ -438,6 +565,12 @@ public class Camera implements Cloneable {
 		rayCreationSpace details = constructRay(nX, nY, i, j);
 		Color color = rayTracer.traceRay(details);
 		imageWriter.writePixel(i, j, color);
+		
+		// Notify the PixelManager that a pixel is done
+        if (pixelManager != null) {
+            pixelManager.pixelDone();
+        }
+		
 	}
 
 	/**

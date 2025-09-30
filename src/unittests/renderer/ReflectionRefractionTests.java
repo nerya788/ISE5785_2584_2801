@@ -213,13 +213,64 @@ class ReflectionRefractionTests {
 		// separating them from the background.
 		myScene.lights.add(new DirectionalLight(new Color(50, 40, 30), new Vector(1, -0.2, 1)));
 
+		
+		/**
 		// --- Render Execution ---
 		// First, build the original camera and render the original image
 
 		Camera originalCamera = myBonusCamera.setResolution(500, 500).build();
 
 		originalCamera.renderImage().writeToImage("stage7Bonus1_Original");
+		
+		**/
+		
+		
+		// --- Render Execution ---
 
+        // Set resolution and other parameters once
+        myBonusCamera.setResolution(500, 500)
+                     .setDebugPrint(1.0); // Prints progress updates
+
+        // -- Run 1: No Multithreading --
+        System.out.println("--- Starting Single-Threaded Render ---");
+        long startTime1 = System.currentTimeMillis();
+        myBonusCamera
+            .setMultithreading(0) // 0 = No multithreading
+            .setBvhEnabled(true)
+            .build()
+            .renderImage()
+            .writeToImage("performance_SingleThread");
+        long endTime1 = System.currentTimeMillis();
+        System.out.println("--> Single-threaded time: " + (endTime1 - startTime1) + "ms");
+
+
+        // -- Run 2: With Parallel Streams --
+        System.out.println("\n--- Starting Parallel Streams Render ---");
+        long startTime2 = System.currentTimeMillis();
+        myBonusCamera
+            .setMultithreading(-1) // -1 = Parallel Streams improvement
+            .setBvhEnabled(true)
+            .build()
+            .renderImage()
+            .writeToImage("performance_ParallelStreams");
+        long endTime2 = System.currentTimeMillis();
+        System.out.println("--> Parallel Streams time: " + (endTime2 - startTime2) + "ms");
+
+
+        // -- Run 3: With Raw Threads --
+        System.out.println("\n--- Starting Raw Threads Render ---");
+        long startTime3 = System.currentTimeMillis();
+        myBonusCamera
+            .setMultithreading(-2) // -2 = Raw Threads improvement with auto core detection
+            .setBvhEnabled(true)
+            .build()
+            .renderImage()
+            .writeToImage("performance_RawThreads");
+        long endTime3 = System.currentTimeMillis();
+        System.out.println("--> Raw Threads time: " + (endTime3 - startTime3) + "ms");
+		
+		
+		
 		/*
 		 * // --- New View 1: Orbit 35 degrees to the left --- // We orbit around the
 		 * original "up" vector to move horizontally. Camera cameraRightOrbit =
@@ -246,7 +297,7 @@ class ReflectionRefractionTests {
 		 * 
 		 */
 	}
-
+	
 	/**
 	 * A utility method to construct a box (cuboid) from 6 Polygons and add it to a
 	 * given Scene.
