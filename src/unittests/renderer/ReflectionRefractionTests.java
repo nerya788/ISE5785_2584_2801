@@ -298,6 +298,7 @@ class ReflectionRefractionTests {
 		 */
 	}
 	
+	
 	/**
 	 * A utility method to construct a box (cuboid) from 6 Polygons and add it to a
 	 * given Scene.
