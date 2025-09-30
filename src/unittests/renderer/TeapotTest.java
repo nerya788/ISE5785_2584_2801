@@ -25,7 +25,7 @@ class TeapotTest {
     * Teapot without improvements
     */
    @Test
-   // @Disabled
+    //@Disabled
    void testTeapot1() {
       prepareTeapot() //
          .build() //
@@ -40,7 +40,7 @@ class TeapotTest {
    @Test
    // @Disabled
    void testTeapot2() {
-      for (int i = 10; i > 0; --i) {
+      for (int i = 1; i > 0; --i) {
          teapot2();
       }
    }
@@ -54,7 +54,7 @@ class TeapotTest {
          .build() //
          .renderImage() //
          .printGrid(50, new Color(YELLOW)) //
-         .writeToImage("teapot2");
+         .writeToImage("teapot2faster");
    }
    
    /**
