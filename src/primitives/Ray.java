@@ -121,4 +121,37 @@ public class Ray {
 	public String toString() {
 		return "Ray: " + head + " " + direction;
 	}
+	
+	/**
+     * Checks if this ray intersects a given Axis-Aligned Bounding Box (AABB).
+     * <p>
+     * This method uses the highly efficient Slab Test algorithm (an optimized version of Kay/Kajiya).
+     * It is designed for fast rejection (early exit) and does not calculate the actual intersection points.
+     *
+     * @param box The AABB to check for intersection with this ray.
+     * @return true if the ray intersects the box, false otherwise.
+     */
+	public boolean isIntersecting(geometries.AABB box) {
+        Point rayOrigin = this.getHead();
+        Vector rayDirection = this.getDirection();
+
+        Point invDir = new Point(1.0 / rayDirection.xyz.d1(),
+                                 1.0 / rayDirection.xyz.d2(),
+                                 1.0 / rayDirection.xyz.d3());
+
+        double t1 = (box.min.xyz.d1() - rayOrigin.xyz.d1()) * invDir.xyz.d1();
+        double t2 = (box.max.xyz.d1() - rayOrigin.xyz.d1()) * invDir.xyz.d1();
+        double t3 = (box.min.xyz.d2() - rayOrigin.xyz.d2()) * invDir.xyz.d2();
+        double t4 = (box.max.xyz.d2() - rayOrigin.xyz.d2()) * invDir.xyz.d2();
+        double t5 = (box.min.xyz.d3() - rayOrigin.xyz.d3()) * invDir.xyz.d3();
+        double t6 = (box.max.xyz.d3() - rayOrigin.xyz.d3()) * invDir.xyz.d3();
+
+        double tmin = Math.max(Math.max(Math.min(t1, t2), Math.min(t3, t4)), Math.min(t5, t6));
+        double tmax = Math.min(Math.min(Math.max(t1, t2), Math.max(t3, t4)), Math.max(t5, t6));
+
+        if (tmax < 0) return false;
+        if (tmin > tmax) return false;
+
+        return true;
+    }
 }

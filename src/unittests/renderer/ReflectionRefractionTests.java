@@ -245,7 +245,6 @@ class ReflectionRefractionTests {
 		 * cameraRolledView.renderImage() .writeToImage("stage7Bonus1_RolledView");
 		 * 
 		 */
-
 	}
 
 	/**

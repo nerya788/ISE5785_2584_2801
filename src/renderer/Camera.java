@@ -43,6 +43,16 @@ public class Camera implements Cloneable {
 		private final Camera camera = new Camera();
 
 		/**
+         * Enables or disables the Bounding Volume Hierarchy (BVH) optimization.
+         * @param enabled true to enable BVH, false to disable.
+         * @return The Builder instance.
+         */
+        public Builder setBvhEnabled(boolean enabled) {
+            SimpleRayTracer.BVH_ENABLED = enabled;
+            return this;
+        }
+		
+		/**
 		 * Orbits the camera around its target point. The camera moves along an arc
 		 * while continuously facing the target.
 		 *

@@ -80,4 +80,10 @@ public class Plane extends Geometry {
 		Point point = ray.getPoint(t);
 		return List.of(new Intersection(this, point));
 	}
+	
+	@Override
+    public AABB getBoundingBox() {
+        return null; // A plane is infinite and has no bounding box
+    }
+	
 }

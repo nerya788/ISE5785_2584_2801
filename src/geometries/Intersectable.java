@@ -11,7 +11,14 @@ import lighting.*;
  * intersections.
  */
 public abstract class Intersectable {
-
+	
+	/**
+     * Calculates and returns the bounding box for the geometric object.
+     * For infinite geometries, this may return null.
+     * @return An AABB object that encloses the geometry, or null.
+     */
+    public abstract AABB getBoundingBox();
+	
 	public static class Intersection {
 		public final Geometry geometry;
 		public final Point point;

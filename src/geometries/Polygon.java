@@ -133,4 +133,10 @@ public class Polygon extends Geometry {
 		return List.of(new Intersection(this, planeIntersections.getFirst()));
 	}
 
+	@Override
+    public AABB getBoundingBox() {
+        // Delegate the calculation to our factory.
+        return primitives.BoundingBoxFactory.createForPolygon(this.vertices);
+    }
+	
 }

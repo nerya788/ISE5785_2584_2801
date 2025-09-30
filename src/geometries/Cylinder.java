@@ -131,4 +131,10 @@ public class Cylinder extends Tube {
 		}
 		return List.of(new Intersection(this, result.get(0)));
 	}
+	
+	@Override
+    public AABB getBoundingBox() {
+        return primitives.BoundingBoxFactory.createForCylinder(this.axis, this.radius, this.height);
+    }
+	
 }
