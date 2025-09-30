@@ -82,7 +82,7 @@ public class Plane extends Geometry {
 	}
 	
 	@Override
-    public AABB getBoundingBox() {
+    public AABB createBoundingBox() {
         return null; // A plane is infinite and has no bounding box
     }
 	

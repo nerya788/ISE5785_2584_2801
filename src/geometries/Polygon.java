@@ -134,7 +134,7 @@ public class Polygon extends Geometry {
 	}
 
 	@Override
-    public AABB getBoundingBox() {
+    public AABB createBoundingBox() {
         // Delegate the calculation to our factory.
         return primitives.BoundingBoxFactory.createForPolygon(this.vertices);
     }

@@ -127,7 +127,7 @@ public class Tube extends RadialGeometry {
 	}
 
 	@Override
-    public AABB getBoundingBox() {
+    public AABB createBoundingBox() {
         return null; // An infinite tube has no bounding box
     }
 	

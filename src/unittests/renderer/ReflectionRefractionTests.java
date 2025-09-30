@@ -235,7 +235,8 @@ class ReflectionRefractionTests {
         System.out.println("--- Starting Single-Threaded Render ---");
         long startTime1 = System.currentTimeMillis();
         myBonusCamera
-            .setMultithreading(0) // 0 = No multithreading
+            //.setMultithreading(0) // 0 = No multithreading
+            .setMultithreading(6) 
             .setBvhEnabled(true)
             .build()
             .renderImage()

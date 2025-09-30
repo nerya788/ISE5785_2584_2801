@@ -110,7 +110,7 @@ public class Geometries extends Intersectable {
     }
 	
 	@Override
-    public AABB getBoundingBox() {
+    public AABB createBoundingBox() {
         if (allgeometries.isEmpty()) {
             return null;
         }
