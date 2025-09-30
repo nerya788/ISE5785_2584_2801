@@ -22,22 +22,11 @@ class TeapotTest {
    TeapotTest() { /* to satisfy JavaDoc generator */ }
 
    /**
-    * 10 Teapot tests with CBR
-    */
-   @Test
-   // @Disabled
-   void testTeapot1() {
-      for (int i = 10; i > 0; --i) {
-         teapot1();
-      }
-   }
-   
-   /**
     * Teapot without improvements
     */
    @Test
    // @Disabled
-   void testTeapot2() {
+   void testTeapot1() {
       prepareTeapot() //
          .build() //
          .renderImage() //
@@ -46,9 +35,20 @@ class TeapotTest {
    }
    
    /**
+    * 10 Teapot tests with CBR
+    */
+   @Test
+   // @Disabled
+   void testTeapot2() {
+      for (int i = 10; i > 0; --i) {
+         teapot2();
+      }
+   }
+   
+   /**
     * Teapot with CBR
     */
-   void teapot1() {
+   void teapot2() {
       prepareTeapot() //
          .setBvhEnabled(true)
          .build() //
@@ -82,10 +82,10 @@ class TeapotTest {
          .setLocation(new Point(0, 0, -1000)).setDirection(Point.ZERO, Vector.AXIS_Y) //
          .setViewPlaneDistance(1000).setViewPlaneSize(200, 200) //
          // .setMultithreading(-3) // fail - paging file size
-         .setMultithreading(-2) // 9.3
+         //.setMultithreading(-2) // 9.3
          // .setMultithreading(-1) // 9.6
          //.setMultithreading(0) // 25
-      // .setMultithreading(1) // 25.8
+       .setMultithreading(1) // 25.8
       // .setMultithreading(2) // 13.6
       // .setMultithreading(3) // 10.7
       // .setMultithreading(4) // 10.7
