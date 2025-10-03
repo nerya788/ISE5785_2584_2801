@@ -8,8 +8,6 @@ import renderer.Camera.rayCreationSpace;
 
 /**
  * Testing Camera Class
- * 
- * @author Dan
  */
 class CameraTest {
 	/** Camera builder for the tests */

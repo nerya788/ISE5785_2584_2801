@@ -1,18 +1,8 @@
-/**
- * 
- */
 package renderer;
-
-import java.util.LinkedList;
-import java.util.List;
-
-import geometries.Intersectable;
-import geometries.Intersectable.Intersection;
 
 import renderer.Camera.rayCreationSpace;
 import scene.Scene;
 import primitives.*;
-import static java.lang.System.out;
 
 /**
  * GridRayTracer — a SimpleRayTracer variant that performs per-pixel
@@ -24,7 +14,7 @@ import static java.lang.System.out;
 
 public class GridRayTracer extends SimpleRayTracer {
 
-	public static final int n = 17;
+	public static final int n = 9;
 
 	/**
 	 * Constructs a {@code GridRayTracer} using the provided scene.
@@ -58,7 +48,8 @@ public class GridRayTracer extends SimpleRayTracer {
 						.add(details.vUp().scale(
 								(-details.rY() / 2) + j * (details.rY() / n) + Math.random() * (details.rY() / n))));
 
-				color = color.add(super.traceRay(new rayCreationSpace(details.p0(),details.vRight(),details.vUp(),newPIJ, details.rX(), details.rY())));
+				color = color.add(super.traceRay(new rayCreationSpace(details.p0(), details.vRight(), details.vUp(),
+						newPIJ, details.rX(), details.rY())));
 			}
 		}
 
@@ -66,12 +57,13 @@ public class GridRayTracer extends SimpleRayTracer {
 	}
 
 	/**
-	 * Check the four corner samples of the pixel: return true if any corner's
-	 * color differs from the provided reference color.
+	 * Check the four corner samples of the pixel: return true if any corner's color
+	 * differs from the provided reference color.
 	 *
 	 * @param details sampling & pixel geometry information
 	 * @param color   reference color to compare against
-	 * @return {@code true} when at least one corner differs, {@code false} when all equal
+	 * @return {@code true} when at least one corner differs, {@code false} when all
+	 *         equal
 	 */
 	private boolean notSame(rayCreationSpace details, Color color) {
 		for (int i = -1; i <= 1; i = i + 2) {
@@ -79,7 +71,8 @@ public class GridRayTracer extends SimpleRayTracer {
 				Point p = details.pIJ().add(details.vRight().scale(i * details.rX() / 2.0))
 						.add(details.vUp().scale(j * details.rY() / 2.0));
 
-				if (!super.traceRay(new rayCreationSpace(details.p0(),details.vRight(),details.vUp(),p, details.rX(), details.rY())).equals(color)) {
+				if (!super.traceRay(new rayCreationSpace(details.p0(), details.vRight(), details.vUp(), p, details.rX(),
+						details.rY())).equals(color)) {
 					return true;
 				}
 			}

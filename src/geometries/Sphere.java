@@ -67,9 +67,9 @@ public class Sphere extends RadialGeometry {
 			return null;
 		}
 	}
-	
+
 	@Override
-    protected AABB createBoundingBox() {
-        return primitives.BoundingBoxFactory.createForSphere(this.center, this.radius);
-    }
+	protected AABB createBoundingBox() {
+		return primitives.BoundingBoxFactory.createForSphere(this.center, this.radius);
+	}
 }

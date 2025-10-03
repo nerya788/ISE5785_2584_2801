@@ -11,8 +11,6 @@ import java.util.List;
 
 /**
  * Testing Triangles
- * 
- * @author Nerya and Yehuda
  */
 class TriangleTests {
 	double DELTA = 0.00000000001;

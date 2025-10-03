@@ -11,7 +11,6 @@ import primitives.*;
  * Polygon class represents two-dimensional polygon in 3D Cartesian coordinate
  * system
  * 
- * @author Dan
  */
 public class Polygon extends Geometry {
 	/** List of polygon's vertices */
@@ -134,9 +133,9 @@ public class Polygon extends Geometry {
 	}
 
 	@Override
-    public AABB createBoundingBox() {
-        // Delegate the calculation to our factory.
-        return primitives.BoundingBoxFactory.createForPolygon(this.vertices);
-    }
-	
+	public AABB createBoundingBox() {
+		// Delegate the calculation to our factory.
+		return primitives.BoundingBoxFactory.createForPolygon(this.vertices);
+	}
+
 }

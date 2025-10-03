@@ -11,26 +11,28 @@ import lighting.*;
  * intersections.
  */
 public abstract class Intersectable {
-	 protected AABB boundingBox = null;
-	 
-	 /**
+	protected AABB boundingBox = null;
+
+	/**
 	 * Returns the bounding box of the geometry, calculating it only once (caching).
+	 * 
 	 * @return The cached AABB of the geometry.
 	 */
-	 public AABB getBoundingBox() {
-	     if (boundingBox == null) {
-	         boundingBox = createBoundingBox();
-	     }
-	     return boundingBox;
-	 }
-	 
-	 /**
-	 * Creates the actual bounding box for the geometry.
-	 * This method is called only once by the caching mechanism in getBoundingBox().
+	public AABB getBoundingBox() {
+		if (boundingBox == null) {
+			boundingBox = createBoundingBox();
+		}
+		return boundingBox;
+	}
+
+	/**
+	 * Creates the actual bounding box for the geometry. This method is called only
+	 * once by the caching mechanism in getBoundingBox().
+	 * 
 	 * @return A new AABB for the geometry.
 	 */
-	 protected abstract AABB createBoundingBox();
-	
+	protected abstract AABB createBoundingBox();
+
 	public static class Intersection {
 		public final Geometry geometry;
 		public final Point point;

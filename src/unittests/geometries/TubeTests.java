@@ -11,8 +11,6 @@ import java.util.List;
 
 /**
  * Testing Tubes
- * 
- * @author Nerya
  */
 class TubeTests {
 

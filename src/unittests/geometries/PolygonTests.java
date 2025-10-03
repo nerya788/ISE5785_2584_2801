@@ -9,8 +9,6 @@ import primitives.*;
 
 /**
  * Testing Polygons
- * 
- * @author Dan
  */
 class PolygonTests {
 	/**

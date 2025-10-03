@@ -11,7 +11,6 @@ import static primitives.Util.isZero;
  * @param d1 first number
  * @param d2 first number
  * @param d3 first number
- * @author Dan Zilberstein
  */
 public record Double3(double d1, double d2, double d3) {
 

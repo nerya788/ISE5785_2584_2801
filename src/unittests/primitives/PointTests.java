@@ -11,8 +11,6 @@ import primitives.*;
 
 /**
  * Testing Points
- * 
- * @authors Neriya_and_Yehuda
  */
 class PointTests {
 

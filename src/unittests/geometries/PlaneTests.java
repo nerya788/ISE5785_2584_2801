@@ -13,8 +13,6 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Testing Planes
- * 
- * @authors Nerya and Yehuda
  */
 class PlaneTests {
 	final double DELTA = 0.00000000001;

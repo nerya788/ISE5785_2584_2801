@@ -12,8 +12,6 @@ import scene.Scene;
 
 /**
  * Test rendering a basic image
- * 
- * @author Dan Zilberstein
  */
 class LightsTests {
 	/** Default constructor to satisfy JavaDoc generator */
@@ -170,24 +168,4 @@ class LightsTests {
 				.renderImage() //
 				.writeToImage("lightTrianglesSpot");
 	}
-
-	/**
-	 * /** Produce a picture of a sphere lighted by a narrow spotlight
-	 * 
-	 * @Test void sphereSpotSharp() { scene1.geometries.add(sphere); scene1.lights
-	 *       .add(new SpotLight(sphereLightColor, sphereLightPosition, new Vector(1,
-	 *       1, -0.5)) // .setKl(0.001).setKq(0.00004).setNarrowBeam(30));
-	 * 
-	 *       camera1.setResolution(500, 500) // .build() // .renderImage() //
-	 *       .writeToImage("lightSphereSpotSharp"); }
-	 * 
-	 *       /** Produce a picture of two triangles lighted by a narrow spotlight
-	 * @Test void trianglesSpotSharp() { scene2.geometries.add(triangle1,
-	 *       triangle2); scene2.lights.add(new SpotLight(trianglesLightColor,
-	 *       trianglesLightPosition, trianglesLightDirection) //
-	 *       .setKl(0.001).setKq(0.00004).setNarrowBeam(30));
-	 * 
-	 *       camera2.setResolution(500, 500) // .build() // .renderImage() //
-	 *       .writeToImage("lightTrianglesSpotSharp"); }
-	 **/
 }

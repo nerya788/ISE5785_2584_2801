@@ -22,8 +22,6 @@ import renderer.Camera.rayCreationSpace;
  * a camera's rays through a 3x3 view plane. The number of expected
  * intersections is compared with the actual result.
  * </p>
- * 
- * @author Yehuda
  */
 class CameraIntersectionsIntegrationTests {
 	private static final int NX = 3; // Number of horizontal pixels in the view plane.

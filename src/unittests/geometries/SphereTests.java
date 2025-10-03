@@ -11,8 +11,6 @@ import java.util.List;
 
 /**
  * Testing Spheres
- * 
- * @author Nerya
  */
 class SphereTests {
 	double DELTA = 0.00000000001;

@@ -21,8 +21,8 @@ import static java.lang.System.out;
 public class SimpleRayTracer extends RayTracerBase {
 
 	/** A global switch to enable or disable the BVH optimization. */
-    public static boolean BVH_ENABLED = false;
-	
+	public static boolean BVH_ENABLED = false;
+
 	// Delta of distance for shading rays that we take from the body to the light
 	// source to prevent self-shading
 	private static final double DELTA = 0.1;

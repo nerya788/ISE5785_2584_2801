@@ -14,8 +14,6 @@ import geometries.*;
 
 /**
  * Testing Cylinders
- * 
- * @author Nerya
  */
 class CylinderTests {
 	final double Radius = 2.0;
