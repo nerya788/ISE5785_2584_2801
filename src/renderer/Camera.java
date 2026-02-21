@@ -444,8 +444,7 @@ public class Camera implements Cloneable {
 	 * @param rX     pixel width
 	 * @param rY     pixel height
 	 */
-	public record rayCreationSpace(Point p0, Vector vRight, Vector vUp, Point pIJ, double rX, double rY) {
-	}
+	public record rayCreationSpace(Point p0, Vector vRight, Vector vUp, Point pIJ, double rX, double rY) {}
 
 	/**
 	 * Constructs a ray through a given pixel.
