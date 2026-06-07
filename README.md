@@ -21,9 +21,37 @@ The project is strictly structured around clean code and object-oriented princip
 - **`lighting`**: Implementation of various light sources, shading models, and atmospheric effects.
 - **`scene`**: Complete scene description encapsulating geometries, backgrounds, ambient lights, and light components.
 - **`renderer`**: The core execution engine containing the `Camera` system, `ImageWriter`, `PixelManager` for thread safety, and specialized `RayTracerBase` implementations.
+---
+⚡ Performance Tuning (Multithreading)
+The engine supports a flexible setMultithreading(int threads) configuration:
+
+0: Single-threaded execution (default).
+
+-1: Leverages Java's Parallel Streams framework.
+
+-2: Automatically detects available system cores and allocates dedicated worker threads dynamically via a custom PixelManager.
+
+>0: Spawns a specific hardcoded number of worker threads.
+---
+👥 Authors
+
+Nerya Cohen - neryh1997@gmail.com
+
+Yehuda Kupperman - yehudtray@gmail.com
 
 ---
+Examples of images created with an explanation:
 
+<img width="781" height="781" alt="Image 3" src="images/Image3.jpeg" />
+
+Recursive Ray Tracing & Optical Physics: Demonstrating advanced simulation of light behavior, including dynamic reflections, material refractions, and multi-source shadowing, calculated through precise 3D vector intersections.
+
+<img width="781" height="781" alt="Image 2" src="images/Image2.jpeg" />
+
+High-Polygon Mesh Rendering & Algorithmic Optimization: Showcasing the rendering of complex 3D models utilizing spatial data structures (AABB) to significantly accelerate processing times and intersection calculations.
+
+
+---
 ## 💻 Code Example
 
 Here is a quick look at how a 3D scene is set up and rendered using the Camera Builder API:
@@ -54,31 +82,5 @@ Camera camera = Camera.getBuilder()
 camera.renderImage()
       .printGrid(50, new Color(java.awt.Color.GRAY)) // Optional diagnostic grid
       .writeToImage("rendered_output");
-
-
-
-⚡ Performance Tuning (Multithreading)
-The engine supports a flexible setMultithreading(int threads) configuration:
-
-0: Single-threaded execution (default).
-
--1: Leverages Java's Parallel Streams framework.
-
--2: Automatically detects available system cores and allocates dedicated worker threads dynamically via a custom PixelManager.
-
->0: Spawns a specific hardcoded number of worker threads.
-
-👥 Authors
-Nerya Cohen - neryh1997@gmail.com
-
-Yehuda Kupperman - yehudtray@gmail.com
-
-Examples of images created:
-
-<img width="781" height="781" alt="Image 1" src="images/Image1.jpeg" />
-
-<img width="1000" height="1000" alt="Image 2" src="images/Image2.jpeg" />
-
-<img width="2048" height="1410" alt="Image 3" src="images/Image3.jpeg" />
 
 
