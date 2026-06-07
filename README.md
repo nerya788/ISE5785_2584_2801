@@ -54,3 +54,31 @@ Camera camera = Camera.getBuilder()
 camera.renderImage()
       .printGrid(50, new Color(java.awt.Color.GRAY)) // Optional diagnostic grid
       .writeToImage("rendered_output");
+
+
+
+⚡ Performance Tuning (Multithreading)
+The engine supports a flexible setMultithreading(int threads) configuration:
+
+0: Single-threaded execution (default).
+
+-1: Leverages Java's Parallel Streams framework.
+
+-2: Automatically detects available system cores and allocates dedicated worker threads dynamically via a custom PixelManager.
+
+>0: Spawns a specific hardcoded number of worker threads.
+
+👥 Authors
+Nerya Cohen - neryh1997@gmail.com
+
+Yehuda Kupperman - yehudtray@gmail.com
+
+Examples of images created:
+<img width="781" height="781" alt="image" src="https://github.com/user-attachments/assets/6e4df007-2cce-4438-82fc-84a3beed5635" />
+
+
+<img width="1000" height="1000" alt="image" src="https://github.com/user-attachments/assets/55638bee-d287-4c47-b80c-a53b1cf46358" />
+
+
+<img width="2048" height="1410" alt="image" src="https://github.com/user-attachments/assets/6fc311db-aad8-4185-889d-03b79dfc743d" />
+
