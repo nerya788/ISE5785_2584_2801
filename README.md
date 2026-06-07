@@ -75,10 +75,10 @@ Yehuda Kupperman - yehudtray@gmail.com
 
 Examples of images created:
 
-<img width="781" height="781" alt="Image 2026-06-07 at 21 34 27" src="https://github.com/user-attachments/assets/6b4261c4-1f2e-467f-b7bf-e68a89277d23" />
+<img width="781" height="781" alt="Image 1" src="images/Image1.jpeg" />
 
-<img width="1000" height="1000" alt="mage 2026-06-07 at 21 34 13" src="https://github.com/user-attachments/assets/6618b989-5b6c-4f14-9688-7d46b83b1f69" />
+<img width="1000" height="1000" alt="Image 2" src="images/Image2.jpeg" />
 
-<img width="2048" height="1410" alt="WhatsApp Image 2026-06-07 at 21 33 45" src="https://github.com/user-attachments/assets/b6597f46-56fb-43cf-9971-26c4fcfe25de" />
+<img width="2048" height="1410" alt="Image 3" src="images/Image3.jpeg" />
 
 
