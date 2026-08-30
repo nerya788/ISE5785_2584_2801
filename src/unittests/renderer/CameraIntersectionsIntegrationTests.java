@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import geometries.*;
 import primitives.*;
 import renderer.*;
-import renderer.Camera.rayCreationSpace;
 
 /**
  * This class contains integration tests for intersections between rays
@@ -41,8 +40,7 @@ class CameraIntersectionsIntegrationTests {
 		for (int i = 0; i < NX; i++) {
 			for (int j = 0; j < NY; j++) {
 				// Construct a ray from the camera through the current pixel.
-				rayCreationSpace details = camera.constructRay(NX, NY, i, j);
-				Ray ray = new Ray(details.p0(), details.pIJ().subtract(details.p0()));
+				Ray ray = camera.constructRay(NX, NY, i, j);
 				// Find all intersection points between the ray and the geometry.
 				List<Point> points = geometry.findIntersections(ray);
 				if (points != null) {

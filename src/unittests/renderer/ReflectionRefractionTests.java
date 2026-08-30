@@ -134,7 +134,8 @@ class ReflectionRefractionTests {
 																									// three-quarter
 																									// view
 				.setDirection(new Point(0, -80, 0), new Vector(0, 1, 0)) // Aim towards the center of the composition
-				.setViewPlaneDistance(450).setViewPlaneSize(300, 300).setRayTracer(myScene, RayTracerType.GRID);
+				.setViewPlaneDistance(450).setViewPlaneSize(300, 300).setRayTracer(myScene, RayTracerType.SIMPLE)
+				.setAntiAliasing(9);
 
 		// --- Material Definitions ---
 		Material floorMaterial = new Material().setKD(0.4).setKS(0.8).setShininess(200).setKR(0.4);

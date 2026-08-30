@@ -4,7 +4,6 @@ import java.util.List;
 import geometries.Intersectable.Intersection;
 import lighting.LightSource;
 import primitives.*;
-import renderer.Camera.rayCreationSpace;
 import scene.Scene;
 import static java.lang.System.out;
 
@@ -179,18 +178,16 @@ public class SimpleRayTracer extends RayTracerBase {
 	}
 
 	/**
-	 * Traces a given {@link rayCreationSpace} and returns the resulting
-	 * {@link Color}.
+	 * Traces a given {@link Ray} and returns the resulting {@link Color}.
 	 * <p>
 	 * If no intersection is found, the background color is returned. Otherwise,
-	 * returns the ambient light at the closest intersection point.
+	 * returns the shaded color at the closest intersection point.
 	 *
-	 * @param rayCreationSpace the ray to trace
+	 * @param ray the ray to trace
 	 * @return the resulting color at the ray's closest intersection point
 	 */
 	@Override
-	public Color traceRay(rayCreationSpace details) {
-		Ray ray = new Ray(details.p0(), details.pIJ().subtract(details.p0()));
+	public Color traceRay(Ray ray) {
 		Intersection intersection = findClosestIntersection(ray);
 		return intersection == null ? scene.background : calcColor(intersection, ray);
 	}

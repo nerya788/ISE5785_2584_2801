@@ -1,10 +1,7 @@
 package renderer;
 
-import geometries.Geometries;
-import lighting.AmbientLight;
 import primitives.Color;
 import primitives.Ray;
-import renderer.Camera.rayCreationSpace;
 import scene.Scene;
 
 /**
@@ -41,14 +38,16 @@ public abstract class RayTracerBase {
 	}
 
 	/**
-	 * Calculates the color resulting from tracing a given ray through the scene.
+	 * Calculates the color resulting from tracing a single ray through the scene.
 	 * <p>
 	 * This method must be implemented by subclasses to define a specific ray
-	 * tracing algorithm.
+	 * tracing algorithm. It receives exactly one ray and returns one color; how
+	 * many rays a pixel is sampled with (anti-aliasing) is decided by the
+	 * {@link Camera}, not here.
 	 *
 	 * @param ray the ray to trace
 	 * @return the computed {@link Color} resulting from the intersection of the ray
 	 *         with the scene
 	 */
-	public abstract Color traceRay(rayCreationSpace details);
+	public abstract Color traceRay(Ray ray);
 }

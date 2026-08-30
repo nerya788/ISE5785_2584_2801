@@ -1,17 +1,11 @@
 package renderer;
 
 import primitives.*;
-import renderer.Camera.rayCreationSpace;
 import scene.Scene;
 
 import static primitives.Util.isZero;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.MissingResourceException;
-
-import geometries.Intersectable;
-import geometries.Intersectable.Intersection;
 
 /**
  * The {@code Camera} class represents a virtual camera in 3D space. It defines
@@ -34,6 +28,24 @@ public class Camera implements Cloneable {
 	private RayTracerBase rayTracer;
 	private int nX = 1;
 	private int nY = 1;
+
+	/**
+	 * Anti-aliasing: grid density per axis for uniform super-sampling. 1 means one
+	 * ray per pixel (disabled).
+	 */
+	private int aaDensity = 1;
+
+	/** Anti-aliasing: whether uniform grid samples are jittered inside their cells. */
+	private boolean aaJitter = true;
+
+	/**
+	 * Anti-aliasing: maximum recursion depth for adaptive super-sampling. 0 disables
+	 * it; when > 0 it takes precedence over {@link #aaDensity}.
+	 */
+	private int aaAdaptiveDepth = 0;
+
+	/** Per-pixel sampling engine, built in {@link #renderImage()}. */
+	private PixelRenderer pixelRenderer;
 
 	/**
 	 * The number of threads to use for rendering. 0: No multithreading
@@ -343,13 +355,51 @@ public class Camera implements Cloneable {
 		 * @return the Builder instance
 		 */
 		public Builder setRayTracer(Scene scene, RayTracerType tracerType) {
-			if (tracerType == RayTracerType.SIMPLE)
-				camera.rayTracer = new SimpleRayTracer(scene);
-			else if (tracerType == RayTracerType.GRID)
-				camera.rayTracer = new GridRayTracer(scene);
-			else
-				camera.rayTracer = null;
+			camera.rayTracer = tracerType == RayTracerType.SIMPLE ? new SimpleRayTracer(scene) : null;
+			return this;
+		}
 
+		/**
+		 * Enables uniform anti-aliasing: each pixel is sampled with a
+		 * {@code density × density} grid of rays whose colors are averaged.
+		 *
+		 * @param density number of samples per axis (1 disables anti-aliasing)
+		 * @return the Builder instance
+		 * @throws IllegalArgumentException if {@code density < 1}
+		 */
+		public Builder setAntiAliasing(int density) {
+			if (density < 1)
+				throw new IllegalArgumentException("Anti-aliasing density must be at least 1");
+			camera.aaDensity = density;
+			return this;
+		}
+
+		/**
+		 * Controls whether super-sampling grid rays are jittered within their cells
+		 * (stratified sampling, on by default) or fixed at the cell centers.
+		 *
+		 * @param jitter true to randomize samples inside each cell
+		 * @return the Builder instance
+		 */
+		public Builder setJitter(boolean jitter) {
+			camera.aaJitter = jitter;
+			return this;
+		}
+
+		/**
+		 * Enables adaptive super-sampling: the pixel corners are sampled first and
+		 * only quadrants whose corners disagree are subdivided further, up to
+		 * {@code maxDepth} levels. When enabled it supersedes
+		 * {@link #setAntiAliasing(int)}.
+		 *
+		 * @param maxDepth recursion depth (0 disables adaptive super-sampling)
+		 * @return the Builder instance
+		 * @throws IllegalArgumentException if {@code maxDepth < 0}
+		 */
+		public Builder setAdaptiveSuperSampling(int maxDepth) {
+			if (maxDepth < 0)
+				throw new IllegalArgumentException("Adaptive super-sampling depth must be non-negative");
+			camera.aaAdaptiveDepth = maxDepth;
 			return this;
 		}
 
@@ -431,31 +481,22 @@ public class Camera implements Cloneable {
 		builder.camera.rayTracer = oldCamera.rayTracer;
 		builder.camera.nX = oldCamera.nX;
 		builder.camera.nY = oldCamera.nY;
+		builder.camera.aaDensity = oldCamera.aaDensity;
+		builder.camera.aaJitter = oldCamera.aaJitter;
+		builder.camera.aaAdaptiveDepth = oldCamera.aaAdaptiveDepth;
 		return builder;
 	}
 
 	/**
-	 * Helper data for ray construction.
+	 * Computes the center point of pixel {@code (j, i)} on the view plane.
 	 *
-	 * @param p0     ray origin
-	 * @param vRight right vector
-	 * @param vUp    up vector
-	 * @param pIJ    pixel point
-	 * @param rX     pixel width
-	 * @param rY     pixel height
+	 * @param nX the number of horizontal pixels
+	 * @param nY the number of vertical pixels
+	 * @param j  the pixel column
+	 * @param i  the pixel row
+	 * @return the pixel center point
 	 */
-	public record rayCreationSpace(Point p0, Vector vRight, Vector vUp, Point pIJ, double rX, double rY) {}
-
-	/**
-	 * Constructs a ray through a given pixel.
-	 *
-	 * @param nX the number of horizontal pixels.
-	 * @param nY the number of vertical pixels.
-	 * @param j  the pixel column.
-	 * @param i  the pixel row.
-	 * @return the rayCreationSpace of ray.
-	 */
-	public rayCreationSpace constructRay(int nX, int nY, int j, int i) {
+	private Point pixelCenter(int nX, int nY, int j, int i) {
 		Point pc = p0.add(vTo.scale(distance));
 
 		double rX = width / nX;
@@ -471,7 +512,34 @@ public class Camera implements Cloneable {
 		if (!isZero(yI))
 			pIJ = pIJ.add(vUp.scale(yI));
 
-		return new rayCreationSpace(p0, vRight, vUp, pIJ, rX, rY);
+		return pIJ;
+	}
+
+	/**
+	 * Constructs the ray from the camera through the center of a given pixel.
+	 *
+	 * @param nX the number of horizontal pixels
+	 * @param nY the number of vertical pixels
+	 * @param j  the pixel column
+	 * @param i  the pixel row
+	 * @return the ray through the pixel center
+	 */
+	public Ray constructRay(int nX, int nY, int j, int i) {
+		return new Ray(p0, pixelCenter(nX, nY, j, i).subtract(p0));
+	}
+
+	/**
+	 * Builds the rectangular sampling area covering a given pixel, used for
+	 * anti-aliasing.
+	 *
+	 * @param nX the number of horizontal pixels
+	 * @param nY the number of vertical pixels
+	 * @param j  the pixel column
+	 * @param i  the pixel row
+	 * @return the pixel's {@link TargetArea} on the view plane
+	 */
+	private TargetArea pixelArea(int nX, int nY, int j, int i) {
+		return new TargetArea(pixelCenter(nX, nY, j, i), vRight, vUp, width / nX, height / nY);
 	}
 
 	/**
@@ -483,6 +551,10 @@ public class Camera implements Cloneable {
 	public Camera renderImage() {
 		// Initialize the PixelManager for the render process
 		pixelManager = new PixelManager(nY, nX, printInterval);
+
+		// Initialize the per-pixel sampling engine (anti-aliasing lives here, not in
+		// the ray tracer)
+		pixelRenderer = new PixelRenderer(rayTracer, aaDensity, aaJitter, aaAdaptiveDepth);
 
 		// Dispatch to the correct rendering method
 		return switch (threadsCount) {
@@ -556,15 +628,15 @@ public class Camera implements Cloneable {
 	}
 
 	/**
-	 * Casts a ray through the given pixel and writes the computed color to the
-	 * image.
+	 * Samples the given pixel (one ray, a super-sampling grid, or adaptively,
+	 * depending on the anti-aliasing configuration) and writes the resulting color
+	 * to the image.
 	 *
 	 * @param i the x-coordinate of the pixel
 	 * @param j the y-coordinate of the pixel
 	 */
 	private void castRay(int i, int j) {
-		rayCreationSpace details = constructRay(nX, nY, i, j);
-		Color color = rayTracer.traceRay(details);
+		Color color = pixelRenderer.renderPixel(p0, pixelArea(nX, nY, i, j));
 		imageWriter.writePixel(i, j, color);
 
 		// Notify the PixelManager that a pixel is done
